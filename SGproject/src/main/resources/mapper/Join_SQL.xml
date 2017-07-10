@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 회원 SQL -->
+<mapper namespace="join">
+
+<insert id="insertMember" parameterType="hashmap" useGeneratedKeys="true" keyProperty="MEMBER_NO"> 
+		<selectKey keyProperty="MEMBER_NO" resultType="integer" order="BEFORE">  
+			SELECT SG_MEMBER_NO_SEQ.NEXTVAL FROM DUAL    
+		</selectKey>   
+		<![CDATA[
+	  INSERT INTO SG_MEMBER  
+      (MEMBER_NO,      
+      MEMBER_ID,        
+      MEMBER_PASSWORD,  
+      MEMBER_GRADE,     
+      MEMBER_NAME,      
+      MEMBER_BIRTHDAY,  
+      MEMBER_EMAIL,    
+      MEMBER_PHONE,     
+      MEMBER_ZIP,       
+      MEMBER_ADDR1,     
+      MEMBER_ADDR2,     
+      MEMBER_HEIGHT,   
+      MEMBER_WEIGHT,    
+      MEMBER_ONOFF,    
+      MEMBER_REGDATE)   
+      VALUES
+      (#{MEMBER_NO}, 
+       #{MEMBER_ID}, 
+       #{MEMBER_PASSWORD}, 
+       0, 
+       #{MEMBER_NAME}, 
+       #{MEMBER_BIRTHDAY}, 
+       #{MEMBER_EMAIL}, 
+       #{MEMBER_PHONE}, 
+       #{MEMBER_ZIP}, 
+       #{MEMBER_ADDR1}, 
+       #{MEMBER_ADDR2}, 
+       #{MEMBER_HEIGHT},
+       #{MEMBER_WEIGHT}, 
+       0, 
+       SYSDATE)
+		]]>
+	</insert>
+	
+	<select id="checkEmail" parameterType="hashmap" resultType="integer">
+	<![CDATA[
+	SELECT COUNT(MEMBER_EMAIL)  
+	FROM SG_MEMBER 
+	WHERE MEMBER_EMAIL = #{MEMBER_EMAIL}   
+	]]>
+	</select>
+	
+	<select id="checkId" parameterType="hashmap" resultType="int">
+	<![CDATA[
+		SELECT COUNT(MEMBER_ID)  
+		FROM SG_MEMBER 
+		WHERE MEMBER_ID = #{MEMBER_ID} 
+	]]>
+  </select>
+</mapper>

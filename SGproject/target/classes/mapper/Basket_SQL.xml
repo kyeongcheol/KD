@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 장바구니 SQL -->
+<mapper namespace="basket">
+
+<!-- 비회원 장바구니 조회 -->
+<select id="basketList" resultType="integer">
+   SELECT * FROM SG_BASKET
+</select>
+
+<!-- 회원 장바구니 조회 -->
+<select id="myBasketList" parameterType="hashmap" resultType="integer">
+   SELECT DISTINCT
+        B.BASKET_GOODS_NO, 
+        B.BASKET_GOODS_NAME,
+        B.BASKET_REG_DATE,
+        B.BASKET_GOODS_AMOUNT, 
+        B.BASKET_TOPPING_NAME,
+        G.GOODS_PRICE,
+        G.GOODS_THUMBNAIL
+       
+        FROM SG_BASKET B,
+        SG_GOODS G,
+        SG_MEMBER M
+                  
+        WHERE M.MEMBER_ID = #{MEMBER_ID}
+          AND B.BASKET_GOODS_NAME = G.GOODS_NAME
+          AND B.BASKET_MEMBER_NO = M.MEMBER_NO
+          AND G.GOODS_ONOFF = 0
+        ORDER BY B.BASKET_REG_DATE DESC,
+                 B.BASKET_GOODS_NO ASC
+</select>
+
+<insert id="basketInsert" parameterType="hashmap">
+   INSERT INTO SG_BASKET
+   (
+   BASKET_NO,
+   BASKET_MEMBER_NO,
+   BASKET_GOODS_NO,
+   BASKET_GOODS_NAME,
+   BASKET_REG_DATE,
+   BASKET_GOODS_AMOUNT,
+   BASKET_TOPPING_NAME
+   )
+   VALUES(
+   SG_BASKET_NO_SEQ.NEXTVAL,
+   #{BASKET_MEMBER_NO},
+   #{BASKET_GOODS_NO},
+   #{BASKET_GOODS_NAME},
+   SYSDATE,
+   #{BASKET_GOODS_AMOUNT},
+   #{BASKET_TOPPING_NAME}
+   )
+</insert>
+
+</mapper>

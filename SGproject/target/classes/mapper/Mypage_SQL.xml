@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 마이페이지 SQL -->
+<mapper namespace="mypage">
+
+<!-- 회원 내역 -->
+<select id="myinfoDetail" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+		SELECT * FROM SG_MEMBER 
+		WHERE MEMBER_ID = #{MEMBER_ID}
+	]]>
+</select>
+
+<!-- 회원 수정 -->
+<update id="updateMyinfo" parameterType="hashmap">
+  <![CDATA[
+		UPDATE SG_MEMBER 
+		  
+		  SET MEMBER_PASSWORD = #{MEMBER_PASSWORD}, 
+			  MEMBER_PHONE = #{MEMBER_PHONE}, 
+			  MEMBER_ZIP = #{MEMBER_ZIP}, 
+			  MEMBER_ADDR1 = #{MEMBER_ADDR1}, 
+			  MEMBER_ADDR2 = #{MEMBER_ADDR2}, 
+			  MEMBER_EMAIL = #{MEMBER_EMAIL}, 
+			  MEMBER_HEIGHT = #{MEMBER_HEIGHT},
+			  MEMBER_WEIGHT = #{MEMBER_WEIGHT}
+			
+			  WHERE MEMBER_ID = #{MEMBER_ID}
+		]]>
+</update>
+
+<!-- 회원탈퇴   -->
+<update  id="deleteMember" parameterType="hashmap">
+   <![CDATA[
+    UPDATE SG_MEMBER
+    SET
+        MEMBER_DELDATE = SYSDATE,   
+        MEMBER_ONOFF = 1            
+    WHERE MEMBER_NO = #{MEMBER_NO} 
+   ]]>
+</update>
+
+<!-- 주문내역 조회 -->
+<select id="myOrderList" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+           SELECT 
+            O.ORDER_NO, 
+            O.ORDER_MONEY, 
+            O.ORDER_DATE, 
+            O.ORDER_TRADE_TYPE, 
+            O.ORDER_TOPPING_NAME, 
+            O.ORDER_STATE, 
+            G.GOODS_NAME, 
+            G.GOODS_THUMBNAIL,
+			D.DELI_INVOICE_NO 
+            
+          FROM SG_ORDER O,
+               SG_GOODS G,
+			   SG_DELI D
+                     
+          WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
+                AND O.ORDER_GOODS_NO = G.GOODS_NO
+		       	AND O.ORDER_DELI_NO = D.DELI_NO
+          
+          ORDER BY O.ORDER_DATE DESC            
+                      
+      ]]>
+  </select>
+  
+<!-- 주문 내역 상세 보기 -->
+ <select id="myOrderDetail" parameterType="hashmap" resultType="hashmap">
+   <![CDATA[
+           SELECT 
+            O.ORDER_NO, 
+            O.ORDER_MONEY, 
+            O.ORDER_DATE, 
+            O.ORDER_TRADE_TYPE, 
+            O.ORDER_TOPPING_NAME, 
+            O.ORDER_STATE, 
+			O.ORDER_GOODS_AMOUNT, 
+            G.GOODS_NAME, 
+			D.DELI_INVOICE_NO, 
+			D.DELI_RECEIVE_ZIP, 
+			D.DELI_RECEIVE_ADDR1, 
+			D.DELI_RECEIVE_ADDR2, 
+		    D.DELI_RECEIVE_NAME, 
+			D.DELI_RECEIVE_PHONE, 
+			D.DELI_ORDER_MEMO, 
+			P.POINT_MONEY 
+            
+          FROM SG_ORDER O,
+               SG_GOODS G,
+			   SG_DELI D,
+			   SG_POINT P
+                     
+          WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
+                AND O.ORDER_GOODS_NO = G.GOODS_NO
+		       	AND O.ORDER_DELI_NO = D.DELI_NO
+				AND O.ORDER_NO = P.POINT_ORDER_NO
+				AND P.POINT_CONTENT='포인트 사용'
+          
+          ORDER BY O.ORDER_DATE DESC            
+                     
+   ]]>
+</select>
+
+<!-- 상세보기 수정  -->
+<!-- 1) 입금 전일 때 : 
+                  주문개수 + 배송 정보(수령자 주소, 수령자 상세 주소, 수령자 이름, 수령자 연락처, 배송메세지) 수정 -->
+<!-- 2) 배송준비중일 때: 
+                   배송 정보(수령자 주소, 수령자 상세 주소, 수령자 이름, 수령자 연락처, 배송메세지) 수정 -->
+
+<!-- 주문 개수 수정 -->
+<update id="myOrderUpate" parameterType="hashmap">
+ <![CDATA[
+
+     UPDATE SG_ORDER
+	 
+     SET ORDER_GOODS_AMOUNT = #{ORDER_GOODS_AMOUT}
+     
+	 WHERE ORDER_NO = #{ORDER_NO}
+ ]]>   
+</update>
+
+<!-- 배송정보 업데이트 -->
+<update id="myDeliUpdate" parameterType="hashmap">
+    <![CDATA[
+
+     UPDATE SG_DELI
+	 
+     SET DELI_RECEIVE_ZIP=#{DELI_RECEIVE_ZIP},
+         DELI_RECEIVE_ADDR1=#{DELI_RECEIVE_ADDR1},
+         DELI_RECEIVE_ADDR2=#{DELI_RECEIVE_ADDR2},
+         DELI_RECEIVE_NAME=#{DELI_RECEIVE_NAME},
+         DELI_RECEIVE_PHONE=#{DELI_RECEIVE_PHONE},  
+         DELI_ORDER_MEMO=#{DELI_ORDER_MEMO}
+     
+	 WHERE DELI_NO=#{DELI_NO} 	 
+     ]]>
+</update>
+
+<!-- 배송번호 별(묶음)로 총 합계금액 == 합계금액은 곧 결제 금액 -->
+<select id="sumTradeMoney" parameterType="hashmap" resultType="hashmap">
+  <![CDATA[
+        SELECT TRADE_DELI_NO, SUM(TRADE_MONEY) AS SUM_TRADE_MONEY 
+        
+        FROM SG_TRADE 
+        
+        WHERE TRADE_DELI_NO = #{TRADE_DELI_NO}
+		AND TRADE_MEMBER_ID = #{TRADE_MEMBER_ID}
+        
+        GROUP BY TRADE_DELI_NO
+  ]]>
+</select>
+
+<!-- 취소/환불 -->
+<!-- 1) 입금 전일 때 : 주문 테이블 삭제 -->
+<!-- 2) 배송준비중일 때: 주문 - 결제 - 배송 -->
+
+<!-- 주문 삭제 -->
+<delete id="orderDelete" parameterType="hashmap">
+ <![CDATA[
+     DELETE FROM SG_ORDER
+     WHERE ORDER_NO = #{ORDER_NO} 
+       AND ORDER_STATE = 0 
+ ]]>	  
+</delete>
+
+<!-- 결제 삭제 -->
+<delete id="tradeDelete" parameterType="hashmap">
+ <![CDATA[
+ 
+ DELETE FROM SG_TRADE
+ 
+ WHERE TRADE_NO = #{TRADE_NO}
+ ]]>	  
+</delete>
+
+<!-- 배송 삭제 -->
+<delete id="deliDelete" parameterType="hashmap">
+ <![CDATA[
+ DELETE FROM SG_DELI
+ 
+ WHERE DELI_NO = #{DELI_NO}
+ ]]>
+</delete>
+
+
+<!-- 장바구니 내역 조회 --> 
+<select id="myBasketList" parameterType="hashmap" resultType="hashmap">
+  <![CDATA[
+		  SELECT DISTINCT
+		   B.BASKET_GOODS_NO, 
+		   B.BASKET_GOODS_NAME, 
+		   B.BASKET_REG_DATE, 
+		   B.BASKET_GOODS_AMOUNT, 
+		   B.BASKET_TOPPING_NAME, 
+		   G.GOODS_PRICE,
+		   G.GOODS_THUMBNAIL 
+       
+		  FROM SG_BASKET B, 
+		  SG_GOODS G, 
+		  SG_MEMBER M 
+		  
+		  WHERE M.MEMBER_ID = #{MEMBER_ID} 
+		  AND B.BASKET_GOODS_NAME = G.GOODS_NAME 
+		  AND B.BASKET_MEMBER_NO = M.MEMBER_NO 
+		  AND G.GOODS_ONOFF = 0 
+		  ORDER BY B.BASKET_REG_DATE DESC, 
+		           B.BASKET_GOODS_NO ASC
+   ]]>		           
+</select>
+
+<!-- 장바구니 내역 삭제 -->
+<delete id="deleteMyBasket" parameterType="hashmap">
+  <![CDATA[
+		DELETE 
+		
+		FROM SG_BASKET 
+		
+		WHERE BASKET_MEMBER_NO = #{MEMBER_NO} 
+		AND BASKET_NO =#{BASKET_NO}
+   ]]>
+</delete>
+
+<!-- 위시 리스트 내역 조회 -->
+<select id="myWishList" parameterType="hashmap" resultType="hashmap">
+  <![CDATA[
+		   SELECT DISTINCT  
+			W.WISH_NO,  -- 위시리스트 번호, 
+			W.WISH_GOODS_NO, -- 위시리스트 상품 번호
+			W.WISH_REG_DATE, -- 위시리스트 등록 날짜 
+		    G.GOODS_NAME, -- 상품 이름
+			G.GOODS_THUMBNAIL, --상품 썸네일
+			G.GOODS_PRICE, -- 상품 가격
+			M.MEMBER_ID -- 회원 ID
+			
+			FROM SG_WISH W, --위시리스트 테이블
+			     SG_GOODS G, -- 상품 테이블
+				 SG_MEMBER M -- 회원 테이블
+			
+			WHERE W.WISH_GOODS_NO = G.GOODS_NO --조인조건(위시+상품)
+			AND W.WISH_MEMBER_NO = M.MEMBER_NO --조인조건(위시+회원)			 
+			AND G.GOODS_ONOFF = 0 -- 상품 노출이 ON
+			AND M.MEMBER_ID = #{MEMBER_ID} --로그인 한 ID를 받아옴
+			ORDER BY W.WISH_REG_DATE DESC, -- 위시리스트 등록일자 내림차순 
+			         W.WISH_NO ASC -- 상품 번호 오름차순
+  ]]>
+</select>
+
+<!-- 위시 리스트 내역 삭제 -->	
+<delete id="deleteMyWish" parameterType="hashmap">
+  <![CDATA[
+		DELETE 
+		FROM SG_WISH 
+		
+		WHERE WISH_MEMBER_NO=#{MEMBER_NO} 
+		AND WISH_NO = #{WISH_NO}
+  ]]>
+ </delete>  
+</mapper>

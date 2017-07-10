@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//src/main/java/SG/com/common/AbstractDAO.java=UTF-8
+encoding//src/main/java/SG/com/common/CustomMapArgumentResolver.java=UTF-8
+<<<<<<< HEAD
+encoding//src/main/java/SG/com/common/GoodsImageUtils.java=UTF-8
+=======
+encoding//src/main/webapp/WEB-INF/tiles/tile/footer.jsp=UTF-8
+>>>>>>> 61c7fefad0ea96596d86ba271c3f672ab5f78aee

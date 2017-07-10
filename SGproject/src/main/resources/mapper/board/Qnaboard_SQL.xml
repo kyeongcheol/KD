@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- QNA 게시판 SQL -->
+<mapper namespace="qnaboard">
+<!--Q&A목록조회(회원 자신의 Q&A)-->
+<select id="memberQnaList" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+  SELECT 
+  QNA_NO,
+  QNA_CATEGORY,
+  QNA_MEMBER_NO,
+  QNA_TITLE, 
+  QNA_REGDATE, 
+  QNA_REPSTATE,
+  QNA_QNA_REPDATE,
+  QNA_HITCOUNT, 
+  FROM SG_QNA
+  WHERE QNA_MEMBER_NO=
+  (SELECT MEMBER_NO FROM SG_MEMBER WHERE MEMBER_ID = #{MEMBER_ID}) 
+]]>
+</select>
+<!-- Q&A상세보기 -->
+<select id="qnaDetail" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+  SELECT 
+  QNA_NO,
+  Q.QNA_CATEGORY,
+  Q.QNA_MEMBER_NO,
+  Q.QNA_TITLE, 
+  Q.QNA_REGDATE, 
+  Q.QNA_REPSTATE,
+  Q.QNA_QNA_REPDATE,
+  Q.QNA_HITCOUNT,
+  M.MEMBER_NO
+  FROM SG_QNA Q, SG_MEMBER M 
+  WHERE Q.QNA_MEMBER_NO = M.MEMBER_NO
+  AND QNA_NO=#{QNA_NO} 
+]]>
+</select>
+<!-- Q&A목록조회(관리자) -->
+<select id="adminQnaList" parameterType="hashmap" resultType="hashmap">
+<![CDATA[ 
+  SELECT 
+  Q.QNA_NO,
+  Q.QNA_CATEGORY,
+  Q.QNA_MEMBER_NO,
+  Q.QNA_TITLE, 
+  Q.QNA_REGDATE, 
+  Q.QNA_REPSTATE,
+  Q.QNA_QNA_REPDATE,
+  Q.QNA_HITCOUNT, 
+  M.MEMBER_ID
+  FROM SG_QNA Q,SG_MEMBER M 
+  WHERE Q.QNA_MEMBER_NO = M.MEMBER_NO 
+  ORDER BY QNA_NO ASC
+]]>
+</select>
+<!-- Q&A목록조회-아이디(관리자)  -->
+<select id="qnaIdSearch" parameterType="hashmap" resultType="hashmap">
+<![CDATA[ 
+  SELECT 
+  Q.QNA_NO,
+  Q.QNA_CATEGORY,
+  Q.QNA_REPSTATE,
+  Q.QNA_REGDATE,
+  Q.QNA_TITLE,M.MEMBER_ID
+  FROM 
+  SG_QNA Q, SG_MEMBER M 
+  WHERE Q.QNA_NO= M.MEMBER_NO AND M.MEMBER_ID LIKE
+  '%' || #{isSearch} || '%' 
+  ORDER BY QNA_NO ASC
+
+]]>
+</select>
+<!-- Q&A목록조회-제목(관리자) -->
+<select id="qnaTitleSearch" parameterType="hashmap" resultType="hashmap">
+<![CDATA[ 
+  SELECT 
+  Q.QNA_NO,
+  Q.QNA_CATEGORY,
+  Q.QNA_REPSTATE,
+  Q.QNA_REGDATE,
+  Q.QNA_TITLE,M.MEMBER_ID
+  FROM 
+  SG_QNA Q, SG_MEMBER M 
+  WHERE Q.QNA_NO= M.MEMBER_NO AND Q.QNA_TITLE LIKE 
+  '%' || #{isSearch} || '%' 
+  ORDER BY QNA_NO ASC
+]]>
+</select>
+<!-- Q&A목록조회-카테고리(답변대기,답변처리) -->
+<select id="qnaCtgSearch0" parameterType="hashmap" resultType="hashmap">
+<![CDATA[ 
+  SELECT 
+  Q.QNA_NO,
+  Q.QNA_CATEGORY,
+  Q.QNA_REPSTATE,
+  Q.QNA_REGDATE,
+  Q.QNA_TITLE,
+  M.MEMBER_ID
+  FROM SG_QNA Q,SG_MEMBER M
+  WHERE Q.QNA_NO=M.MEMBER_NO AND Q.QNA_REPSTATE=#{Q.QNA_REPSTATE]
+  ORDER BY QNA_NO ASC
+
+]]>
+</select>
+<!-- Q&A목록조회-카테고리(상품문의,홈페이지이용문의..) -->
+<select id="qnaCtgSearch1" parameterType="hashmap" resultType="hashmap">
+<![CDATA[ 
+  SELECT 
+  Q.QNA_NO,
+  Q.QNA_CATEGORY,
+  Q.QNA_REPSTATE,
+  Q.QNA_REGDATE,
+  Q.QNA_TITLE,
+  M.MEMBER_ID
+  FROM SG_QNA Q,SG_MEMBER M
+  WHERE Q.QNA_NO=M.MEMBER_NO AND Q.QNA_CATEGORY=#{Q.QNA_CATEGORY]
+  ORDER BY QNA_NO ASC
+
+]]>
+</select>
+<!-- Q&A등록(회원) -->
+<select id="qes" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+INSERT INTO SG_QNA(
+        QNA_NO,
+        QNA_CATEGORY,
+        QNA_MEMBER_NO,
+        QNA_TITLE,
+        QNA_CONTENT,
+        QNA_HITCOUNT,
+        QNA_REGDATE )
+VALUES
+        (SG_QNA_NO_SEQ,
+        #{QNA_CATEGORY},
+        #{QNA_MEMBER_NO},
+        #{QNA_TITLE},
+        DEFAULT,
+        #{QNA_CONTENT},
+        SYSDATE)
+ 
+]]>
+</select>
+<!-- Q&A답변등록(관리자) -->
+<select id="ans" parameterType="hashmap" >
+<![CDATA[
+  UPDATE SG_QNA SET 
+  QNA_REPCONTENT=#{QNA_REPCONTENT}, 
+  QNA_REPDATE=SYSDATE,
+  QNA_REPSTATE='답변완료'
+  WHERE QNA_NO=#{QNA_NO}
+ 
+]]>
+</select>
+<!-- Q&A삭제  -->
+<select id="qnaDelete" parameterType="hashmap" >
+<![CDATA[
+  DELETE FROM SG_QNA
+  WHERE QNA_NO = #{QNA_NO} 
+]]>
+</select>
+
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자페이지 상품 SQL -->
+<mapper namespace="adgoods">
+ 
+ <select id="adgoodsList" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS
+	]]>
+ </select>
+  <!-- 토핑 조회 -->
+ <select id="adToppingList" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_TOPPING
+	]]>
+ </select>
+ 
+ <!-- 상품명 검색 -->
+ <select id="adgoodsListSearch0" parameterType="String" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS WHERE GOODS_NAME LIKE '%'||#{isSearch}||'%'
+	]]>
+ </select>
+ 
+<!-- 상품번호 -->
+ <select id="adgoodsListSearch1" parameterType="String" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS WHERE GOODS_NO LIKE '%'||#{isSearch}||'%'
+	]]>
+ </select>
+
+<!-- 카테고리 0=완제품, 1=음료, 2=몰라...-->
+ <select id="adgoodsListSearch2" parameterType="String" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS WHERE GOODS_TYPE = #{isSearch}
+	]]>
+ </select>
+ 
+<!--  판매 On Off -->
+  <select id="adgoodsListSearch3" parameterType="String" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS WHERE GOODS_ONOFF = #{isSearch}
+	]]>
+ </select>
+ 
+ <!-- 재고가 0 인 상품 -->
+  <select id="adgoodsListSearch4" parameterType="String" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS WHERE #{isSearch} = 0
+	]]>
+ </select>
+ 
+ <!-- 판매량 순 -->
+  <select id="adgoodsListSearch5" parameterType="String" resultType="hashmap">
+	<![CDATA[ 
+	 SELECT * FROM SG_GOODS ORDER BY #{isSearch} DESC
+	]]>
+ </select>
+ 
+
+ 
+
+<insert id="insertAdminGoods" parameterType="hashmap" useGeneratedKeys="true" keyProperty="GOODS_NO">
+		<selectKey keyProperty="GOODS_NO" resultType="integer" order="BEFORE">
+			SELECT SG_GOODS_NO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+
+<![CDATA[ 
+INSERT INTO SG_GOODS (
+	GOODS_NO,
+	GOODS_NAME,
+	GOODS_PRICE,
+	GOODS_DETAIL,
+	GOODS_DATE,
+	GOODS_ONOFF,
+	GOODS_KCAL,
+	GOODS_TYPE,
+	GOODS_AMOUNT
+	) 
+VALUES (
+	#{GOODS_NO},
+	#{GOODS_NAME},
+	#{GOODS_PRICE},
+	#{GOODS_DETAIL},
+	SYSDATE,
+	#{GOODS_ONOFF},
+	#{GOODS_KCAL},
+	#{GOODS_TYPE},
+	#{GOODS_AMOUNT}
+	)
+	]]>
+</insert>
+
+<insert id="insertGoodsImage" parameterType="hashmap">
+		<selectKey keyProperty="GOODS_NO" resultType="integer" order="BEFORE">
+			SELECT SG_GOODS_NO_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+<![CDATA[
+INSERT INTO SG_IMAGE(
+	IMAGE_GOODS_NO,
+	IMAGE_NO,
+	IMAGE_IMAGE
+)
+VALUES(
+	#{GOODS_NO},
+	SG_IMAGE_NO_SEQ.NEXTVAL,
+	#{IMAGE_IMAGE}
+)
+]]>
+</insert>
+
+
+<update id="updateGoodsThumbnail" parameterType="hashmap">
+<![CDATA[ 
+UPDATE SG_GOODS SET
+	GOODS_THUMBNAIL = #{GOODS_THUMBNAIL}
+WHERE
+	GOODS_NO = #{GOODS_NO}	
+]]>
+</update>
+
+
+
+</mapper>

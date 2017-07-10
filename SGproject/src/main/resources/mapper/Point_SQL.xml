@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 포인트 SQL -->
+<mapper namespace="point">
+
+<!-- 회원가입시 포인트 적립 -->
+<insert id="joinPoint" parameterType="hashmap" >
+	<![CDATA[
+		INSERT INTO SG_POINT 
+		(POINT_NO, 
+		POINT_MONEY, 
+		POINT_CONTENT,
+		POINT_DATE,  
+		POINT_MEMBER_NO 
+		)
+        VALUES 
+		( SG_POINT_NO_SEQ.NEXTVAL, 
+		  2000, DEFAULT, 
+		   SYSDATE, #{MEMBER_NO})		
+	]]> 
+	</insert>
+	
+	
+<!-- 구매시 1% 포인트 적립 -->
+<insert id="orderPoint" parameterType="hashmap" >
+ <![CDATA[
+		INSERT INTO SG_POINT 
+		(POINT_NO, 
+		 POINT_MONEY, 
+		 POINT_CONTENT, 
+		 POINT_DATE,
+		 POINT_MEMBER_NO,
+		 POINT_TRADE_NO
+		 )
+        VALUES 
+		( SG_POINT_NO_SEQ.NEXTVAL, 
+		  #{POINT_MONEY}, 
+		  '구매 포인트 적립', 
+		   SYSDATE, #{POINT_MEMBER_NO}, #{POINT_TRADE_NO})		
+]]>
+	</insert>
+
+<!-- 포인트 사용 -->
+<insert id="usePoint" parameterType="hashmap" >
+	<![CDATA[
+		INSERT INTO SG_POINT 
+		(POINT_NO, 
+		 POINT_MONEY, 
+		 POINT_CONTENT, 
+		 POINT_DATE,
+		 POINT_MEMBER_NO,
+		 POINT_TRADE_NO
+		 )
+        VALUES 
+		( SG_POINT_NO_SEQ.NEXTVAL, 
+		  #{POINT_MONEY}, 
+		  '포인트 사용', 
+		   SYSDATE, #{POINT_MEMBER_NO}, #{POINT_TRADE_NO})
+	]]>
+	</insert>
+	
+<!-- 수동적립 이벤트 등 -->
+<insert id="savePoint" parameterType="hashmap" >
+  <![CDATA[
+     INSERT INTO SG_POINT 
+		(POINT_NO, 
+		 POINT_MONEY, 
+		 POINT_CONTENT, 
+		 POINT_DATE,
+		 POINT_MEMBER_NO,
+		 POINT_TRADE_NO
+		 )
+        VALUES 
+		( SG_POINT_NO_SEQ.NEXTVAL, 
+		  #{POINT_MONEY}, 
+		  #{POINT_CONTENT}, 
+		   SYSDATE, #{POINT_MEMBER_NO},NULL)
+	]]>
+	</insert>
+	
+<!--회원별 포인트 총 합계 -->
+ <select id="sumPoint" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+		SELECT 
+			SUM(POINT_MONEY) AS SUM
+			FROM SG_POINT 
+			WHERE POINT_MEMBER_NO = ${MEMBER_NO}
+	]]>
+	</select>
+
+<!-- 회원별 포인트 내역 조회 -->
+  <select id="myPointList" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+		SELECT  
+		     POINT_DATE, 
+		     POINT_CONTENT, 
+		     POINT_MONEY, 
+		     POINT_TRADE_NO
+	    FROM SG_POINT
+		WHERE POINT_MEMBER_NO = ${MEMBER_NO} 
+		      ORDER BY POINT_DATE DESC
+			
+	]]>
+	</select>
+	
+
+</mapper>

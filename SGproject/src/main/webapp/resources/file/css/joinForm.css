@@ -1,0 +1,93 @@
+@CHARSET "UTF-8";
+@import url('//cdn.rawgit.com/young-ha/webfont-archive/master/css/PureunJeonnam.css'); 
+
+.body_center 
+{
+ width:1000px;
+ height:1050px;
+ margin-left:auto;
+ margin-right:auto;
+ padding-top:50px;
+ font-family: PureunJeonnam;
+
+}
+.main_subject 
+{
+ color:000000;
+ text-align:left;
+ margin-left:10px;
+ margin-bottom:10px;
+}
+
+.effect 
+{
+  text-align: center;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: #fff;
+  text-transform: capitalize;
+  background-color: #00CCCF;;
+  font-size: 15px;
+  padding-top: 12px; 
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 12px;
+  width: 150px;
+  border-radius: 6px;
+  overflow: hidden;
+ /*  margin-left:700px; */
+  font-family: PureunJeonnam;
+}
+
+.effect.effect-5 
+{
+  -webkit-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s;
+}
+
+.effect.effect-5:before 
+{
+  content: ">"; 
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0px;
+  height: 100%;
+  width: 30px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 0 50% 50% 0;
+  -webkit-transform: scale(0, 1);
+          transform: scale(0, 1);
+  -webkit-transform-origin: left center;
+          transform-origin: left center;
+  -webkit-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s;
+}
+
+ .effect.effect-5:hover 
+{
+  text-indent: 15px;
+} 
+.effect.effect-5:hover:before 
+{
+  -webkit-transform: scale(3, 1);
+          transform: scale(1, 1);
+  text-indent:0px;
+}
+
+.btnArea 
+{
+   overflow: hidden;
+   margin: 20px 0 50px;
+   text-align: right;
+   font-size: 1%;
+   line-height: 1%;
+}

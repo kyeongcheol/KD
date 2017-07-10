@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- FAQ 게시판 SQL -->
+<mapper namespace="faqboard">
+<!--FAQ 리스트 목록  -->
+<select id="faqList" parameterType="hashmap" resultType="hashmap">
+<![CDATA[ 
+  SELECT 
+  FAQ_NO,
+  FAQ_HITCOUNT,
+  FAQ_TITLE,
+  FAQ_REGDATE,
+  FAQ_CATEGORY 
+  FROM SG_FAQ
+
+]]>
+</select>
+<!--FAQ상세보기 -->
+<select id="faqDetail" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+  SELECT
+  FAQ_CONTENT,
+  FAQ_IMAGE,
+  FAQ_TITLE,
+  FAQ_REGDATE,
+  FAQ_CATEGORY
+  FROM SG_FAQ
+  WHERE FAQ_NO = #{FAQ_NO}
+
+
+]]>
+</select>
+
+<!--FAQ검색(제목)0  -->
+<select id="faqSearch0" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+  SELECT 
+  FAQ_NO,
+  FAQ_HITCOUNT,
+  FAQ_TITLE,
+  FAQ_REGDATE,
+  FAQ_CATEGORY 
+  FROM SG_FAQ
+  WHERE FAQ_TITLE LIKE '%' || #{isSearch} || '%'
+  ORDER BY FAQ_NO ASC
+
+]]>
+</select>
+<!--FAQ검색(내용)1  -->
+<select id="faqSearch1" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+  SELECT 
+  FAQ_NO,
+  FAQ_HITCOUNT,
+  FAQ_TITLE,
+  FAQ_REGDATE,
+  FAQ_CATEGORY FROM SG_FAQ
+  WHERE FAQ_CONTENT LIKE '%' || #{isSearch} || '%'
+  ORDER BY FAQ_NO ASC
+
+]]>
+</select>
+<!--FAQ검색(카테고리)2  -->
+<select id="faqSearch2" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+ SELECT 
+ FAQ_NO,
+ FAQ_HITCOUNT,
+ FAQ_TITLE,
+ FAQ_REGDATE,
+ FAQ_CATEGORY 
+ FROM SG_FAQ
+ WHERE  FAQ_CATEGORY LIKE '%' || #{FAQ_CATEGORY} || '%'
+]]>
+</select>
+
+<!--FAQ등록  -->
+<select id="faqWrite" parameterType="hashmap" resultType="hashmap">
+ <![CDATA[
+ INSERT INTO SG_FAQ(
+ FAQ_NO,
+ FAQ_CONTENT,
+ FAQ_IMAGE,
+ FAQ_HITCOUNT,
+ FAQ_TITLE,
+ FAQ_REGDATE,
+ FAQ_CATEGORY)
+ VALUES
+ (SG_FAQ_NO_SEQ.NEXTVAL,
+ #{FAQ_CONTENT},
+ #{FAQ_IMAGE},
+ default,
+ #{FAQ_TITLE},
+ SYSDATE,
+ #{FAQ_CATEGORY})
+ ]]> 
+
+</select>
+
+<!--FAQ수정  -->
+<select id="faqModify" parameterType="hashmap" >
+<![CDATA[
+ UPDATE SG_FAQ SET
+ FAQ_CONTENT=#{FAQ_CONTENT},
+ FAQ_IMAGE=#{FAQ_IMAGE},
+ FAQ_TITLE=#{FAQ_TITLE},
+ FAQ_REGDATE=SYSDATE,
+ FAQ_CATEGORY=#{FAQ_CATEGORY}
+ WHERE FAQ_NO=#{FAQ_NO}
+
+ ]]> 
+
+</select>
+<!--FAQ상세보기 조회수업데이트-->
+<select id="faqUpdateHitCnt" parameterType="hashmap">
+<![CDATA[
+
+ UPDATE SG_FAQ SET
+ FAQ_HITCOUNT = FAQ_HITCOUNT+1
+ WHERE FAQ_NO = #{FAQ_NO}
+
+ ]]> 
+</select>
+
+<!--FAQ삭제  -->
+<select id="faqDelete" parameterType="hashmap">
+ DELETE FROM SH_FAQ WHERE FAQ_NO=#{FAQ_NO}
+</select>
+
+
+
+
+</mapper>

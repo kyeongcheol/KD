@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 상품 SQL -->
+<mapper namespace="goods">
+
+<select id="goodsList" resultType="hashmap">
+	<![CDATA[
+		
+		SELECT * FROM SG_GOODS where GOODS_ONOFF=0
+	]]>
+	</select>
+	
+<select id="selectOneGoods" parameterType="int" resultType="hashmap">
+	<![CDATA[
+		
+	select * from SG_GOODS
+	where GOODS_NO = #{GOODS_NO}
+	]]>
+	</select>
+	
+	<select id="imageList" parameterType="int" resultType="string">
+	<![CDATA[
+		
+	SELECT IMAGE_IMAGE FROM SG_IMAGE
+	where IMAGE_GOODS_NO = #{GOODS_NO}
+	
+	]]>
+	</select>
+	
+	
+	<select id="commentList" parameterType="int" resultType="hashmap">
+	
+	<![CDATA[
+		
+	select * 
+	from SG_COMMENT
+	where COMMENT_GOODS_NO= #{GOODS_NO}
+	ORDER BY COMMENT_REGDATE desc
+	
+	]]>
+	
+	</select>
+	
+	
+	<insert id="insertComment" parameterType="hashmap">
+
+		insert into SG_COMMENT 
+		(COMMENT_NO, 
+		COMMENT_ID, 
+		COMMENT_GOODS_NO, 
+		COMMENT_CONTENT, 
+		COMMENT_RATE, 
+		COMMENT_REGDATE)
+		values
+		(SG_COMMENT_NO_SEQ.NEXTVAL,
+		#{COMMENT_ID},
+		#{COMMENT_GOODS_NO},
+		#{COMMENT_CONTENT},
+		#{COMMENT_RATE},
+		SYSDATE)
+				
+			
+	</insert>
+
+</mapper>
