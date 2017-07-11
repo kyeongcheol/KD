@@ -10,8 +10,8 @@ function email_code()
 	  
 	   var f = document.frm;
 	   var email = f.email1.value+"@"+f.email2.value;
-	   var email1 = f.email1.value; //앞 주소 이메일 
-	   var email2 = f.email2.value; //뒤 주소 이메일
+	   //var email1 = f.email1.value; //앞 주소 이메일 
+	   //var email2 = f.email2.value; //뒤 주소 이메일
 	   
 	      //이메일 주소를 아예 입력하지 않은경우
 	 	  if(email == '@') 
