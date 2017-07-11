@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+
+   <definition name="layoutAdmin" template="/WEB-INF/tiles/Layout/layout-admin.jsp">
+		<put-attribute name="body" value="/WEB-INF/tiles/tile/container.jsp"/>
+	</definition>
+	
+   <definition name="admin_main" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/main/adminmain.jsp"/>
+	</definition>
+	
+	<definition name="admin_faq" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/Admin/adminFaq.jsp"/>
+	</definition>
+	
+	<definition name="admin_qna" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/Admin/QnABoard/adminQnA.jsp"/>
+	</definition>
+	
+	<definition name="admin_goodslist" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/Admin/adminGoodsList.jsp"/>
+	</definition>
+	
+	<definition name="admin_goodsForm" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/Admin/adminGoodsForm.jsp"/>
+	</definition>
+	
+	<definition name="admin_toppingList" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/Admin/adminToppingList.jsp"/>
+	</definition>
+	
+	<definition name="admin_toppingForm" extends="layoutAdmin">
+		<put-attribute name="body" value="/WEB-INF/views/Admin/adminToppingForm.jsp"/>
+	</definition>
+
+</tiles-definitions>

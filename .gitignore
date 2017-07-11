@@ -146,11 +146,19 @@ RemoteSystemsTempFiles/.project
 .metadata/.lock
 .metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
 .metadata/
+<<<<<<< HEAD
+=======
 Servers/.settings/org.eclipse.wst.server.core.prefs
 Servers/.project
+>>>>>>> 25e2bbfe2283db00dd4f57cce4989ab6504304b2
 Servers/Tomcat v9.0 Server at localhost-config/web.xml
 Servers/Tomcat v9.0 Server at localhost-config/tomcat-users.xml
 Servers/Tomcat v9.0 Server at localhost-config/server.xml
 Servers/Tomcat v9.0 Server at localhost-config/context.xml
 Servers/Tomcat v9.0 Server at localhost-config/catalina.properties
 Servers/Tomcat v9.0 Server at localhost-config/catalina.policy
+<<<<<<< HEAD
+Servers/.settings/org.eclipse.wst.server.core.prefs
+Servers/.project
+=======
+>>>>>>> 25e2bbfe2283db00dd4f57cce4989ab6504304b2

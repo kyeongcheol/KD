@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+
+	<definition name="layout" template="/WEB-INF/tiles/Layout/layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/tiles/tile/header.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/tiles/tile/body.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/tiles/tile/footer.jsp"/>
+	</definition>
+	
+	<definition name="joinEmail" extends="layout">
+		<put-attribute name="body" value="/WEB-INF/views/Member/join_Step1.jsp"/>
+	</definition>
+	
+	<definition name="joinAgree" extends="layout">
+		<put-attribute name="body" value="/WEB-INF/views/Member/join_Step2.jsp"/>
+	</definition>
+	
+	<definition name="joinForm" extends="layout">
+		<put-attribute name="body" value="/WEB-INF/views/Member/join_Step3.jsp"/>
+	</definition>
+	
+	<definition name="joinSuccess" extends="layout">
+		<put-attribute name="body" value="/WEB-INF/views/Member/join_complete.jsp"/>
+	</definition>
+	
+	<definition name="loginForm" extends="layout">
+		<put-attribute name="body" value="/WEB-INF/views/Member/login_Form.jsp"/>
+	</definition>
+	
+
+</tiles-definitions>
