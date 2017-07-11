@@ -71,6 +71,7 @@ $(document).ready(function()
 </head>
 
 <body>
+<div class="message">${message}</div>
 <div id="loginform">
       <div id="loginformtop"></div>
       
@@ -140,5 +141,5 @@ $(document).ready(function()
       </form>
       <div id="loginformbottom"></div>
    </div>
-   <div class="message">${message}</div>
+   
 </body>
