@@ -41,7 +41,7 @@ public class PointDao extends AbstractDAO
 	}
 	
 	//회원별 포인트 총 합계
-	public Map<String, Object> sumPoint(Map<String, Object>map) throws Exception 
+	public Map<String, Object> sumPoint(Map<String, Object> map) throws Exception 
 	{
 		return (Map<String, Object>)selectOne("point.sumPoint", map);
 	}

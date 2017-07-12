@@ -140,19 +140,7 @@
      ]]>
 </update>
 
-<!-- 배송번호 별(묶음)로 총 합계금액 == 합계금액은 곧 결제 금액 -->
-<select id="sumTradeMoney" parameterType="hashmap" resultType="hashmap">
-  <![CDATA[
-        SELECT TRADE_DELI_NO, SUM(TRADE_MONEY) AS SUM_TRADE_MONEY 
-        
-        FROM SG_TRADE 
-        
-        WHERE TRADE_DELI_NO = #{TRADE_DELI_NO}
-		AND TRADE_MEMBER_ID = #{TRADE_MEMBER_ID}
-        
-        GROUP BY TRADE_DELI_NO
-  ]]>
-</select>
+
 
 <!-- 취소/환불 -->
 <!-- 1) 입금 전일 때 : 주문 테이블 삭제 -->
@@ -228,24 +216,24 @@
 <select id="myWishList" parameterType="hashmap" resultType="hashmap">
   <![CDATA[
 		   SELECT DISTINCT  
-			W.WISH_NO,  
-			W.WISH_GOODS_NO, 
+			W.WISH_NO,
+			W.WISH_GOODS_NO,
 			W.WISH_REG_DATE, 
-		    G.GOODS_NAME, 
-			G.GOODS_THUMBNAIL, 
-			G.GOODS_PRICE, 
-			M.MEMBER_ID 
+		    G.GOODS_NAME,
+			G.GOODS_THUMBNAIL,
+			G.GOODS_PRICE,
+			M.MEMBER_ID
 			
-			FROM SG_WISH W, 
-			     SG_GOODS G, 
-				 SG_MEMBER M 
+			FROM SG_WISH W,
+			     SG_GOODS G,
+				 SG_MEMBER M
 			
-			WHERE W.WISH_GOODS_NO = G.GOODS_NO 
-			AND W.WISH_MEMBER_NO = M.MEMBER_NO 
-			AND G.GOODS_ONOFF = 0 
-			AND M.MEMBER_ID = #{MEMBER_ID} 
+			WHERE W.WISH_GOODS_NO = G.GOODS_NO
+			AND W.WISH_MEMBER_NO = M.MEMBER_NO			 
+			AND G.GOODS_ONOFF = 0
+			AND M.MEMBER_ID = #{MEMBER_ID}
 			ORDER BY W.WISH_REG_DATE DESC, 
-			         W.WISH_NO ASC 
+			         W.WISH_NO ASC
   ]]>
 </select>
 
@@ -260,13 +248,13 @@
   ]]>
  </delete>  
  
- <!--회원별 구매금액 총 누적 합계 -->
- <!--  <select id="sumTradeMoney" parameterType="hashmap" resultType="hashmap">
+
+<select id="sumTradeMoney" parameterType="hashmap" resultType="hashmap">
 	<![CDATA[
 		SELECT 
-			SUM(TRADE_MONEY) AS SUM
-			FROM SG_TRADE 
-			WHERE TRADE_MEMBER_ID = ${MEMBER_ID}
+			NVL(SUM(TRADE_MONEY),0) AS SUM
+			FROM SG_TRADE
+			WHERE TRADE_MEMBER_ID =#{MEMBER_ID}
 	]]>
-	</select> -->
+	</select> 
 </mapper>
