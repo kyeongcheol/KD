@@ -16,6 +16,9 @@ public interface MemberService {
 
 	 //È¸¿øÅ»Åð
 	 void deleteMember(Map<String, Object> map) throws Exception;
+	 
+	 //È¸¿øº° ÃÑ ´©Àû±Ý¾×
+	 Map<String, Object> sumTradeMoney(Map<String, Object>map) throws Exception;
 	
 
 

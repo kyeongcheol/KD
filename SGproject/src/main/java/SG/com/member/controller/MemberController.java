@@ -31,26 +31,25 @@ public class MemberController
 	public String mypage(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
 		String mem_num = session.getAttribute("MEMBER_NO").toString();
+		String mem_id = session.getAttribute("MEMBER_ID").toString();
 		
 		commandMap.getMap().put("MEMBER_NO", mem_num);
+		commandMap.getMap().put("MEMBER_ID", mem_id);
 		
 		Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
+		Map<String, Object> sumTradeMoney = memberService.sumTradeMoney(commandMap.getMap());
 		
 		model.addAttribute("sumPoint", sumPoint.get("SUM"));
+		model.addAttribute("sumTradeMoney", sumTradeMoney.get("SUM"));
 		
-		return "Member/mypage";
+		return "mypage";
 	}
 	
 	//회원 정보 조회
 	@RequestMapping(value = "/memberInfo")
 	public String memInfo(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
-      /*  String mem_num = session.getAttribute("MEMBER_NO").toString();
-		
-		commandMap.getMap().put("MEMBER_NO", mem_num);
-		
-		Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
-		model.addAttribute("sumPoint", sumPoint.get("SUM"));*/
+      
 		return "memberInfo";
 	}
 	

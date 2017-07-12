@@ -42,25 +42,31 @@
    .search_mypage input[type='text']{width:300px;}   
    .category{
       padding-bottom: 100px;
+      padding-left:350px;
     }
    .category ul{margin-left:35px; list-style-type: none;}
    .category ul li
    {
+   width:155px;
+   height:35px;
    float:left;
    margin-top:20px;
+   padding-top:5px;
    padding-right:25px;
    padding-left:25px;
    margin-left:2px;
    margin-botton:20px;
    background-color:black;
    color:white;
-   font-size:15px;
+   font-size:14px;
    font-family:PureunJeonnam;
    line-height:20px;
+   text-align:center;
    }
    .category ul li a{
    text-decoration:none;
    color:white;
+
    }
    
    .account-nav {display:block;}
@@ -156,19 +162,20 @@ function tab(num){
 	<div class="my-account row">
 		<section class="col-xs-24 my-info">
 			<div class="section-body">
-				<div class="item profile col-xs-24 col-md-6">
-					<div class="info">						<strong>
+				<div class="item cash col-xs-8 col-md-6">
+					<strong>
 						<span> <!-- class="level" style="text-align:center;" -->${sessionScope.MEMBER_ID}</span>(${sessionScope.MEMBER_NAME }님)
 						</strong>
-						<a href="memberInfo" onclick="javascript:tab(7)" class="button small button-dimmed">
+						<a href="memberInfo" onclick="javascript:tab(7)" class="button small">
 							<span class="button-label">내 정보 보기</span>
 						</a>
-					</div>
+			
 				</div>
+				
 				<div class="item point col-xs-8 col-md-6">
 					<strong>포인트 : </strong>
 					<em>${sumPoint}원</em><br>
-					<button class="button small" target="modal" data-size="md" data-label="나의 적립금" href="/SIRORAGI/member/myPoint">
+					<button class="button small" target="modal" data-size="md" data-label="나의 적립금" href="/SG/member/myPoint">
 						<span class="button-label">자세히 보기</span>
 					</button>
 					<div></div>
@@ -176,13 +183,13 @@ function tab(num){
 				<div class="item cash col-xs-8 col-md-6">
 				<div class="info">
 				<c:choose>
-				<c:when test="${sumTrade eq null }">
+				<c:when test="${sumTradeMoney eq null }">
 				<span>총  구입금액 : </span>
 				 <span>0원</span>
 				 </c:when>
 				 <c:otherwise>
 				 <span>총  구입금액 : </span>
-				 <span>${sumTrade}원</span>
+				 <span>${sumTradeMoney}원</span>
 				 </c:otherwise>
 				</c:choose>
 				

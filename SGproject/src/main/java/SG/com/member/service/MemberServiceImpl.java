@@ -35,6 +35,11 @@ public class MemberServiceImpl implements MemberService {
 	  public void deleteMember(Map<String, Object> map) throws Exception{
 		  memberDao.deleteMember(map);
 	  }
+	   
+	   @Override
+	  public Map<String, Object> sumTradeMoney(Map<String, Object>map) throws Exception{
+		   return memberDao.sumTradeMoney(map);
+	   }
 	
 
 
