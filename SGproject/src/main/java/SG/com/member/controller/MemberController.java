@@ -12,10 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import SG.com.common.CommandMap;
 import SG.com.member.service.PointService;
-import SG.com.member.service.JoinService;
 import SG.com.member.service.MemberService;
 //마이페이지 컨트롤러 
 @Controller
@@ -38,7 +38,7 @@ public class MemberController
 		
 		model.addAttribute("sumPoint", sumPoint.get("SUM"));
 		
-		return "Member/mypage";
+		return "mypage";
 	}
 	
 	//회원 정보 조회
@@ -51,7 +51,9 @@ public class MemberController
 		
 		Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
 		model.addAttribute("sumPoint", sumPoint.get("SUM"));*/
-		return "memberInfo";
+		System.out.println("진입");
+		
+		return "Member/member_Info";
 	}
 	
 	//회원 정보 수정 폼

@@ -84,7 +84,7 @@
  <select id="sumPoint" parameterType="hashmap" resultType="hashmap">
 	<![CDATA[
 		SELECT 
-			SUM(POINT_MONEY) AS SUM
+			NVL(SUM(POINT_MONEY),0) AS SUM
 			FROM SG_POINT 
 			WHERE POINT_MEMBER_NO = ${MEMBER_NO}
 	]]>

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/SG/resources/file/css/main.min.css">
 
 <link rel="stylesheet" href="/SG/resources/file/css/bootstrap.css"><!-- 위의 정보 확인 바 관련 css -->
-	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>	
 
 
 <style>
@@ -73,7 +73,8 @@
    
 </style>
 <script type="text/javascript">
-function tab(num){
+function tab(num)
+{
 	if(num == 1){
 			$.ajax({
 				url: "/SIRORAGI/orderlist",
@@ -129,15 +130,18 @@ function tab(num){
 		}
 	});
 	}
-	if(num == 7){
-			$.ajax({
-		url: "/SG/myinfo",
-		type : "get",
-		success:function(data){
+	if(num == 7)
+	{
+	  $.ajax({
+		url: "/SG/memberInfo",
+		type : "post",
+		success:function(data)
+		{
 			$("#account-contentsWrap").html(data);
-		}
+		},
+		
 	});
-	}
+  }
 	return false;
 };
 
@@ -160,7 +164,7 @@ function tab(num){
 					<div class="info">						<strong>
 						<span> <!-- class="level" style="text-align:center;" -->${sessionScope.MEMBER_ID}</span>(${sessionScope.MEMBER_NAME }님)
 						</strong>
-						<a href="memberInfo" onclick="javascript:tab(7)" class="button small button-dimmed">
+						<a href="#memberInfo" onclick="javascript:tab(7)" class="button small button-dimmed">
 							<span class="button-label">내 정보 보기</span>
 						</a>
 					</div>
@@ -208,75 +212,9 @@ function tab(num){
          	<li><a href="#">Q&A</a></li>
          </ul>
 		</div>
+		<div id="account-contentsWrap">
+		
+		</div>
 
-         <div class="board_main" align="center">
-            <table class="board_table" width="90%">
-               <colgroup>
-                  <col width="10%" />
-                  	<col width="10%"/>
-                    <col width="40%" />
-                    <col width="20%" />
-                    <col width="10%" />
-                    <col width="10%" />
-               </colgroup>
-               <thead>
-                  <tr class="table_title">
-                     <th>NO</th>
-                     <th>카테고리</th>
-                     <th>제목</th>
-                     <th>작성자</th>
-                     <th>등록일</th>
-                     <th>조회수</th>
-                  </tr>
-               </thead>
-               <tbody>
-               <c:choose>
-               <c:when test="${list} == null">
- 					<tr>
-                 		<td colspan="6">게시글이 없습니다.</td>
-                 	</tr>
-                 </c:when>
-                 <c:otherwise>
- 
-   				 <c:forEach var="list"  items="${list}" varStatus="stat">
-                 	<tr> 
-                     	<td>${list.mypage_NO}</td>
-                     	<td>${list.mypage_CATEGORY}</td>
-                        <td><a href="#">${list.mypage_TITLE}</a></td>
-                        <td>SG운영자</td>
-                        <td>${list.mypage_REGDATE}</td>
-                        <td>${list.mypage_HITCOUNT}</td>
-                    </tr>
-                 </c:forEach> 
-                 </c:otherwise>
-                </c:choose> 	
-               </tbody>
-            </table>
-            
-            <form action="#" name="searchForm" method="post">
-            <table class="board_search_table" width="90%" style="padding-top: 10px;">
-               <colgroup>
-                  <col width="20%" />
-                    <col width="30%" />
-                    <col width="50%" />
-               </colgroup>
-               <thead>
-                  <tr class="table_title">
-                     <th>SEARCH</th>
-                     <th><select id="select" name="searchNum">
-                              <option selected="selected">TITLE</option>
-                              <option>CONTENT</option>
-                              <option>CATEGORY</option>
-                        </select></th>
-                        
-                        <th><input type="text" name="isSearch" id="search_text" placeholder="검색할 키워드를 입력해주세요">
-                        <input type="button" value="검색" onclick="boardSearch()"></th>
-                  </tr>
-               </thead>
-            </table>
-            </form>
-         </div>
-        </div> 
-        </div>
 </body>
 </html>
