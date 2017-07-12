@@ -33,5 +33,13 @@ public class MemberDao extends AbstractDAO {
 	{
 	   sqlSession.update("mypage.deleteMember", map);
 	}
+	
+	//회원별 구매 총 누적금액
+	public Map<String, Object> sumTradeMoney(Map<String, Object>map) throws Exception 
+	{
+		return (Map<String, Object>)selectOne("mypage.sumTradeMoney", map);
+	}
+	
+	
 
 }

@@ -20,7 +20,7 @@ public interface PointService {
 	public void savePoint(Map<String, Object>map) throws Exception;
 	   
 	//회원별 포인트 총 합계
-	public Map<String, Object> sumPoint(Map<String, Object>map) throws Exception ;
+	public Map<String, Object> sumPoint(Map<String, Object> map) throws Exception ;
 			
 	//회원별 포인트 내역 조회
 	public List<Map<String, Object>> myPointList(Map<String, Object>map) throws Exception ;

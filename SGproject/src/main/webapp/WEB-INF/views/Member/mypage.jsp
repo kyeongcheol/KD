@@ -72,7 +72,76 @@
 }
    
 </style>
+<script type="text/javascript">
+function tab(num){
+	if(num == 1){
+			$.ajax({
+				url: "/SIRORAGI/orderlist",
+				type : "get",
+				success:function(data){
+					$("#account-contentsWrap").html(data);
+					
+				}
+			});
+	}
+	if(num == 2){
+			$.ajax({
+		url: "/SIRORAGI/exchangelist",
+		type : "get",
+		success:function(data){
+			$("#account-contentsWrap").html(data);
+		}
+	});
+	}
+	if(num == 3){
+			$.ajax({
+		url: "/SIRORAGI/returnlist",
+		type : "get",
+		success:function(data){
+			$("#account-contentsWrap").html(data);
+		}
+	});
+	}
+	if(num == 4){
+			$.ajax({
+		url: "/SIRORAGI/review",
+		type : "get",
+		success:function(data){
+			$("#account-contentsWrap").html(data);
+		}
+	});
+	}
+	if(num == 5){
+			$.ajax({
+		url: "/SIRORAGI/qna",
+		type : "get",
+		success:function(data){
+			$("#account-contentsWrap").html(data);
+		}
+	});
+	}
+	if(num == 6){
+			$.ajax({
+		url: "/SIRORAGI/oneToOne",
+		type : "get",
+		success:function(data){
+			$("#account-contentsWrap").html(data);
+		}
+	});
+	}
+	if(num == 7){
+			$.ajax({
+		url: "/SG/myinfo",
+		type : "get",
+		success:function(data){
+			$("#account-contentsWrap").html(data);
+		}
+	});
+	}
+	return false;
+};
 
+</script>
 <title>mypage게시판</title>
 </head>
 <body>
@@ -89,16 +158,16 @@
 			<div class="section-body">
 				<div class="item profile col-xs-24 col-md-6">
 					<div class="info">						<strong>
-						<span class="level" style="text-align:center;">${sessionScope.MEMBER_ID}</span>(${sessionScope.MEMBER_NAME }님)
+						<span> <!-- class="level" style="text-align:center;" -->${sessionScope.MEMBER_ID}</span>(${sessionScope.MEMBER_NAME }님)
 						</strong>
-						<a href="#" onclick="javascript:tab(7)" class="button small button-dimmed">
-							<span class="button-label">내 정보 수정</span>
+						<a href="memberInfo" onclick="javascript:tab(7)" class="button small button-dimmed">
+							<span class="button-label">내 정보 보기</span>
 						</a>
 					</div>
 				</div>
 				<div class="item point col-xs-8 col-md-6">
 					<strong>포인트 : </strong>
-					<em><fmt:formatNumber value="${sumPoint}" type="number" />원</em><br>
+					<em>${sumPoint}원</em><br>
 					<button class="button small" target="modal" data-size="md" data-label="나의 적립금" href="/SIRORAGI/member/myPoint">
 						<span class="button-label">자세히 보기</span>
 					</button>
@@ -107,32 +176,26 @@
 				<div class="item cash col-xs-8 col-md-6">
 				<div class="info">
 				<c:choose>
-				<c:when test="${totalMoney eq null }">
+				<c:when test="${sumTrade eq null }">
 				<span>총  구입금액 : </span>
 				 <span>0원</span>
 				 </c:when>
 				 <c:otherwise>
 				 <span>총  구입금액 : </span>
-				 <span>${totalMoney}원</span>
+				 <span>${sumTrade}원</span>
 				 </c:otherwise>
 				</c:choose>
 				
 				</div>
 				</div>
 				<div class="item coupon col-xs-8 col-md-6">
-				<div style="margin-top:-15px">
-					<span>주문진행중 : </span>
-				<span>${buyCount }건</span><br> 
-				</div>
 				<div>
-					<span>반품진행중 : </span>
-					 <span>${ReCount }건</span><br> 
-					 </div>
-					 <div>
-					<span>교환진행중 : </span>
-					 <span>${ExCount }건</span><br> 
-					 </div>
+					<span>나의 등급: </span>
+				<span>일반회원</span><br> 
+				<span>일반회원 이미지 </span>
+				</div>
 				
+					
 				</div>
 			</div>
 		</section>
