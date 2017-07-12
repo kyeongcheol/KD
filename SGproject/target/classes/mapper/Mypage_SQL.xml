@@ -228,24 +228,24 @@
 <select id="myWishList" parameterType="hashmap" resultType="hashmap">
   <![CDATA[
 		   SELECT DISTINCT  
-			W.WISH_NO,  -- 위시리스트 번호, 
-			W.WISH_GOODS_NO, -- 위시리스트 상품 번호
-			W.WISH_REG_DATE, -- 위시리스트 등록 날짜 
-		    G.GOODS_NAME, -- 상품 이름
-			G.GOODS_THUMBNAIL, --상품 썸네일
-			G.GOODS_PRICE, -- 상품 가격
-			M.MEMBER_ID -- 회원 ID
+			W.WISH_NO,  
+			W.WISH_GOODS_NO, 
+			W.WISH_REG_DATE, 
+		    G.GOODS_NAME, 
+			G.GOODS_THUMBNAIL, 
+			G.GOODS_PRICE, 
+			M.MEMBER_ID 
 			
-			FROM SG_WISH W, --위시리스트 테이블
-			     SG_GOODS G, -- 상품 테이블
-				 SG_MEMBER M -- 회원 테이블
+			FROM SG_WISH W, 
+			     SG_GOODS G, 
+				 SG_MEMBER M 
 			
-			WHERE W.WISH_GOODS_NO = G.GOODS_NO --조인조건(위시+상품)
-			AND W.WISH_MEMBER_NO = M.MEMBER_NO --조인조건(위시+회원)			 
-			AND G.GOODS_ONOFF = 0 -- 상품 노출이 ON
-			AND M.MEMBER_ID = #{MEMBER_ID} --로그인 한 ID를 받아옴
-			ORDER BY W.WISH_REG_DATE DESC, -- 위시리스트 등록일자 내림차순 
-			         W.WISH_NO ASC -- 상품 번호 오름차순
+			WHERE W.WISH_GOODS_NO = G.GOODS_NO 
+			AND W.WISH_MEMBER_NO = M.MEMBER_NO 
+			AND G.GOODS_ONOFF = 0 
+			AND M.MEMBER_ID = #{MEMBER_ID} 
+			ORDER BY W.WISH_REG_DATE DESC, 
+			         W.WISH_NO ASC 
   ]]>
 </select>
 
