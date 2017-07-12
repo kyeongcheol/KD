@@ -1,26 +1,56 @@
 package SG.com.member.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import SG.com.common.CommandMap;
+import SG.com.member.service.PointService;
+import SG.com.member.service.JoinService;
+import SG.com.member.service.MemberService;
 //마이페이지 컨트롤러 
 @Controller
 public class MemberController 
 {
+	@Resource(name="memberService")
+	private MemberService memberService;
+	
+	@Resource(name="pointService")
+	private PointService pointService;
 	//마이페이지 
 	@RequestMapping(value = "/mypage")
-	public String mypage(Model model) 
+	public String mypage(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
-		return "mypage";
+		String mem_num = session.getAttribute("MEMBER_NO").toString();
+		
+		commandMap.getMap().put("MEMBER_NO", mem_num);
+		
+		Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
+		
+		model.addAttribute("sumPoint", sumPoint.get("SUM"));
+		
+		return "Member/mypage";
 	}
 	
 	//회원 정보 조회
 	@RequestMapping(value = "/memberInfo")
-	public String memInfo(Model model) 
+	public String memInfo(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
+      /*  String mem_num = session.getAttribute("MEMBER_NO").toString();
+		
+		commandMap.getMap().put("MEMBER_NO", mem_num);
+		
+		Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
+		model.addAttribute("sumPoint", sumPoint.get("SUM"));*/
 		return "memberInfo";
 	}
 	

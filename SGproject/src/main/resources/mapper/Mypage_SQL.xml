@@ -259,4 +259,14 @@
 		AND WISH_NO = #{WISH_NO}
   ]]>
  </delete>  
+ 
+ <!--회원별 구매금액 총 누적 합계 -->
+ <!--  <select id="sumTradeMoney" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+		SELECT 
+			SUM(TRADE_MONEY) AS SUM
+			FROM SG_TRADE 
+			WHERE TRADE_MEMBER_ID = ${MEMBER_ID}
+	]]>
+	</select> -->
 </mapper>
