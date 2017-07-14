@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+나의 포인트 내역
 </body>
 </html>

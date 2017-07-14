@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-wish
+나의 위시리스트
 </body>
 </html>

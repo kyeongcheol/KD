@@ -23,10 +23,6 @@
 		<put-attribute name="body" value="/WEB-INF/views/Member/mem_update_Form.jsp"/>
 	</definition>
 	
-	<definition name="memUpdateAction" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/mem_update_Action.jsp"/>
-	</definition>
-	
 	<definition name="memDeleteForm" extends="layout">
 		<put-attribute name="body" value="/WEB-INF/views/Member/mem_delete_Form.jsp"/>
 	</definition>
@@ -43,12 +39,12 @@
 	  <put-attribute name="body" value="/WEB-INF/views/Member/myWish.jsp"/>
     </definition>	
 
-    <definition name="tradeInfo" extends="layout">
-     <put-attribute name="body" value="/WEB-INF/views/Member/myTrade.jsp"/>
+    <definition name="orderInfo" extends="layout">
+     <put-attribute name="body" value="/WEB-INF/views/Member/myOrder.jsp"/>
     </definition>
 	
-    <definition name="tradeInfoView" extends="layout">
-	  <put-attribute name="body" value="/WEB-INF/views/Member/myTrade_View.jsp"/>
+    <definition name="orderInfoView" extends="layout">
+	  <put-attribute name="body" value="/WEB-INF/views/Member/myOrder_View.jsp"/>
     </definition>
 	
 </tiles-definitions>

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import SG.com.member.dao.LoginDao;
 
-@Service("loginService")
+ @Service("loginService")
  public class LoginServiceImpl implements LoginService {
 	
 	@Resource(name="loginDAO")

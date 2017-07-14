@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-basket
-
+나의 장바구니 내역
 </body>
 </html>
