@@ -37,7 +37,7 @@
     SET
         MEMBER_DELDATE = SYSDATE,   
         MEMBER_ONOFF = 1            
-    WHERE MEMBER_NO = #{MEMBER_NO} 
+    WHERE MEMBER_NO = #{MEMBER_NO} AND MEMBER_ID = #{MEMBER_ID}
    ]]>
 </update>
 

@@ -22,6 +22,7 @@ function deleteMember()
 	   {
 	   return;
 	   }
+   
    else{
 	   var total = ({"MEMBER_ID":mem_id});
 		$.ajax
@@ -37,11 +38,10 @@ function deleteMember()
 				
 				if(data != 0)
 					{
-					opener.location.replace("main");
-					alert("그동안 이용해 주셔서 감사합니다.");				    
+					alert("그동안 이용해 주셔서 감사합니다.");
 					self.close();
-					
-					
+					opener.location.replace("main"); //부모창 새로고침
+								    
 					}	
 				else
 					{
@@ -58,12 +58,8 @@ function deleteMember()
 }
 	
 } 
- 
-         
+          
 </script>
-
-
-
 </head>
 
 <body>
