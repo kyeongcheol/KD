@@ -101,6 +101,7 @@
 .totalpoint label {
     float:left;
    	text-align: center; 
+   	padding-left:
 	border-top: 1px solid #e5e5e5; 
 	border-bottom: 1px solid #e5e5e5;
 	 
@@ -108,7 +109,8 @@
 }
  .totalpoint input {
        padding-right:50px;
-       float
+       float:left;
+       
 }
 
 </style>
@@ -163,10 +165,10 @@
 </table>
       
 		<div class="totalpoint">
-         <label for="input-mail">
+         <label for="sumPoint">
             <strong>총 포인트</strong>
          </label>
-         <input type="text" name=sumPoint id="sumPoint" label="총포인트" value="${sumPoint}" readOnly class="xx-control">
+         <input type="text" name="sumPoint" id="sumPoint" label="총포인트" value="${sumPoint}" readOnly class="xx-control">
          </div>
       </div>
      

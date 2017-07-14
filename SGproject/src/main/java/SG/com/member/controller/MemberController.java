@@ -108,13 +108,13 @@ public class MemberController
 		
 		System.out.println(MEMBER_EMAIL);
 		System.out.println(commandMap.getMap());
-		
-	    
-	    /*memberService.updateMyinfo(commandMap.getMap());
+		Map<String, Object> updatemember = new HashMap<String, Object>();
+	    updatemember = commandMap.getMap();
+	    memberService.updateMyinfo(updatemember);
 	    
 	    Map<String, Object> memberMap = new HashMap<String, Object>();
 	    memberMap = memberService.myinfoDetail(commandMap.getMap());
-	    model.addAttribute("memberInfo", memberMap);*/
+	    model.addAttribute("memberInfo", memberMap);
 	    
 	    return "Member/mem_update_Form";
 	}
@@ -137,8 +137,9 @@ public class MemberController
 	
 	//나의 포인트 내역
 	@RequestMapping(value = "/myPoint")
-	public String mypoint(Model model) 
+	public String mypoint(Model model, HttpSession session) 
 	{
+		String mem_id = session.getAttribute("MEMBER_ID").toString();
 		System.out.println("나의 포인트 내역");
 		return "Member/myPoint";
 	}

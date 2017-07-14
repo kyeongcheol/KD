@@ -70,6 +70,7 @@
       var f = document.frm;
       var mem_id = f.MEMBER_ID.value;
       var mem_pw = f.MEMBER_PASSWORD.value;
+      var mem_phone = f.MEMBER_PHONE.value;
       var mem_zip = f.MEMBER_ZIP.value;
       var mem_addr1 = f.MEMBER_ADDR1.value;
       var mem_addr2 = f.MEMBER_ADDR2.value;
@@ -94,6 +95,7 @@
     		 ({
     		   "MEMBER_ID":mem_id,	
     		   "MEMBER_PASSWORD":mem_pw,
+    		   "MEMBER_PHONE":mem_phone,
     		   "MEMBER_ZIP":mem_zip,
     		   "MEMBER_ADDR1":mem_addr1,
     		   "MEMBER_ADDR2":mem_addr2, 
@@ -110,24 +112,24 @@
     		 data : update,
     		 success : function(data)
     		 {
-    			 if(data != 0)
-    			 {
-    				 confirm("회원정보가 수정되었습니다.");
-    				 f.action="/SG/memberInfo";
-    				 f.submit();
-    			 }
+    			 
+    			  confirm("회원정보가 수정되었습니다.");
+    			  self.close();
+    			  f.action="redirect:/SG/memberInfo"
     		 },
     		 
     		 error : function(e)
 		     {
 		    	 alert("error" + e);
 		     }
+    		 
     	 });
     	 
       }
       return true;
       
     }
+  
     </script>
 
   
