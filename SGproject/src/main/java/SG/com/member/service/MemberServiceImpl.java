@@ -18,7 +18,7 @@ public class MemberServiceImpl implements MemberService {
 	
 	 // 나의 회원정보 조회
 	   @Override
-	  public Map<String, Object> myinfoDetail(Map<String, Object> map, HttpServletRequest request) throws Exception{
+	  public Map<String, Object> myinfoDetail(Map<String, Object> map) throws Exception{
 		  return memberDao.myinfoDetail(map);
 	  }
 	
