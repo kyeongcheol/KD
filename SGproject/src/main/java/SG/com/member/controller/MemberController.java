@@ -110,15 +110,15 @@ public class MemberController
 		System.out.println(commandMap.getMap());
 		
 	    
-	    /*memberService.updateMyinfo(commandMap.getMap());
+	    memberService.updateMyinfo(commandMap.getMap());
 	    
 	    Map<String, Object> memberMap = new HashMap<String, Object>();
+	    
 	    memberMap = memberService.myinfoDetail(commandMap.getMap());
-	    model.addAttribute("memberInfo", memberMap);*/
+	    model.addAttribute("memberInfo", memberMap);
 	    
 	    return "Member/mem_update_Form";
 	}
-
 	
 	//회원 정보 삭제 처리
 	@RequestMapping(value = "/memberDeleteAction")
