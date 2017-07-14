@@ -52,7 +52,7 @@ public class MemberController
 	
 	//회원 정보 조회
 	@RequestMapping(value = "/memberInfo")
-	public String memInfo(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
+	public String memInfo(HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
 
 		System.out.println("회원 내역");
@@ -69,18 +69,20 @@ public class MemberController
 	
 	//회원 정보 수정 폼
 	@RequestMapping(value = "/memberUpdateForm")
-	public String memUpdateForm(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) 
+	public String memUpdateForm(HttpSession session, Model model, CommandMap commandMap) 
 			throws Exception
 	{ 
 	   System.out.println("진입");
 			
-	   String mem_id = session.getAttribute("MEMBER_ID").toString();
+	   String mem_id = session.getAttribute("MEMBER_ID").toString(); //MEMBER_ID 값 설정
 			
-	   commandMap.getMap().put("MEMBER_ID", mem_id);
-			
+	   commandMap.getMap().put("MEMBER_ID", mem_id); //MEMBER_ID 커맨드 map에 put
+	
+	   //회원 ID에 해당하는 회원정보 myinfo 맵으로 받아오기
 	   Map<String, Object> myInfo = memberService.myinfoDetail(commandMap.getMap());
+	   //아이디 출력
 	   System.out.println(myInfo.get("MEMBER_ID"));
-	   model.addAttribute("myInfo", myInfo);
+	   model.addAttribute("myInfo", myInfo); //myinfo 영역에 저장
 			  
 	   String email = (String)myInfo.get("MEMBER_EMAIL");
 			
@@ -98,23 +100,26 @@ public class MemberController
 	
 	//회원 정보 수정 처리
 	@RequestMapping(value = "/memberUpdateAction")
-	public String memUpdateAction(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
+	public String memUpdateAction(HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
 		System.out.println("진입");
+		//split 된 이메일을 다시 합침
 		String MEMBER_EMAIL = commandMap.getMap().get(("MEMBER_EMAIL1"))
 				+"@"+ commandMap.getMap().get(("MEMBER_EMAIL2"));
 		
-		commandMap.getMap().put("MEMBER_EMAIL", MEMBER_EMAIL);
+		commandMap.getMap().put("MEMBER_EMAIL", MEMBER_EMAIL); //MEMBER_EMAIL map에 삽입
 		
-		System.out.println(MEMBER_EMAIL);
-		System.out.println(commandMap.getMap());
+		System.out.println(commandMap.getMap()); //map 확인
+		
+		//updatemember map 선언
 		Map<String, Object> updatemember = new HashMap<String, Object>();
-	    updatemember = commandMap.getMap();
-	    memberService.updateMyinfo(updatemember);
+	    updatemember = commandMap.getMap(); //update 할 정보들 updatemember에 넣음
+	    memberService.updateMyinfo(updatemember); //update 쿼리 실행
 	    
+	    //memberMap map 선언
 	    Map<String, Object> memberMap = new HashMap<String, Object>();
-	    memberMap = memberService.myinfoDetail(commandMap.getMap());
-	    model.addAttribute("memberInfo", memberMap);
+	    memberMap = memberService.myinfoDetail(commandMap.getMap()); //바뀐 회원정보 불러옴
+	    model.addAttribute("memberInfo", memberMap); //model에 저장
 	    
 	    return "Member/mem_update_Form";
 	}
@@ -122,17 +127,29 @@ public class MemberController
 	
 	//회원 정보 삭제 처리
 	@RequestMapping(value = "/memberDeleteAction")
-	public String memDeleteAction(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
+	public String memDeleteAction(HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
-	   String mem_num = session.getAttribute("MEMBER_NO").toString();
-	      
-	   commandMap.getMap().put("MEMBER_NO", mem_num);
-	      
-	   memberService.deleteMember(commandMap.getMap());
-	      
-	   session.invalidate();
+	   System.out.println("진입");
+	   String mem_id = commandMap.getMap().get("MEMBER_ID").toString(); //ajax jason data가 map에 저장
+	   
+	   commandMap.getMap().put("MEMBER_ID", mem_id); //MEMBER_ID commandMap에 저장
+	   commandMap.getMap().put("MEMBER_NO", session.getAttribute("MEMBER_NO")); //MEMBER_NO commandMap에 저장
+	   System.out.println(commandMap.getMap());
+	
+	   memberService.deleteMember(commandMap.getMap()); //update onoff = 1(회원탈퇴) 쿼리 실행
+	   
+	   Map<String, Object> member = new HashMap<String, Object>(); //member map 선언
+	   member = memberService.myinfoDetail(commandMap.getMap()); //회원 정보를 map에 담음
+	   
+	   int onoff = Integer.parseInt(member.get("MEMBER_ONOFF").toString());
+	   
+	   if(onoff == 1)
+	   {
+		  model.addAttribute("onoff", onoff);
+	      session.invalidate();
+	   }
 	       
-	   return "redirect:main";
+	   return "Member/member_Info";
 	 }
 	
 	//나의 포인트 내역

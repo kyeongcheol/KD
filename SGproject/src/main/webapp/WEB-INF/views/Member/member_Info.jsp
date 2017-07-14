@@ -22,6 +22,7 @@ function deleteMember()
 	   {
 	   return;
 	   }
+   
    else{
 	   var total = ({"MEMBER_ID":mem_id});
 		$.ajax
@@ -37,11 +38,10 @@ function deleteMember()
 				
 				if(data != 0)
 					{
-					opener.location.replace("main");
-					alert("그동안 이용해 주셔서 감사합니다.");				    
+					alert("그동안 이용해 주셔서 감사합니다.");
 					self.close();
-					
-					
+					opener.location.replace("main"); //부모창 새로고침
+								    
 					}	
 				else
 					{
@@ -58,12 +58,8 @@ function deleteMember()
 }
 	
 } 
- 
-         
+          
 </script>
-
-
-
 </head>
 
 <body>
@@ -186,7 +182,7 @@ function deleteMember()
    </li>
 </ul>
  <div class="btnArea">
-   <a class="effect effect-5" title="탈퇴하기 " onclick="javascript:deleteMember();">탈퇴하기</a>
+  <input class="effect effect-5" type="button" value="탈퇴하기" onclick="javascript:deleteMember();">
   <input class="effect effect-5" type="submit" value="회원정보 수정하기"/>
  </div>
 </section>
