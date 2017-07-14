@@ -92,6 +92,25 @@
 .paging a:first-child{margin-left:0;}
 .paging strong{color:#fff;background:#337AB7;border:1px solid #337AB7;}
 .paging .page_arw{font-size:11px;line-height:30px;}
+
+.totalpoint {
+
+ padding-right:50px;
+ text-align:center;
+}
+.totalpoint label {
+    float:left;
+   	text-align: center; 
+	border-top: 1px solid #e5e5e5; 
+	border-bottom: 1px solid #e5e5e5;
+	 
+	font-family: PureunJeonnam;
+}
+ .totalpoint input {
+       padding-right:50px;
+       float
+}
+
 </style>
 
 
@@ -105,7 +124,7 @@
 </div>
 
 
-<table class="faq_admin_table" width="100%">
+<table class="faq_admin_table" width="80%">
 <colgroup>
 	<col width="10%" />
 	<col width="20%"/>
@@ -131,43 +150,29 @@
 
    				 <c:forEach var="list"  items="${list}" varStatus="stat">
                  	<tr> 
-                     	<td>${list.FAQ_NO}</td>
-                     	<td>${list.FAQ_CATEGORY}</td>
-                        <td><a href="#">${list.FAQ_TITLE}</a></td>
-                        <td>SG운영자</td>
-                        <td>${list.FAQ_REGDATE}</td>
-                        <td>${list.FAQ_HITCOUNT}</td>
-                        <td>관리버튼</td>
+                     	<td>${stat.count}</td>
+                     	<td>${list.POINT_DATE}</td>
+                     	<td>${list.POINT_MONEY}</td>
+                     	<td>${list.POINT_CONTENT}</td>
+                      
                     </tr>
                  </c:forEach> 
                  </c:otherwise> 
                 </c:choose>  
            
 </table>
-
-							<div>
-								<input type="button" value="등록하기" id="resister">
-							</div>
+      
+		<div class="totalpoint">
+         <label for="input-mail">
+            <strong>총 포인트</strong>
+         </label>
+         <input type="text" name=sumPoint id="sumPoint" label="총포인트" value="${sumPoint}" readOnly class="xx-control">
+         </div>
+      </div>
+     
 <div class="paging" style="text-align:center;">
 						${pagingHtml}
 					</div>
-<div class="admin_search">
-
-                     		<div style="text-align:center; width:500px; margin-left:auto; margin-right:auto; margin-top:10px;">
-								<div id="dataTables-example_filter" class="dataTables_filter">
-									<form action="">
-									<select class="form-control" name="searchNum" id="searchNum" style="width:90px; float:left; margin-right:8px;">
-										<option value="0">내용</option>
-										<option value="1">제목</option>
-									</select>
-										<input class="form-control" type="text" name="isSearch" id="isSearch" style="width:300px; float:left;"/>
-										<span>
-										<button type="submit" class="btn btn-default" style="float:left;">검색</button>
-										</span>
-									</form>
-								</div>							
-							</div>
-</div>
 
 </div>
 </body>
