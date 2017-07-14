@@ -38,34 +38,34 @@ function tab(num)
 };
 
 $(document).ready(function () 
-      {
-          //img를 꺼내와서 크기 지정
+		{
+		    //img를 꺼내와서 크기 지정
             $("#grade").attr('width', 50);
             $("#grade").attr('height', 50);
             
             var link = document.location.href;
-           var tab = link.split('mypage').pop(); //href 태그 중 mypage를 제거
-           
-           if(tab == "")
-           {
-              $('a[href=#myorder]').trigger("click");   
-           }
-           else 
-           {
-               $('a[href$='+tab+']').trigger("click");
-           }
+        	var tab = link.split('mypage').pop(); //href 태그 중 mypage를 제거
+        	
+        	if(tab == "")
+        	{
+        		$('a[href=#myorder]').trigger("click");	
+        	}
+        	else 
+        	{
+        	    $('a[href$='+tab+']').trigger("click");
+        	}
         });
                 
 function member_info()
 {
-   //아이디 찾기 팝업 창
-   window.open('/SG/memberInfo','','toolbar=no,menubar=no,location=no,height=950,width=1200'); 
+	//아이디 찾기 팝업 창
+	window.open('/SG/memberInfo','','toolbar=no,menubar=no,location=no,height=950,width=1200'); 
 }
 
 function point_list()
 {
-   //아이디 찾기 팝업 창
-   window.open('/SG/myPoint','','toolbar=no,menubar=no,location=no,height=950,width=1200'); 
+	//아이디 찾기 팝업 창
+	window.open('/SG/myPoint','','toolbar=no,menubar=no,location=no,height=950,width=1200'); 
 }
 
 
