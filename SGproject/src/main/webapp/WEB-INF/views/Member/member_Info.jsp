@@ -1,21 +1,74 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page session = "true" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <link rel="stylesheet" href="/SG/resources/file/css/main.min.css">
 <link rel="stylesheet" href="/SG/resources/file/css/joinForm.css">
+<script>
+
+//회원탈퇴
+function deleteMember()
+{
+    var f = document.frm;
+	var mem_id = f.MEMBER_ID.value;
+	
+   if(!confirm("삭제하시겠습니까?"))
+	   {
+	   return;
+	   }
+   else{
+	   var total = ({"MEMBER_ID":mem_id});
+		$.ajax
+		({
+			
+			type: "POST",
+			url: "/SG/memberDeleteAction",
+			data : total,
+			
+			success: function(data)
+			{
+				console.log("로그 내용1");
+				
+				if(data != 0)
+					{
+					opener.location.replace("main");
+					alert("그동안 이용해 주셔서 감사합니다.");				    
+					self.close();
+					
+					
+					}	
+				else
+					{
+				    alert("탈퇴에 실패 함");
+				    self.close();
+					} 
+			
+		     },
+		error: function(e)
+		{
+			alert('error'+e);
+		}
+	});
+}
+	
+} 
+ 
+         
+</script>
+
+
 
 </head>
 
 <body>
 <div class="body_center">
-<form action="/SG/memberUpdateForm">
+<form action="/SG/memberUpdateForm" name="frm">
 <section class="input-horizontal list-horizontal section box-shadow">
             <div class="main_subject">
                <h2>회원정보</h2>
@@ -133,6 +186,7 @@
    </li>
 </ul>
  <div class="btnArea">
+   <a class="effect effect-5" title="탈퇴하기 " onclick="javascript:deleteMember();">탈퇴하기</a>
   <input class="effect effect-5" type="submit" value="회원정보 수정하기"/>
  </div>
 </section>

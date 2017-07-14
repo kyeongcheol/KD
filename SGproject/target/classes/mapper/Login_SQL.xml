@@ -6,7 +6,7 @@
 
 <select id="loginSuccess" parameterType="hashmap" resultType="hashmap">
 	<![CDATA[
-		SELECT * FROM SG_MEMBER WHERE MEMBER_ID = #{MEMBER_ID} 
+		SELECT * FROM SG_MEMBER WHERE MEMBER_ID = #{MEMBER_ID} AND MEMBER_ONOFF = 0 
 	]]>
 </select>
 	
