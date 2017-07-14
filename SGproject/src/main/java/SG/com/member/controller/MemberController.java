@@ -100,23 +100,40 @@ public class MemberController
 	@RequestMapping(value = "/memberUpdateAction")
 	public String memUpdateAction(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
-		String MEMBER_EMAIL = request.getParameter("MEMBER_EMAIL1")+"@"+request.getParameter("MEMBER_EMAIL2");
+		System.out.println("진입");
+		String MEMBER_EMAIL = commandMap.getMap().get(("MEMBER_EMAIL1"))
+				+"@"+ commandMap.getMap().get(("MEMBER_EMAIL2"));
+		
+		commandMap.getMap().put("MEMBER_EMAIL", MEMBER_EMAIL);
+		
+		System.out.println(MEMBER_EMAIL);
+		System.out.println(commandMap.getMap());
+		
+	    
+	    /*memberService.updateMyinfo(commandMap.getMap());
+	    
 	    Map<String, Object> memberMap = new HashMap<String, Object>();
-			
-	    memberMap = commandMap.getMap();
-	    memberMap.put("MEMBER_EMAIL", MEMBER_EMAIL);
-	    memberService.updateMyinfo(memberMap);
-	        
-	    return "redirect:/memberInfo";
+	    memberMap = memberService.myinfoDetail(commandMap.getMap());
+	    model.addAttribute("memberInfo", memberMap);*/
+	    
+	    return "Member/mem_update_Form";
 	}
 
 	
 	//회원 정보 삭제 처리
 	@RequestMapping(value = "/memberDeleteAction")
-	public String memDeleteAction(Model model) 
+	public String memDeleteAction(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
-		return "redirect:/main";
-	}
+	   String mem_num = session.getAttribute("MEMBER_NO").toString();
+	      
+	   commandMap.getMap().put("MEMBER_NO", mem_num);
+	      
+	   memberService.deleteMember(commandMap.getMap());
+	      
+	   session.invalidate();
+	       
+	   return "redirect:main";
+	 }
 	
 	//나의 포인트 내역
 	@RequestMapping(value = "/myPoint")

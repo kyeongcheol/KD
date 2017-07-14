@@ -132,7 +132,7 @@
 	        
 		    <c:choose>
 		    
-		    <c:when test="${(sessionScope.MEMBER_NO) == null}">
+		    <c:when test="${(sessionScope.MEMBER_NO) == 0}">
 		    <ul>		
 		    <li><a class="loginLink" href="loginForm">로그인</a></li>
 		    <li><a class="loginLink" href="joinEmail">회원가입</a></li>

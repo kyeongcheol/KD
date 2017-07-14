@@ -65,11 +65,20 @@
         }).open();
     }
   //비밀번호 일치 확인
-    function checkpw()
-    {
+  function checkpw()
+  {
       var f = document.frm;
+      var mem_id = f.MEMBER_ID.value;
+      var mem_pw = f.MEMBER_PASSWORD.value;
+      var mem_zip = f.MEMBER_ZIP.value;
+      var mem_addr1 = f.MEMBER_ADDR1.value;
+      var mem_addr2 = f.MEMBER_ADDR2.value;
+      var mem_email1 = f.MEMBER_EMAIL1.value;
+      var mem_email2 = f.MEMBER_EMAIL2.value;
+      var mem_height = f.MEMBER_HEIGHT.value;
+      var mem_weight = f.MEMBER_WEIGHT.value;
       
-      if(f.MEMBER_PASSWORD.value != f.password_confirm.value)
+      if(mem_pw != f.password_confirm.value)
       {
     	 alert("비밀번호가 일치하지 않습니다.");
     	 
@@ -79,20 +88,55 @@
     	 return false;
       }
       
-     /*  f.action="/SG/joinSuccess";
-      f.submit(); */
+      else
+      {
+    	 var update = 
+    		 ({
+    		   "MEMBER_ID":mem_id,	
+    		   "MEMBER_PASSWORD":mem_pw,
+    		   "MEMBER_ZIP":mem_zip,
+    		   "MEMBER_ADDR1":mem_addr1,
+    		   "MEMBER_ADDR2":mem_addr2, 
+    		   "MEMBER_EMAIL1":mem_email1,
+    		   "MEMBER_EMAIL2":mem_email2, 
+    		   "MEMBER_HEIGHT":mem_height,
+    		   "MEMBER_WEIGHT":mem_weight    		 
+    		 });
+   
+    	 $.ajax
+    	 ({
+    		 type : "POST",
+    		 url : "/SG/memberUpdateAction",
+    		 data : update,
+    		 success : function(data)
+    		 {
+    			 if(data != 0)
+    			 {
+    				 confirm("회원정보가 수정되었습니다.");
+    				 f.action="/SG/memberInfo";
+    				 f.submit();
+    			 }
+    		 },
+    		 
+    		 error : function(e)
+		     {
+		    	 alert("error" + e);
+		     }
+    	 });
+    	 
+      }
       return true;
       
     }
     </script>
 
-
+  
 
 </head>
 
 <body>
 <div class="body_center">
-<form action="/SG/memberUpdateAction" method="post" >
+<form name="frm" method="post" >
 <section class="input-horizontal list-horizontal section box-shadow">
             <div class="main_subject">
                <h2>회원정보 수정</h2>
