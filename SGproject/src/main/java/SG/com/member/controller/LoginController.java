@@ -43,6 +43,7 @@ public class LoginController
 			return "loginForm";
 			
 		}
+	
 		//해당 회원정보가 있으면
 		else
 		{

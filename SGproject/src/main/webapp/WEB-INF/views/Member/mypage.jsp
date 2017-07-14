@@ -48,7 +48,6 @@ $(document).ready(function ()
            
            if(tab == "")
            {
-              alert("111");
               $('a[href=#myorder]').trigger("click");   
            }
            else 
