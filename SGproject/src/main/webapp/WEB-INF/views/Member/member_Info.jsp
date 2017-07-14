@@ -186,7 +186,7 @@ function deleteMember()
    </li>
 </ul>
  <div class="btnArea">
-   <a class="effect effect-5" title="탈퇴하기 " onclick="javascript:deleteMember();">탈퇴하기</a>
+  <input class="effect effect-5" type="button" value="탈퇴하기" onclick="javascript:deleteMember();">
   <input class="effect effect-5" type="submit" value="회원정보 수정하기"/>
  </div>
 </section>

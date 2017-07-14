@@ -18,7 +18,7 @@ public interface MemberService {
 	 void deleteMember(Map<String, Object> map) throws Exception;
 	 
 	 //회원별 총 누적금액
-	 Map<String, Object> sumTradeMoney(Map<String, Object>map) throws Exception;
+	 int mysumTradeMoney(Map<String, Object>map) throws Exception;
 	
 
 

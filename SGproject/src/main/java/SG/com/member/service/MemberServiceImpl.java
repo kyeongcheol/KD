@@ -11,35 +11,39 @@ import SG.com.member.dao.LoginDao;
 import SG.com.member.dao.MemberDao;
 
 @Service("memberService")
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService 
+{
 	
-	   @Resource(name="memberDAO")
-	   private MemberDao memberDao;
+	@Resource(name="memberDAO")
+	private MemberDao memberDao;
 	
-	 // 나의 회원정보 조회
-	   @Override
-	  public Map<String, Object> myinfoDetail(Map<String, Object> map) throws Exception{
-		  return memberDao.myinfoDetail(map);
-	  }
-	
-	
-	   // 나의 회원정보 수정
+	// 나의 회원정보 조회
 	@Override
-	  public void updateMyinfo(Map<String, Object> map) throws Exception{
-         memberDao.updateMyinfo(map);
-
-	  }
+	public Map<String, Object> myinfoDetail(Map<String, Object> map) throws Exception
+	{
+	   return memberDao.myinfoDetail(map);
+	}
+	
+	// 나의 회원정보 수정
+	@Override
+	public void updateMyinfo(Map<String, Object> map) throws Exception
+	{
+       memberDao.updateMyinfo(map);
+	}
 		
-		//회원탈퇴
-	   @Override
-	  public void deleteMember(Map<String, Object> map) throws Exception{
-		  memberDao.deleteMember(map);
-	  }
-	   
-	   @Override
-	  public Map<String, Object> sumTradeMoney(Map<String, Object>map) throws Exception{
-		   return memberDao.sumTradeMoney(map);
-	   }
+	//회원탈퇴
+	@Override
+	public void deleteMember(Map<String, Object> map) throws Exception
+	{
+	   memberDao.deleteMember(map);
+	}
+	  
+	//회원의 결제 총 누적금액
+	@Override
+	public int mysumTradeMoney(Map<String, Object>map) throws Exception
+	{
+	   return (int)memberDao.mysumTradeMoney(map);
+	}
 	
 
 

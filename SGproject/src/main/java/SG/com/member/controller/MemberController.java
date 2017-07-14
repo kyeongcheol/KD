@@ -165,13 +165,6 @@ public class MemberController
 		return "Member/myOrder";
 	}
 	
-	//주문상품 취소 처리
-	@RequestMapping(value="/ordercancel")
-	public String orderCancel(Model model)
-	{
-		return "redirect:/orderInfo";
-	}
-	
 	//나의 위시리스트
 	@RequestMapping(value = "/wishList")
 	public String wishList(Model model)

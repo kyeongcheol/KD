@@ -123,9 +123,9 @@
     			 self.close();
     		 },
     		 
-    		 error : function(e)
+    		 error : function()
 		     {
-		    	 alert("error" + e);
+		    	 alert("수정이 되지 않았습니다." + e);
 		     }
     	 });
     	 
