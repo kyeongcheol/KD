@@ -1,0 +1,66 @@
+@CHARSET "UTF-8";
+@import url('//cdn.rawgit.com/young-ha/webfont-archive/master/css/PureunJeonnam.css');
+   /* body */
+   .mypage_member_wrap {width: 1500px; margin-left:auto; margin-right:auto;}
+   .board_title {text-align: center; color: #212121; padding-top: 50px;}
+   .board_title div {padding-bottom: 10px;}
+   .title_font1 {font-family: Orbitron; font-size: 24px; font-weight: bold;}
+   .title_font2 {font-family: PureunJeonnam; font-size: 12px; color: #999;}
+   .line {margin: 0 50px 0 50px;}
+   .board_table thead th {text-align: center; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; padding: 8px 0; background: #f5f5f5;}
+   .board_table tbody td { text-align: center;  border-bottom: 1px solid #e5e5e5; padding: 5px 0;}
+   .board_main {width: 1500px; padding-top: 30px; padding-bottom: 30px;}
+   .board_table {font-family: PureunJeonnam; font-size: 12px; color: #212121;}
+   .board_table tbody tr td a {color: #212121; text-decoration: none;}
+   .board_table tbody tr td a:HOVER {color: #aaa;}
+   .btn_board {color: #212121; font-size: 14px; border: 1px solid #bbb; width: 80px; text-align: center; border-radius: 5px; padding: 5px 3px; cursor: pointer; margin: 0 0 70px 850px;}
+   .btn_board:HOVER {background-color: #eee; transition-duration: 0.5s;}
+   .btn_board img {padding: 0px 5px 0 0;}
+   
+   .board_search_table{font-family: PureunJeonnam; font-size: 12px; color: #212121;}
+   .board_search_table thead th{text-align: center; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; padding: 2px 0; background: #f5f5f5;}
+   .board_search_table input[type=text]{width:200px;height: 20px;padding-left:13px; }
+   .board_search_table input[type=button]{border:1px solid silver; background-color: white; padding:2px 6px; border-radius:5px;}
+   .board_search_table input[type=button]:HOVER{background-color: #e5e5e5;  }
+   
+   .paging{text-align:center; padding-top: 20px;}
+    .paging a{text-decoration: none; color:black;}
+
+   .search_mypage
+   .search_mypage input[type='text']{width:300px;}   
+   .category{
+      padding-bottom: 100px;
+      padding-left:350px;
+    }
+   .category ul{margin-left:35px; list-style-type: none;}
+   .category ul li
+   {
+   width:155px;
+   height:35px;
+   float:left;
+   margin-top:20px;
+   padding-top:5px;
+   padding-right:25px;
+   padding-left:25px;
+   margin-left:2px;
+   margin-botton:20px;
+   background-color:black;
+   color:white;
+   font-size:14px;
+   font-family:PureunJeonnam;
+   line-height:20px;
+   text-align:center;
+   }
+   .category ul li a{
+   text-decoration:none;
+   color:white;
+
+   }
+   
+   .account-nav {display:block;}
+.account-nav ul li {width:14.285%;}
+@media (max-width: 767px){
+   .account-nav ul li {width:25%; float:left; border:1px solid #000; margin-right:-1px; margin-bottom:-1px; border-radius:0 !important; padding:5px 0;}
+   .account-nav ul li.m-1 {margin-left:-1px;}
+   .account-nav ul li.xx {width:33.333%;}
+}

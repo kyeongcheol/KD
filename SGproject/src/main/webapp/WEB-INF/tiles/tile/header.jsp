@@ -142,7 +142,7 @@
 		    <c:otherwise>
 		    <ul>          		
 		    <li><a class="loginLink" href="logout">로그아웃</a></li>
-		    <li><a class="loginLink" href="mypage">마이페이지</a></li>
+		    <li><a class="loginLink" href="/SG/mypage">마이페이지</a></li>
 		    <li><a class="loginLink" href="#">장바구니</a></li>
 		    <li><a class="loginLink" href="#">위시리스트</a></li>		    
 		    </ul>

@@ -1,126 +1,142 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page session = "true" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
 <link rel="stylesheet" href="/SG/resources/file/css/main.min.css">
+<link rel="stylesheet" href="/SG/resources/file/css/joinForm.css">
 
-<link rel="stylesheet" href="/SG/resources/file/css/bootstrap.css"><!-- 위의 정보 확인 바 관련 css -->
-	
-
-
-<style>
-@import url('//cdn.rawgit.com/young-ha/webfont-archive/master/css/PureunJeonnam.css');
-   /* body */
-   .mypage_member_wrap {width: 1500px; margin-left:auto; margin-right:auto;}
-   .board_title {text-align: center; color: #212121; padding-top: 50px;}
-   .board_title div {padding-bottom: 10px;}
-   .title_font1 {font-family: Orbitron; font-size: 24px; font-weight: bold;}
-   .title_font2 {font-family: PureunJeonnam; font-size: 12px; color: #999;}
-   .line {margin: 0 50px 0 50px;}
-   .board_table thead th {text-align: center; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; padding: 8px 0; background: #f5f5f5;}
-   .board_table tbody td { text-align: center;  border-bottom: 1px solid #e5e5e5; padding: 5px 0;}
-   .board_main {width: 1400px; padding-top: 30px; padding-bottom: 30px; padding-left:20px; padding-right:20px;}
-   .board_table {font-family: PureunJeonnam; font-size: 12px; color: #212121;}
-   .board_table tbody tr td a {color: #212121; text-decoration: none;}
-   .board_table tbody tr td a:HOVER {color: #aaa;}
-   .btn_board {color: #212121; font-size: 14px; border: 1px solid #bbb; width: 80px; text-align: center; border-radius: 5px; padding: 5px 3px; cursor: pointer; margin: 0 0 70px 850px;}
-   .btn_board:HOVER {background-color: #eee; transition-duration: 0.5s;}
-   .btn_board img {padding: 0px 5px 0 0;}
-   
-   .board_search_table{font-family: PureunJeonnam; font-size: 12px; color: #212121;}
-   .board_search_table thead th{text-align: center; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; padding: 2px 0; background: #f5f5f5;}
-   .board_search_table input[type=text]{width:200px;height: 20px;padding-left:13px; }
-   .board_search_table input[type=button]{border:1px solid silver; background-color: white; padding:2px 6px; border-radius:5px;}
-   .board_search_table input[type=button]:HOVER{background-color: #e5e5e5;  }
-   
-   .paging{text-align:center; padding-top: 20px;}
-    .paging a{text-decoration: none; color:black;}
-
-   .search_mypage
-   .search_mypage input[type='text']{width:300px;}   
-   .category{
-      padding-bottom: 100px;
-    }
-   .category ul{margin-left:35px; list-style-type: none;}
-   .category ul li
-   {
-   float:left;
-   margin-top:20px;
-   padding-right:25px;
-   padding-left:25px;
-   margin-left:2px;
-   margin-botton:20px;
-   background-color:black;
-   color:white;
-   font-size:15px;
-   font-family:PureunJeonnam;
-   line-height:20px;
-   }
-   .category ul li a{
-   text-decoration:none;
-   color:white;
-   }
-   
-   .account-nav {display:block;}
-.account-nav ul li {width:14.285%;}
-@media (max-width: 767px){
-	.account-nav ul li {width:25%; float:left; border:1px solid #000; margin-right:-1px; margin-bottom:-1px; border-radius:0 !important; padding:5px 0;}
-	.account-nav ul li.m-1 {margin-left:-1px;}
-	.account-nav ul li.xx {width:33.333%;}
-}
-   
-</style>
 </head>
+
 <body>
- 
-         <div class="board_main" align="center">
-            <table class="board_table" width="90%">
-               <colgroup>
-                  <col width="10%" />
-                  	<col width="10%"/>
-                    <col width="40%" />
-                    <col width="20%" />
-                    <col width="10%" />
-                    <col width="10%" />
-               </colgroup>
-               <thead>
-                  <tr class="table_title">
-                     <th>NO</th>
-                     <th>카테고리</th>
-                     <th>제목</th>
-                     <th>작성자</th>
-                     <th>등록일</th>
-                     <th>조회수</th>
-                  </tr>
-               </thead>
-               <tbody>
-               <c:choose>
-               <c:when test="${list} == null">
- 					<tr>
-                 		<td colspan="6">게시글이 없습니다.</td>
-                 	</tr>
-                 </c:when>
-                 <c:otherwise>
- 
-   				 <c:forEach var="list"  items="${list}" varStatus="stat">
-                 	<tr> 
-                     	<td>${list.mypage_NO}</td>
-                     	<td>${list.mypage_CATEGORY}</td>
-                        <td><a href="#">${list.mypage_TITLE}</a></td>
-                        <td>SG운영자</td>
-                        <td>${list.mypage_REGDATE}</td>
-                        <td>${list.mypage_HITCOUNT}</td>
-                    </tr>
-                 </c:forEach> 
-                 </c:otherwise>
-                </c:choose> 	
-               </tbody>
-            </table>
-           
+<div class="body_center">
+<form action="/SG/memberUpdateForm">
+<section class="input-horizontal list-horizontal section box-shadow">
+            <div class="main_subject">
+               <h2>회원정보</h2>
+            </div>
+
+<ul class="section-body">
+   <li class="id">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="mi">
+            <strong>아이디</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <input type="text" name="MEMBER_ID" id="MEMBER_ID" value="${myInfo.MEMBER_ID}" class="xx-control" label="아이디" readOnly>
+         
+      
+   </li>
+   
+   <li class="password">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="input-password">
+            <strong>비밀번호</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <input type="password" id="input-password" class="xx-control" value="${myInfo.MEMBER_PASSWORD}" name="MEMBER_PASSWORD" label="비밀번호" readOnly>
+      </div>
+   </li>
+
+   <li class="name">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="input-name">
+            <strong> 이름</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <input type="text" id="input-name" class="xx-control" name="MEMBER_NAME" value="${myInfo.MEMBER_NAME}" readOnly label="이름">
+      </div>
+   </li>
+   <li class="cell-phone">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="input-cell-phone01">
+            <strong> 핸드폰</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <div class="input-box">
+            <input type="text" name="MEMBER_PHONE" id="input-cell-phone01" label="휴대폰" value="${myInfo.MEMBER_PHONE}" readOnly class="xx-control">
          </div>
-        </div> 
-        </div>
+         
+         
+      </div>
+   </li>
+   <li class="mail">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="input-mail">
+            <strong>이메일</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <div class="input-box">
+            <input type="text" name="MEMBER_EMAIL" id="MEMBER_EMAIL" label="이메일" value="${myInfo.MEMBER_EMAIL}" readOnly class="xx-control">
+         </div>
+         
+      </div>
+   </li>
+   <li class="address">
+      <div class="item-label col-lg-3 col-md-4">
+         <strong>주소</strong>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <div class="input-box">
+         <input type="text" id="sample6_postcode"  name="MEMBER_ZIP"  label="우편번호" value="${myInfo.MEMBER_ZIP}" readOnly>
+         </div>
+         <input type="text" id="sample6_address" class="xx-control" name="MEMBER_ADDR1" label="주소" value="${myInfo.MEMBER_ADDR1}" readOnly>
+         <input type="text" id="sample6_address2" class="xx-control" name="MEMBER_ADDR2" label="상세주소" value="${myInfo.MEMBER_ADDR2}" readOnly>
+      </div>
+   </li>
+   
+   <li class="birth input-placeholder">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="input-birth01">
+            <strong>생년월일</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <div class="input-box">
+               <input type="text" id="input-birth01" name="MEMBER_BIRTHDAY" class="xx-control" value="${myInfo.MEMBER_BIRTHDAY}" readOnly >
+         </div>
+      </div>
+   </li>
+   <li class="birth input-placeholder">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="height">
+            <strong>키</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <div class="input-box">
+               <input type="text" id="height" name="MEMBER_HEIGHT" class="xx-control" value="${myInfo.MEMBER_HEIGHT}" readOnly >
+         </div>
+      </div>
+   </li>
+   <li class="birth input-placeholder">
+      <div class="item-label col-lg-3 col-md-4">
+         <label for="weight">
+            <strong>몸무게</strong>
+         </label>
+      </div>
+      <div class="col-lg-21 col-md-20">
+         <div class="input-box">
+               <input type="text" id="weight" name="MEMBER_WEIGHT" class="xx-control" value="${myInfo.MEMBER_WEIGHT}" readOnly>
+         </div>
+      </div>        
+   </li>
+</ul>
+ <div class="btnArea">
+  <input class="effect effect-5" type="submit" value="회원정보 수정하기"/>
+ </div>
+</section>
+</form>
+</div>
 </body>
 </html>
