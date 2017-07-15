@@ -213,6 +213,7 @@ public class MemberController
 		return "Member/myBasket";
 	}
     
+    //나의 장바구니 리스트 삭제
     @RequestMapping(value = "/myBasketList/Delete")
     public String basketDelete(Model model) 
 	{

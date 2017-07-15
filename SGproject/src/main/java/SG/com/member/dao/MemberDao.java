@@ -17,6 +17,7 @@ public class MemberDao extends AbstractDAO
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
+	//-------------------회원정보---------------------------
 	//회원정보 조회
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> myinfoDetail(Map<String, Object>map) throws Exception 
@@ -42,6 +43,8 @@ public class MemberDao extends AbstractDAO
 		return (int)selectOne("mypage.mysumTradeMoney", map);
 	}
 	
+	//-------------------주문내역---------------------------
+	
 	//나의 주문내역 리스트 보기
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> myOrederList(Map<String, Object>map) throws Exception 
@@ -56,30 +59,64 @@ public class MemberDao extends AbstractDAO
 	    return (Map<String, Object>)selectOne("mypage.myOrderDetail", map);
 	}
 		
-    //주문내역 상세보기 수정(주문개수수정, 입금전일때)
+    //주문내역 상세보기 수정(주문 개수 수정, 입금전일때)
     public void myOrderUpdate(Map<String, Object>map) throws Exception 
     {
-	    sqlSession.update("order.myOrderUpdate", map);
+	    sqlSession.update("mypage.myOrderUpdate", map);
 	}
 	
     //주문내역 상세보기 수정(배송정보수정, 입금전,배송준비중일때)
 	public void myDeliUpdate(Map<String, Object>map) throws Exception  
 	{
-	    sqlSession.update("deli.myDeliUpdate", map);
-	}
-	
-	//배송번호 별 총 합계금액
-	public int sumTradeMoney(Map<String, Object>map) throws Exception 
-	{
-	   return (int)selectOne("order.sumTradeMoney", map);
+	    sqlSession.update("mypage.myDeliUpdate", map);
 	}
 	
 	//주문삭제 (입금전일때)
 	public void orderDelete(Map<String, Object>map) throws Exception  
 	{
-	   sqlSession.delete("order.orderDelete", map);
+	   sqlSession.delete("mypage.orderDelete", map);
 	}
 	
+	//-------------------주문취소(배송준비 중일 때)---------------------------
 	
+	//결제삭제(배송준비중일때)
+	public void tradeDelete(Map<String, Object>map) throws Exception  
+	{
+	   sqlSession.delete("mypage.tradeDelete", map);
+	}
+	
+	//배송삭제(배송준비중일때)
+	public void deliDelete(Map<String, Object>map) throws Exception 
+	{
+		sqlSession.delete("mypage.deliDelete", map);
+	}
+	
+	//-------------------장바구니---------------------------
+	
+	//나의 장바구니 내역보기
+    public List<Map<String, Object>> myBasketList(Map<String, Object>map) throws Exception 
+    {
+	   return sqlSession.selectList("mypage.myBasketList", map);
+	}
+	
+    //장바구니 내역 삭제
+    public void deleteMyBasket(Map<String, Object>map) throws Exception 
+    {
+	    sqlSession.delete("mypage.deleteMyBasket", map);
+    }
+    
+    //-------------------위시리스트---------------------------
+    
+    //나의 위시리스트 내역보기
+    public List<Map<String, Object>> myWishList(Map<String, Object>map) throws Exception 
+    {
+	   return sqlSession.selectList("mypage.myWishList", map);
+	}
+	
+    //위시리스트 내역 삭제
+    public void deleteMyWish(Map<String, Object>map) throws Exception 
+    {
+	    sqlSession.delete("mypage.deleteMyWish", map);
+    }
 
 }
