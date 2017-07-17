@@ -118,5 +118,11 @@ public class MemberDao extends AbstractDAO
     {
 	    sqlSession.delete("mypage.deleteMyWish", map);
     }
-
+    
+    //상품 이름으로 검색된 위시리스트 내역보기
+    public List<Map<String, Object>> searchWish0(Map<String, Object>map) throws Exception 
+    {
+	   return sqlSession.selectList("mypage.searchWish0", map);
+	}
+    
 }

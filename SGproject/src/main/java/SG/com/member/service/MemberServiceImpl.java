@@ -123,13 +123,12 @@ public class MemberServiceImpl implements MemberService
 	{
 		memberDao.deleteMyWish(map);
 	}
-	
-	
-	
-	
-	
-	
-	
 
+	//상품 이름으로 검색
+	@Override
+	public List<Map<String, Object>> searchWish0(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.searchWish0(map);
+	}
 
 }

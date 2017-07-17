@@ -1,22 +1,23 @@
 package SG.com.member.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import SG.com.common.CommandMap;
-import SG.com.member.service.PointService;
-import SG.com.member.service.MemberService;
+import SG.com.common.Paging;
 import SG.com.member.service.LoginService;
+import SG.com.member.service.MemberService;
+import SG.com.member.service.PointService;
 
 //마이페이지 컨트롤러 
 @Controller
@@ -30,6 +31,19 @@ public class MemberController
 	
 	@Resource(name="loginService")
 	private LoginService loginService;
+	
+	private int gcurrentPage = 1;
+	
+	// 페이징
+    private int currentPage = 1;
+    private int totalCount;
+    private int blockCount = 7;
+    private int blockPage = 5;
+    private String pagingHtml;
+    private Paging paging;
+    
+    private String isSearch;
+    private int searchNum;
 	
 	//마이페이지 
 	@RequestMapping(value = "/mypage")
@@ -154,12 +168,25 @@ public class MemberController
 	
 	//나의 포인트 내역
 	@RequestMapping(value = "/myPoint")
-	public String mypoint(Model model, HttpSession session) 
+	public String mypoint(HttpSession session, Model model, CommandMap commandMap) throws Exception 
 	{
-		String mem_id = session.getAttribute("MEMBER_ID").toString();
-		System.out.println("나의 포인트 내역");
-		return "Member/myPoint";
-	}
+	      System.out.println("진입");
+	      String mem_no = session.getAttribute("MEMBER_NO").toString();
+	      
+	      commandMap.getMap().put("MEMBER_NO", mem_no); //회원 번호 commandMap에 넣기
+	      
+	      Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
+	      List<Map<String, Object>> pointList = pointService.myPointList(commandMap.getMap());
+	      System.out.println(pointList);
+	      
+	      model.addAttribute("sumPoint", sumPoint.get("SUM"));
+	      model.addAttribute("pointList", pointList);
+	      
+	      
+	      System.out.println("나의 포인트 내역");
+	      
+	      return "Member/myPoint";
+	   }
 	
 	//나의 주문 내역
 	@RequestMapping(value="/orderInfo")
@@ -192,32 +219,137 @@ public class MemberController
 	
 	//나의 위시리스트
 	@RequestMapping(value = "/wishList")
-	public String wishList(Model model)
+	public String wishList(Model model, CommandMap commandMap, HttpSession session, HttpServletRequest request) 
+			throws Exception
 	{
-		return "Member/myWish";
+		
+		String member_id = session.getAttribute("MEMBER_ID").toString(); //세션에서 MEMBER_ID 가져와 String 변수로 받음
+		System.out.println(member_id);
+		commandMap.getMap().put("MEMBER_ID", member_id); //세션 MEMBER_ID를 commandMap에 넣음
+		
+		//뷰에서 설정한 currentPage가 없을 경우
+		if (request.getParameter("currentPage") == null || request.getParameter("currentPage").trim().isEmpty()
+				|| request.getParameter("currentPage").equals("0")) 
+		{
+			currentPage = 1;
+		} 
+		else 
+		{
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+		
+		List<Map<String,Object>> wishlist = memberService.myWishList(commandMap.getMap()); //WISH 테이블에 있는 내용을 꺼내옴
+		model.addAttribute("gcurrentPage", gcurrentPage); //상품 리스트 페이지
+		isSearch = request.getParameter("isSearch");
+		
+        if (isSearch != null) //검색을 한 경우
+        {
+			searchNum = Integer.parseInt(request.getParameter("searchNum"));
+
+			System.out.println("getMap : " + commandMap.getMap());
+
+			if (searchNum == 0) //상품 이름
+			{ 
+				wishlist = memberService.searchWish0(commandMap.getMap());
+			} 
+        
+        totalCount = wishlist.size();
+		paging = new Paging(currentPage, totalCount, blockCount, blockPage, "wishList", searchNum, isSearch);
+		pagingHtml = paging.getPagingHtml().toString();
+		int lastCount = totalCount;
+		
+		if (paging.getEndCount() < totalCount)
+		{	lastCount = paging.getEndCount() + 1; }
+
+		wishlist = wishlist.subList(paging.getStartCount(), lastCount);
+		
+		model.addAttribute("isSearch", isSearch);
+		model.addAttribute("searchNum", searchNum);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("pagingHtml", pagingHtml);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("wishlist", wishlist);
+		
+        }
+        else 
+        {
+
+			totalCount = wishlist.size();
+
+			paging = new Paging(currentPage, totalCount, blockCount, blockPage, "wishList", searchNum, isSearch);
+			pagingHtml = paging.getPagingHtml().toString();
+
+			int lastCount = totalCount;
+
+			if (paging.getEndCount() < totalCount)
+				{lastCount = paging.getEndCount() + 1;}
+
+			wishlist = wishlist.subList(paging.getStartCount(), lastCount);
+
+			model.addAttribute("totalCount", totalCount);
+			model.addAttribute("pagingHtml", pagingHtml);
+			model.addAttribute("currentPage", currentPage);
+
+			model.addAttribute("wishlist", wishlist); //WISH LIST를 "wishlist" 영역에 저장
+			
+			
+		}
+        return "Member/myWish";
 	}
 	
 	//나의 위시리스트 삭제
 	@RequestMapping(value = "/myWishList/wish_del")
-	public String wishDelete(Model model)
+	public String wishDelete(Model model, CommandMap commandMap, HttpSession session) throws Exception
 	{
-		return "redirect:/wishList";
+		System.out.println("위시리스트 삭제");
+		int wish_no = Integer.parseInt(commandMap.getMap().get("WISH_NO").toString()); 
+		int wish_mem_no = Integer.parseInt(session.getAttribute("MEMBER_NO").toString());
+		commandMap.getMap().put("WISH_NO", wish_no);
+		commandMap.getMap().put("WISH_MEMBER_NO", wish_mem_no);
+		
+		System.out.println(commandMap.getMap());
+		memberService.deleteMyWish(commandMap.getMap()); //위시리스트 삭제
+		
+		String member_id = session.getAttribute("MEMBER_ID").toString();
+		commandMap.getMap().put("MEMBER_ID", member_id);
+		List<Map<String,Object>> wishlist = memberService.myWishList(commandMap.getMap()); //위시리스트 꺼내옴
+		model.addAttribute("wishlist", wishlist);
+		
+		return "Member/myWish";
 	}
 	
 	//장바구니 리스트
     @RequestMapping(value = "/mybasket")
-    public String basketList(Model model) 
+    public String basketList(Model model, CommandMap commandMap, HttpSession session, HttpServletRequest request)
+    throws Exception
 	{
     	System.out.println("나의 장바구니 내역");
-    	
+    	String member_id = session.getAttribute("MEMBER_ID").toString(); //세션에서 MEMBER_ID 가져와 String 변수로 받음
+    	System.out.println(member_id);
+		commandMap.getMap().put("MEMBER_ID", member_id); //세션 MEMBER_ID를 commandMap에 넣음
+		
+		List<Map<String,Object>> basketlist = memberService.myBasketList(commandMap.getMap()); //WISH 테이블에 있는 내용을 꺼내옴
+		model.addAttribute("gcurrentPage", gcurrentPage); //상품 리스트 페이지
+		model.addAttribute("basketlist", basketlist);
+		
 		return "Member/myBasket";
 	}
     
     //나의 장바구니 리스트 삭제
+    
     @RequestMapping(value = "/myBasketList/Delete")
-    public String basketDelete(Model model) 
+    public String basketDelete(Model model, CommandMap commandMap, HttpSession session, 
+    		@RequestParam(value="BASKET_NO", required=true) List<Integer> basketno) throws Exception
 	{
-    	return "redirect:/mybasket";
+    	System.out.println("장바구니 삭제");
+    	System.out.println(basketno.size());
+    	
+    	for(int i=0; i<basketno.size(); i++)
+    	{
+    		System.out.println(basketno.get(i));
+    	}
+    	System.out.println(commandMap.getMap());
+    	return "Member/myBasket";
 	}
     
     

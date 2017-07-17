@@ -54,6 +54,8 @@ public interface MemberService
 	  
 	 //위시리스트 내역 삭제
 	 void deleteMyWish(Map<String, Object>map) throws Exception;
-
+	 
+	 //상품이름으로 검색된 위시리스트 내역
+     List<Map<String, Object>> searchWish0(Map<String, Object>map) throws Exception;
 
 }
