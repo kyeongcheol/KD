@@ -93,14 +93,10 @@
 <!-- 회원별 포인트 내역 조회 -->
   <select id="myPointList" parameterType="hashmap" resultType="hashmap">
 	<![CDATA[
-		SELECT  
-		     POINT_DATE, 
-		     POINT_CONTENT, 
-		     POINT_MONEY, 
-		     POINT_TRADE_NO
+		SELECT POINT_DATE, POINT_CONTENT, POINT_MONEY,POINT_ORDER_NO
 	    FROM SG_POINT
 		WHERE POINT_MEMBER_NO = ${MEMBER_NO} 
-		      ORDER BY POINT_DATE DESC
+		ORDER BY POINT_DATE DESC
 			
 	]]>
 	</select>

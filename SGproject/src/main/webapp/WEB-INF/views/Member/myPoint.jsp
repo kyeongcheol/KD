@@ -13,13 +13,12 @@
 }
 .faq_admin_title {text-align: left; color: #212121; padding-top: 50px;}
 .faq_admin_title div {padding-bottom: 10px;}
-.title_font1 {font-family: PureunJeonnam; font-size: 40px; font-weight: bold;}
+.title_font1 {font-family: PureunJeonnam; font-size: 40px;}
 .title_font2 {font-family: PureunJeonnam; font-size: 20px; color: #999;}
 .faq_admin_table{
 	text-align: center;
 	font-family: PureunJeonnam;
 	font-size:15px;
-	font-weight:bold;
 }
 .faq_line {margin: 0 50px 0 50px;}
 
@@ -81,7 +80,7 @@
    
 .paging{text-align:center;height:32px;margin-top:5px;margin-bottom:15px;}
 .paging a,
-.paging strong{display:inline-block;width:36px;height:32px;line-height:28px;font-size:14px;border:1px solid #e0e0e0;margin-left:5px;
+.paging strong{display:inline-block;width:36px;height:32px;line-height:28px;font-size:14px;margin-left:5px;/* border:1px solid #e0e0e0; */
 -webkit-border-radius:3px;
    -moz-border-radius:3px;
 		border-radius:3px;
@@ -97,6 +96,8 @@
 
  padding-right:50px;
  text-align:center;
+ margin-left:850px;
+ margin-top:15px;
 }
 .totalpoint label {
     float:left;
@@ -110,6 +111,7 @@
  .totalpoint input {
        padding-right:50px;
        float:left;
+       margin-left:15px;
        
 }
 
@@ -143,19 +145,19 @@
 </tr>
 
           <c:choose>
-               <c:when test="${list} == null">
+               <c:when test="${pointList} == null">
  					<tr>
                  		<td colspan="7">게시글이 없습니다.</td>
                  	</tr>
                  </c:when>
                  <c:otherwise>
 
-   				 <c:forEach var="list"  items="${list}" varStatus="stat">
+   				 <c:forEach var="pointList"  items="${pointList}" varStatus="stat">
                  	<tr> 
                      	<td>${stat.count}</td>
-                     	<td>${list.POINT_DATE}</td>
-                     	<td>${list.POINT_MONEY}</td>
-                     	<td>${list.POINT_CONTENT}</td>
+                     	<td>${pointList.POINT_DATE}</td> 
+                     	<td>${pointList.POINT_MONEY}</td>
+                     	<td>${pointList.POINT_CONTENT}</td>
                       
                     </tr>
                  </c:forEach> 
