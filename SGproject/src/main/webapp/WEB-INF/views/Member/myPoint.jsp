@@ -170,14 +170,13 @@
          <label for="sumPoint">
             <strong>총 포인트</strong>
          </label>
-         <input type="text" name="sumPoint" id="sumPoint" label="총포인트" value="${sumPoint}" readOnly class="xx-control">
+         <%-- <input type="text" name="sumPoint" id="sumPoint" label="총포인트" value="${sumPoint}" readOnly class="xx-control"> --%>
+         <div style="margin-left:150px; float:left;">${sumPoint}원</div>
          </div>
       </div>
-     
-<div class="paging" style="text-align:center;">
-						${pagingHtml}
-					</div>
-
-</div>
+<div class="paging" style="text-align:center; float:left; padding-top:40px; padding-left:550px;">
+${pagingHtml}
+</div>     
 </body>
+
 </html>

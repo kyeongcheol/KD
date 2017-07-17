@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -151,7 +151,7 @@
 </tr>
 
           <c:choose>
-               <c:when test="${wishlist} == null">
+               <c:when test="${fn:length(wishlist) le 0}">
  					<tr>
                  		<td colspan="7">담은 위시리스트가 없습니다.</td>
                  	</tr>
@@ -185,30 +185,6 @@
                 </c:choose>  
            
 </table>
-<form action="/SG/wishList" method="post">
-<table class="board_search_table" width="94%" style="padding-top: 20px;">
-               <colgroup>
-                  <col width="20%" />
-                    <col width="30%" />
-                    <col width="50%" />
-               </colgroup>
-               <thead>
-                  <tr class="wish_table">
-                     <th>SEARCH</th>
-                     <th><select id="select" name="searchNum" >
-                         <option value="0">상품이름</option>
-                        </select>
-                     </th>
-                        
-                        <th><input type="text" name="isSearch" id="search_text" placeholder="검색할 키워드를 입력해주세요">
-                        <input type="submit" value="검색"></th>
-                  </tr>
-               </thead>
-            </table>
-            </form>
-<div class="paging" style="text-align:center;">
-${pagingHtml}
-</div>
 
 <div class="wish_bottom">
 <div class="wish_bottom_font">

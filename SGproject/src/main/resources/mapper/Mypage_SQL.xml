@@ -208,8 +208,7 @@
 		
 		FROM SG_BASKET 
 		
-		WHERE BASKET_MEMBER_NO = #{MEMBER_NO} 
-		AND BASKET_NO =#{BASKET_NO}
+		WHERE BASKET_NO =#{BASKET_NO}
    ]]>
 </delete>
 
