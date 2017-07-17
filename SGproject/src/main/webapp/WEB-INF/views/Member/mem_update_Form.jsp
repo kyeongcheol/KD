@@ -79,6 +79,7 @@
       var mem_height = f.MEMBER_HEIGHT.value;
       var mem_weight = f.MEMBER_WEIGHT.value;
       
+      
       if(mem_pw != f.password_confirm.value)
       {
     	 alert("비밀번호가 일치하지 않습니다.");
@@ -87,6 +88,12 @@
     	 f.password_confirm.value = "";
     	 
     	 return false;
+      }
+      
+      else if(mem_pw == "" || f.password_confirm.value == "")
+      {
+    	  confirm("비밀번호를 입력해주세요.");
+    	  
       }
       
       else
@@ -112,24 +119,20 @@
     		 data : update,
     		 success : function(data)
     		 {
-    			 
-    			  confirm("회원정보가 수정되었습니다.");
-    			  self.close();
-    			  f.action="redirect:/SG/memberInfo"
+    			 confirm("회원정보가 수정되었습니다.");
+    			 self.close();
     		 },
     		 
-    		 error : function(e)
+    		 error : function()
 		     {
-		    	 alert("error" + e);
+		    	 alert("수정이 되지 않았습니다." + e);
 		     }
-    		 
     	 });
     	 
       }
       return true;
       
     }
-  
     </script>
 
   

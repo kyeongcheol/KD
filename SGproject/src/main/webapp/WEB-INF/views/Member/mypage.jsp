@@ -55,10 +55,10 @@ $(document).ready(function ()
         	    $('a[href$='+tab+']').trigger("click");
         	}
         });
-                
+                 
 function member_info()
 {
-	//나의 정보 보기 팝업 창
+	//나의 정보보기 팝업 창
 	window.open('/SG/memberInfo','','toolbar=no,menubar=no,location=no,height=950,width=1200'); 
 }
 
@@ -67,7 +67,6 @@ function point_list()
 	//나의 포인트 리스트 팝업 창
 	window.open('/SG/myPoint','','toolbar=no,menubar=no,location=no,height=950,width=1000'); 
 }
-
 
 </script>
 <style>
