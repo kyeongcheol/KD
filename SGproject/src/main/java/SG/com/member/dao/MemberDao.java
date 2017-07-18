@@ -47,7 +47,7 @@ public class MemberDao extends AbstractDAO
 	
 	//나의 주문내역 리스트 보기
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> myOrederList(Map<String, Object>map) throws Exception 
+	public List<Map<String, Object>> myOrderList(Map<String, Object>map) throws Exception 
 	{
 		return (List<Map<String, Object>>)selectList("mypage.myOrderList", map);
 	}

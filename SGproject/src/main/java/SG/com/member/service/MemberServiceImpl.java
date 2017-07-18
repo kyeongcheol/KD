@@ -48,9 +48,9 @@ public class MemberServiceImpl implements MemberService
 	
 	//나의 주문내역 리스트
 	@Override
-	public List<Map<String, Object>> myOrederList(Map<String, Object> map) throws Exception 
+	public List<Map<String, Object>> myOrderList(Map<String, Object> map) throws Exception 
 	{
-		return memberDao.myOrederList(map);
+		return memberDao.myOrderList(map);
 	}
 
 	//나의 주문내역 상세보기
