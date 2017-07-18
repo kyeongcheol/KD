@@ -25,27 +25,31 @@
 </script>
 	 
 </head>
-<body>
+<body style="overflow-x:hidden; overflow-y:auto;">
 
 <!-- Place somewhere in the <body> of your page -->
-<div class="flexslider" style="width: 100%; margin:auto; z-index: -10;">
-
-  <ul class="slides">
-    <li>
-   		 <img src="resources/file/img/Slide4.jpg" style="height: 300px"/>
-   </li>
-    
-    <li>
-         <img src="resources/file/img/Slide2.jpg" style="height: 300px"/>
-                 
-    </li>
-    <li>
-      <img src="resources/file/img/Slide3.jpg" style="height: 300px"/>
-    </li>
-  </ul>
+<div class="container">	
+	<div class="flexslider" style="width: 100%; margin:auto; z-index: -10;">
+	
+	  <ul class="slides">
+	    <li>
+	   		 <img src="resources/file/img/Slide4.jpg" style="height: 300px"/>
+	   </li>
+	    
+	    <li>
+	         <img src="resources/file/img/Slide2.jpg" style="height: 300px"/>
+	                 
+	    </li>
+	    <li>
+	      <img src="resources/file/img/Slide3.jpg" style="height: 300px"/>
+	    </li>
+	  </ul>
+	</div>
 </div>
-<div id="wrap">
-  <div id="best_main">best상품</div>
+<div style="margin-top: 60px; overflow-x:hidden; overflow-y:auto;">
+  <div class="container" style="overflow-x:hidden; overflow-y:auto;" >
+  <jsp:include page="../Goods/goodsList-Body.jsp"></jsp:include></div>
+  
   <div id="event_main">event메인</div>
   <div id="review_main">review메인</div>
 </div>

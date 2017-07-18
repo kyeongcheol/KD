@@ -23,7 +23,7 @@ public interface MemberService
 	 int mysumTradeMoney(Map<String, Object>map) throws Exception;
 	
 	 //나의 주문내역 리스트
-	 List<Map<String, Object>> myOrederList(Map<String, Object>map) throws Exception; 
+	 List<Map<String, Object>> myOrderList(Map<String, Object>map) throws Exception; 
 		
 	 //나의 주문내역 상세보기
 	 Map<String, Object> myOrderDetail(Map<String, Object>map) throws Exception;
@@ -57,5 +57,11 @@ public interface MemberService
 	 
 	 //상품이름으로 검색된 위시리스트 내역
      List<Map<String, Object>> searchWish0(Map<String, Object>map) throws Exception;
+     
+     //나의 장바구니 내역보기
+     List<Map<String, Object>> pagingbasket(Map<String, Object>map) throws Exception;
+     
+     //나의 장바구니 카운트
+     int basketcount(Map<String, Object>map) throws Exception;
 
 }

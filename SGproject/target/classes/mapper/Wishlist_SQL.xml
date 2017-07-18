@@ -4,4 +4,42 @@
 <!-- 위시리스트 SQL -->
 <mapper namespace="wishlist">
 
-</mapper>
+<insert id="insertWish" parameterType="hashmap">
+<![CDATA[
+
+INSERT INTO SG_WISH(
+WISH_NO,
+WISH_MEMBER_NO,
+WISH_GOODS_NO,
+WISH_GOODS_NAME,
+WISH_REG_DATE
+)
+VALUES(
+SG_WISH_NO_SEQ.NEXTVAL,
+#{WISH_MEMBER_NO},
+#{WISH_GOODS_NO},
+#{WISH_GOODS_NAME},
+SYSDATE)
+
+]]> 
+
+</insert>
+
+
+<delete id="deleteMyWish" parameterType="hashmap">
+
+DELETE 
+        FROM SG_WISH 
+        WHERE WISH_MEMBER_NO=#{WISH_MEMBER_NO} 
+        AND WISH_GOODS_NO = #{WISH_GOODS_NO}
+        
+        
+</delete>
+
+<select id="selectMyWish" parameterType="int" resultType="hashmap">
+	SELECT *
+	FROM SG_WISH
+	WHERE WISH_MEMBER_NO = #{WISH_MEMBER_NO}
+</select>
+
+</mapper> 

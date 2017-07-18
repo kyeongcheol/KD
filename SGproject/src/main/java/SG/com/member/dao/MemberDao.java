@@ -47,7 +47,7 @@ public class MemberDao extends AbstractDAO
 	
 	//나의 주문내역 리스트 보기
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> myOrederList(Map<String, Object>map) throws Exception 
+	public List<Map<String, Object>> myOrderList(Map<String, Object>map) throws Exception 
 	{
 		return (List<Map<String, Object>>)selectList("mypage.myOrderList", map);
 	}
@@ -123,6 +123,18 @@ public class MemberDao extends AbstractDAO
     public List<Map<String, Object>> searchWish0(Map<String, Object>map) throws Exception 
     {
 	   return sqlSession.selectList("mypage.searchWish0", map);
+	}
+    
+    //나의 장바구니 내역보기(페이징)
+    public List<Map<String, Object>> pagingbasket(Map<String, Object>map) throws Exception 
+    {
+	   return sqlSession.selectList("mypage.pagingbasket", map);
+	}
+    
+    //나의 장바구니 총 개수
+    public int basketcount(Map<String, Object>map) throws Exception 
+    {
+	   return (int)selectOne("mypage.basketcount", map);
 	}
     
 }

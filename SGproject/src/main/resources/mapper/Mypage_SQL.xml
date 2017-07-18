@@ -282,5 +282,56 @@
 			FROM SG_TRADE
 			WHERE TRADE_MEMBER_ID =#{MEMBER_ID}
 	]]>
-	</select> 
+</select>
+
+<select id="basketcount" parameterType="hashmap" resultType="int">
+<![CDATA[
+SELECT COUNT(A.RNUM) AS BASKET_COUNT
+FROM
+(
+  SELECT   
+           ROW_NUMBER() OVER(ORDER BY B.BASKET_NO) AS RNUM,
+           B.BASKET_NO,
+		   B.BASKET_GOODS_NO, 
+		   B.BASKET_GOODS_NAME, 
+		   B.BASKET_REG_DATE, 
+		   B.BASKET_GOODS_AMOUNT, 
+		   B.BASKET_TOPPING_NAME,
+           G.GOODS_PRICE,
+		   G.GOODS_THUMBNAIL  
+    
+  FROM SG_BASKET B, SG_GOODS G, SG_MEMBER M  
+  WHERE B.BASKET_GOODS_NAME = G.GOODS_NAME
+  AND B.BASKET_MEMBER_NO = M.MEMBER_NO
+  AND G.GOODS_ONOFF = 0
+  AND M.MEMBER_ID=#{MEMBER_ID} 
+) A
+]]>
+</select>
+
+<select id="pagingbasket" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+SELECT A.*
+FROM
+(
+  SELECT 
+           ROW_NUMBER() OVER(ORDER BY B.BASKET_NO) AS RNUM,
+           B.BASKET_NO,
+		   B.BASKET_GOODS_NO, 
+		   B.BASKET_GOODS_NAME, 
+		   B.BASKET_REG_DATE, 
+		   B.BASKET_GOODS_AMOUNT, 
+		   B.BASKET_TOPPING_NAME,
+           G.GOODS_PRICE,
+		   G.GOODS_THUMBNAIL  
+    
+  FROM SG_BASKET B, SG_GOODS G, SG_MEMBER M  
+  WHERE B.BASKET_GOODS_NAME = G.GOODS_NAME
+  AND B.BASKET_MEMBER_NO = M.MEMBER_NO
+  AND G.GOODS_ONOFF = 0
+  AND M.MEMBER_ID=#{MEMBER_ID}  
+) A      
+WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
+]]>
+</select>  
 </mapper>

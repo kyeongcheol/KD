@@ -46,6 +46,8 @@ public class MemberController
     private int searchNum;
     
     private int lastCount;
+    
+    HttpSession session;
 	
 	//마이페이지 
 	@RequestMapping(value = "/mypage")
@@ -60,6 +62,8 @@ public class MemberController
 		Map<String, Object> sumPoint = pointService.sumPoint(commandMap.getMap());
 		Map<String, Object> mem_grade = loginService.selectId(commandMap.getMap()); 
 		
+		/*String page = pagingHtml(commandMap, 1);
+		model.addAttribute("page", page);*/
 		model.addAttribute("sumPoint", sumPoint.get("SUM"));
 		model.addAttribute("memberGrade", mem_grade.get("MEMBER_GRADE"));
 		
@@ -214,27 +218,52 @@ public class MemberController
 	      return "Member/myPoint";
 	   }
 	
-	//나의 주문 내역
-	@RequestMapping(value="/orderInfo")
-	public String orderInfo(Model model)
-	{
-		System.out.println("나의 주문 내역");
-		return "Member/myOrder";
-	}
-	
-	//나의 주문 상세보기
-	@RequestMapping(value="/orderInfoView")
-	public String orderInfoView(Model model)
-	{
-		return "orderInfoView";
-	}
-	
-	//주문상품 취소
-	@RequestMapping(value="/orderInfo/order_del")
-	public String orderDel(Model model)
-	{
-		return "Member/myOrder";
-	}
+	   //나의 주문 내역
+	   @RequestMapping(value="/orderInfo")
+	   public String orderInfo(HttpSession session, Model model, CommandMap commandMap) throws Exception
+	   {
+	        System.out.println("진입");
+	         String mem_id = session.getAttribute("MEMBER_ID").toString();
+	         
+	         commandMap.getMap().put("MEMBER_ID", mem_id); //회원 번호 commandMap에 넣기
+	         
+	         List<Map<String, Object>> myOrderList = memberService.myOrderList(commandMap.getMap());
+	         
+	         System.out.println(myOrderList);
+	         
+	         model.addAttribute("gcurrentPage", gcurrentPage);
+	         model.addAttribute("myOrderList", myOrderList);
+	         
+	         
+	        System.out.println("나의 주문 내역");
+	      
+	        return "Member/myOrder";
+	   }
+	   
+	   //나의 주문 상세보기
+	   @RequestMapping(value="/orderInfoView")
+	   public String orderInfoView(Model model)
+	   {
+	      return "orderInfoView";
+	   }
+	   
+	   //주문상품 취소
+	   @RequestMapping(value="/orderInfo/order_del")
+	    public String orderDel(Model model, CommandMap commandMap, HttpSession session, 
+	          @RequestParam(value="DELI_NO", required=true) List<Integer> deli_no) throws Exception
+	   {
+	       System.out.println("주문내역 삭제");
+	       
+	    
+	       
+	       for(int i=0; i<deli_no.size(); i++)
+	       {
+	          System.out.println(deli_no.get(i));
+	       }
+	       System.out.println(commandMap.getMap());
+	       
+	       return "Member/myOrder";
+	   }
 	
 	//주문상품 취소 처리
 	@RequestMapping(value="/ordercancel")
@@ -287,12 +316,32 @@ public class MemberController
     public String basketList(Model model, CommandMap commandMap, HttpSession session, HttpServletRequest request)
     throws Exception
 	{
+    	String pagingHtml;
+    	
     	System.out.println("나의 장바구니 내역");
     	String member_id = session.getAttribute("MEMBER_ID").toString(); //세션에서 MEMBER_ID 가져와 String 변수로 받음
     	System.out.println(member_id);
 		commandMap.getMap().put("MEMBER_ID", member_id); //세션 MEMBER_ID를 commandMap에 넣음
 		
-		List<Map<String,Object>> basketlist = memberService.myBasketList(commandMap.getMap()); //WISH 테이블에 있는 내용을 꺼내옴
+		System.out.println("페이징 진입");
+		
+		//페이징 추가 로직
+		System.out.println(commandMap.getMap());
+	
+		if(commandMap.get("PAGE").toString().equals(""))
+		{
+			 pagingHtml = pagingHtml(commandMap, 1, session);
+		}
+		else
+		{
+			int page = Integer.parseInt(commandMap.get("PAGE").toString());
+			pagingHtml = pagingHtml(commandMap, page, session);
+		}
+		
+		List<Map<String,Object>> basketlist = memberService.pagingbasket(commandMap.getMap()); //WISH 테이블에 있는 내용을 꺼내옴
+		model.addAttribute("pagingHtml", pagingHtml);
+		//페이징 추가 로직
+		
 		model.addAttribute("gcurrentPage", gcurrentPage); //상품 리스트 페이지
 		model.addAttribute("basketlist", basketlist);
 		
@@ -327,5 +376,51 @@ public class MemberController
 	}
     
     
+    //페이징 로직
+    private String pagingHtml(CommandMap commandMap, int pageNo, HttpSession session) throws Exception
+    {		
+		int blockCount = 5;
+		
+		commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
+		int totalCount =  memberService.basketcount(commandMap.getMap());	
+		System.out.println(totalCount);
+		
+		int totalPage = (int) Math.ceil((double) totalCount / blockCount);		
+		//System.out.println("totalCount:"+totalCount  +"   blockCount: "+  blockCount );		
+		//System.out.println("totalPage:"+totalPage   +"  |||  "+  (int) Math.ceil((double) totalCount / blockCount)        );
+		
+		String PAGING = String.valueOf(blockCount);	
+		String PAGINGNO = String.valueOf(pageNo);	
+		
+		commandMap.put("PAGING",PAGING); //페이지의 리스트 수
+		commandMap.put("PAGINGNO",PAGINGNO); // currentpage 	
+		
+		
+		StringBuffer pagingHtml = new StringBuffer();
+		
+		for(int i=1; i<=totalPage; i++ )
+		{			
+			
+			if(i==pageNo)
+			{
+				
+				pagingHtml.append("<strong>");
+				pagingHtml.append(i);						
+				pagingHtml.append("</strong>  ");
+			
+			}
+			else
+			{
+				
+				pagingHtml.append(" <a class='page' href='javascript:ajaxPageView("+i+");'' >" );			
+				pagingHtml.append(i);				
+				pagingHtml.append("</a> ");
+				
+			}
+			
+		}
+		
+		return pagingHtml.toString();
+	}
 		
 }

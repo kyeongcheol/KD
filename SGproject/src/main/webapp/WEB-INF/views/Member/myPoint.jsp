@@ -174,7 +174,7 @@
          <div style="margin-left:150px; float:left;">${sumPoint}원</div>
          </div>
       </div>
-<div class="paging" style="text-align:center; float:left; padding-top:40px; padding-left:550px;">
+<div class="paging" style="text-align:center; float:left; padding-top:40px; padding-left:550px; position:absolute;">
 ${pagingHtml}
 </div>     
 </body>

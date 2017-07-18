@@ -4,4 +4,29 @@
 <!-- 결제 SQL -->
 <mapper namespace="trade">
 
+<!-- 결제 insert -->
+	<insert id="successInsert" parameterType="hashmap">
+
+		INSERT INTO SG_TRADE(
+TRADE_NO,
+TRADE_GROUP_NO,
+TRADE_TYPE,
+TRADE_DATE,
+TRADE_MONEY,
+TRADE_AMOUNT,
+TRADE_MEMBER_ID
+
+)
+VALUES(
+#{TRADE_NO},
+#{TRADE_GROUP_NO},
+#{TRADE_TYPE},
+SYSDATE,
+#{TRADE_MONEY},
+#{TRADE_AMOUNT},
+#{TRADE_MEMBER_ID}
+)
+				
+	</insert>
+
 </mapper>

@@ -21,10 +21,10 @@
       </div>
    </div>
    <div class="btnArea">   
-    <a href="loginForm" class="effect effect-5" target="modal" data-size="sm" data-label="로그인 하기">
+    <a href="loginForm" class="effect effect-5">
    로그인 하기
    </a>
-   <a href="main" class="effect effect-5" target="modal" data-size="sm" data-label="메인으로 가기">
+   <a href="main" class="effect effect-5">
    메인으로 가기
    </a>
    </div>

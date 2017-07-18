@@ -4,4 +4,35 @@
 <!-- 배송 SQL -->
 <mapper namespace="deli">
 
+<!-- comment by seo -->
+
+<!-- 배송 insert -->
+	<insert id="insertDeli" parameterType="hashmap">
+
+		INSERT INTO SG_ORDER(
+        ORDER_NO,
+        ORDER_GOODS_NO,
+        ORDER_GOODS_AMOUNT,
+        ORDER_MEMBER_ID,
+        ORDER_MONEY,
+        ORDER_TRADE_TYPE,
+        ORDER_DATE,
+        ORDER_STATE,
+        ORDER_TOPPING_NAME)        
+		
+		VALUES(
+        
+        SG_ORDER_NO_SEQ.NEXTVAL,
+        #{ORDER_GOODS_NO},
+        #{ORDER_GOODS_AMOUNT},
+        #{ORDER_MEMBER_ID},
+        #{ORDER_MONEY},
+        #{ORDER_TRADE_TYPE},
+        SYSDATE,
+        DEFAULT,
+        #{ORDER_TOPPING_NAME})
+				
+	</insert>
+	
+<!-- comment by seo -->	
 </mapper>

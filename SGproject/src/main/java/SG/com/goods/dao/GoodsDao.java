@@ -22,6 +22,11 @@ public class GoodsDao extends AbstractDAO {
 		return sqlSession.selectList("goods.goodsList");
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> wishGoodsList(int MEMBER_NO) throws Exception{
+		return sqlSession.selectList("goods.wishGoodsList",MEMBER_NO);
+		
+	}
 	
 	@SuppressWarnings("unchecked")
 	public Map<String,Object> selectOneGoods(int num) throws Exception{
@@ -47,5 +52,32 @@ public class GoodsDao extends AbstractDAO {
 	public void basketInsert(Map<String, Object> map) throws Exception{
 	    sqlSession.insert("basket.basketInsert", map);
 	}
+	
+	public void basketDelete(Map<String,Object> map)throws Exception{
+		sqlSession.delete("basket.basketDelete",map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> goodscategory(Map<String,Object> map){
+		return sqlSession.selectList("goods.goodscategory",map);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> searchGoods(Map<String,Object> map){
+		return sqlSession.selectList("goods.searchGoods",map);
+	}
+	
+	public void deleteComment(int no){
+		sqlSession.delete("goods.deleteComment",no);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Map<String,Object> selectOneGoodsforBasket(int num) throws Exception{
+		return sqlSession.selectOne("goods.selectOneGoodsforBasket",num);
+	}
+	
+	
 
 }

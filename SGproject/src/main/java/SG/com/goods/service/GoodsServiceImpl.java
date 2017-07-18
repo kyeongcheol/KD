@@ -52,4 +52,43 @@ public class GoodsServiceImpl implements GoodsService {
 	    goodsDao.basketInsert(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> wishGoodsList(int MEMBER_NO) throws Exception {
+		// TODO Auto-generated method stub
+		return goodsDao.wishGoodsList(MEMBER_NO);
+	}
+
+	@Override
+	public List<Map<String, Object>> goodscategory(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		return goodsDao.goodscategory(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchGoods(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return goodsDao.searchGoods(map);
+	}
+
+	@Override
+	public void deleteComment(int no) {
+		// TODO Auto-generated method stub
+		goodsDao.deleteComment(no);
+		
+	}
+
+	@Override
+	public void basketDelete(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		goodsDao.basketDelete(map);
+	}
+
+	@Override
+	public Map<String, Object> selectOneGoodsforBasket(int num) throws Exception {
+		// TODO Auto-generated method stub
+		return goodsDao.selectOneGoodsforBasket(num);
+	}
+
+
+
 }

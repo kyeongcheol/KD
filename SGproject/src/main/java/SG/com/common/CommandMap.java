@@ -13,6 +13,10 @@ public class CommandMap
 	
 	public Object get(String key)
 	{
+		
+		if(map.get(key)== null)
+		 return "";
+		
 		return map.get(key);
 	}
 	

@@ -4,6 +4,69 @@
 <!-- 주문 SQL -->
 <mapper namespace="order">
 
+<!-- comment by seo  -->
+
+	<!-- 주문 insert -->
+	<insert id="orderInsert" parameterType="hashmap">
+
+		INSERT INTO SG_ORDER(
+        ORDER_NO,
+        ORDER_GOODS_NO,
+        ORDER_GOODS_AMOUNT,
+        ORDER_MEMBER_ID,
+        ORDER_MONEY,
+        ORDER_TRADE_TYPE,
+        ORDER_DATE,
+        ORDER_STATE,
+        ORDER_TOPPING_NAME)        
+		
+		VALUES(
+        
+        SG_ORDER_NO_SEQ.NEXTVAL,
+        #{ORDER_GOODS_NO},
+        #{ORDER_GOODS_AMOUNT},
+        #{ORDER_MEMBER_ID},
+        #{ORDER_MONEY},
+        #{ORDER_TRADE_TYPE},
+        SYSDATE,
+        DEFAULT,
+        #{ORDER_TOPPING_NAME})
+				
+	</insert>
 	
+	
+	
+	<!-- 주문테이블에서 최신 레코드 가져오기 -->
+	<select id="selectLastOrder" resultType="hashmap">
+	<![CDATA[
+		
+		SELECT * FROM  
+ 		(SELECT * FROM SG_ORDER  ORDER BY ORDER_NO DESC) 
+		WHERE ROWNUM = 1
+		
+	]]>
+	</select>
+	
+	<!-- 배송테이블에서 최신 레코드 가져오기 -->
+	<select id="selectLastDeli" resultType="hashmap">
+	<![CDATA[
+		
+		SELECT * FROM  
+ 		(SELECT * FROM SG_DELI  ORDER BY DELI_NO DESC) 
+		WHERE ROWNUM = 1
+		
+	]]>
+	</select>
+	
+	<!-- 주문테이블 배송번호 update -->
+	<update id="updateDeli" parameterType="hashmap">
+	
+		UPDATE SG_ORDER
+		SET ORDER_DELI_NO = #{DELI_NO}
+		WHERE ORDER_NO = #{ORDER_NO}
+	
+	</update>
+	
+	<!-- comment by seo -->
 
 </mapper>

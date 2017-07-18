@@ -54,4 +54,11 @@
    )
 </insert>
 
+<delete id="basketDelete" parameterType="hashmap">
+delete from SG_BASKET
+where BASKET_NO = (select  MAX(BASKET_NO) 
+					from SG_BASKET 
+					where BASKET_MEMBER_NO = #{BASKET_MEMBER_NO} and BASKET_GOODS_NO = #{BASKET_GOODS_NO})
+</delete>
+
 </mapper>

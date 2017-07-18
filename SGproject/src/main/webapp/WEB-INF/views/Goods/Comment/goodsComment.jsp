@@ -3,11 +3,19 @@
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
     
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>  
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>Insert title here</title>
+
+<script type="text/javascript">
+	
+
+</script>
 </head>
 <body>
  <c:choose>
@@ -26,8 +34,27 @@
     <tr>
         <th scope="row">${commentList.COMMENT_ID}</th>
         <td>${commentList.COMMENT_CONTENT}</td>
-        <td>${commentList.COMMENT_RATE}</td>
-        <td>${commentList.COMMENT_REGDATE}</td>
+        <td>
+        <c:choose>
+        	<c:when test="${commentList.COMMENT_RATE == 1}">맛없어요</c:when>
+        	<c:when test="${commentList.COMMENT_RATE == 2}">별루에요</c:when>
+        	<c:when test="${commentList.COMMENT_RATE == 3}">좋아요</c:when>
+        	<c:when test="${commentList.COMMENT_RATE == 4}">맛있어요</c:when>
+        	<c:otherwise>최고에요</c:otherwise>
+        
+        </c:choose>
+        
+        
+        
+        
+        
+        </td>
+        <td>${commentList.COMMENT_REGDATE}
+        &nbsp;
+        &nbsp;
+        <span class="glyphicon glyphicon-remove" aria-hidden="true" id="${commentList.COMMENT_NO}" name="${commentList.COMMENT_ID}" onclick="dComment(this)"></span>
+        </td>
+        
     </tr>
 
    	</c:forEach>
