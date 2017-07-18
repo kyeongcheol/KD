@@ -45,24 +45,23 @@
 <select id="myOrderList" parameterType="hashmap" resultType="hashmap">
       <![CDATA[
            SELECT 
-            O.ORDER_NO, 
-            O.ORDER_MONEY, 
-            O.ORDER_DATE, 
-            O.ORDER_TRADE_TYPE, 
-            O.ORDER_TOPPING_NAME, 
-            O.ORDER_STATE, 
-            G.GOODS_NAME, 
+            O.ORDER_NO,
+            O.ORDER_MONEY,
+            O.ORDER_DATE,
+            O.ORDER_TRADE_TYPE,
+            O.ORDER_TOPPING_NAME,
+            O.ORDER_STATE,
+            O.ORDER_GOODS_NO,
+            G.GOODS_NAME,
             G.GOODS_THUMBNAIL,
-			D.DELI_INVOICE_NO 
-            
-          FROM SG_ORDER O,
-               SG_GOODS G,
-			   SG_DELI D
-                     
-          WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
-                AND O.ORDER_GOODS_NO = G.GOODS_NO
-		       	AND O.ORDER_DELI_NO = D.DELI_NO
-          
+			D.DELI_INVOICE_NO,
+			D.DELI_NO
+            FROM SG_ORDER O, SG_GOODS G, SG_DELI D
+           WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
+               AND O.ORDER_GOODS_NO = G.GOODS_NO
+		       AND O.ORDER_DELI_NO = D.DELI_NO
+		  GROUP BY O.ORDER_NO, O.ORDER_MONEY,O.ORDER_DATE, O.ORDER_TRADE_TYPE, 
+		        O.ORDER_TOPPING_NAME,O.ORDER_GOODS_NO, O.ORDER_STATE, G.GOODS_NAME, G.GOODS_THUMBNAIL, D.DELI_INVOICE_NO, DELI_NO     
           ORDER BY O.ORDER_DATE DESC            
                       
       ]]>
