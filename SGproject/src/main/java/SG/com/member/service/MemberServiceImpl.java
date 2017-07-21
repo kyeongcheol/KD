@@ -62,9 +62,9 @@ public class MemberServiceImpl implements MemberService
 
 	//나의 주문내역 상세보기
 	@Override
-	public Map<String, Object> myOrderDetail(Map<String, Object> map) throws Exception 
+	public List<Map<String, Object>> myOrderDetail(Map<String, Object> map) throws Exception 
 	{
-		return memberDao.myOrderDetail(map);
+		return (List<Map<String, Object>>) memberDao.myOrderDetail(map);
 	}
 	
 	//주문내역 상세보기 수정(주문개수수정, 입금전일때)
@@ -94,6 +94,13 @@ public class MemberServiceImpl implements MemberService
 	public void orderDelete(Map<String, Object> map) throws Exception 
 	{
 		memberDao.orderDelete(map);
+	}
+	
+	//주문삭제 (배송준비중일때)
+	@Override
+	public void delinodel(Map<String, Object> map) throws Exception 
+	{
+		memberDao.delinodel(map);
 	}
 
 	//결제삭제(배송준비중일때)
@@ -144,5 +151,9 @@ public class MemberServiceImpl implements MemberService
 	{
 		memberDao.deleteMyWish(map);
 	}
+
+
+	
+	
 
 }

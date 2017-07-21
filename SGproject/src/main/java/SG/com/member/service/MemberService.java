@@ -29,7 +29,7 @@ public interface MemberService
 	 List<Map<String, Object>> myOrderList(Map<String, Object>map) throws Exception; 
 		
 	 //나의 주문내역 상세보기
-	 Map<String, Object> myOrderDetail(Map<String, Object>map) throws Exception;
+	 List<Map<String, Object>> myOrderDetail(Map<String, Object>map) throws Exception;
 		
 	 //주문내역 상세보기 수정(주문개수수정, 입금전일때)
 	 void myOrderUpdate(Map<String, Object>map) throws Exception;
@@ -42,6 +42,9 @@ public interface MemberService
 			
 	 //주문삭제 (입금전일때)
 	 void orderDelete(Map<String, Object>map) throws Exception;
+	 
+	 //주문삭제 (배송준비중 일때)
+	 void delinodel(Map<String, Object>map) throws Exception;
 	 
 	 //결제삭제(배송준비중일때)
 	 void tradeDelete(Map<String, Object>map) throws Exception;

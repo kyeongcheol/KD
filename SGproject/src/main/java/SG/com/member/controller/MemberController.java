@@ -247,11 +247,11 @@ public class MemberController
       public String orderInfoView(Model model, CommandMap commandMap, HttpServletRequest request, HttpSession session)
       throws Exception
       {
-        commandMap.getMap().put("ORDER_DELI_NO", commandMap.getMap().get("DELI_NO")); 
-        commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
-        System.out.println(commandMap.getMap());
-        List<Map<String, Object>> myOrderDetail = memberService.myOrderDetail(commandMap.getMap());
-        model.addAttribute("myOrderDetail", myOrderDetail);
+    	 commandMap.getMap().put("ORDER_DELI_NO", commandMap.getMap().get("DELI_NO")); 
+    	 commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
+    	 System.out.println(commandMap.getMap());
+    	 List<Map<String, Object>> myOrderDetail = memberService.myOrderDetail(commandMap.getMap());
+    	 model.addAttribute("myOrderDetail", myOrderDetail);
          return "Member/myOrder_View";
       }
       
@@ -287,17 +287,17 @@ public class MemberController
          {
             if(cnt > 1) //배송번호가 하나 이상일 경우
             {
-               System.out.println("입금 전 부분 취소함 : 배송번호 1개 이상일 경우");
-               System.out.println(commandMap.getMap());
-               memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
+            	System.out.println("입금 전 부분 취소함 : 배송번호 1개 이상일 경우");
+            	System.out.println(commandMap.getMap());
+            	memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
             }
             else //배송번호가 하나일 경우
             {
-               System.out.println("입금 전 부분 취소함 : 배송번호 1개 일경우");
-               System.out.println(commandMap.getMap());
-               memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
-               memberService.deliDelete(commandMap.getMap()); //배송 테이블 삭제
-               
+            	System.out.println("입금 전 부분 취소함 : 배송번호 1개 일경우");
+            	System.out.println(commandMap.getMap());
+            	memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
+            	memberService.deliDelete(commandMap.getMap()); //배송 테이블 삭제
+            	
             }
          }  
          
