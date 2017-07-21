@@ -136,5 +136,10 @@ public class MemberDao extends AbstractDAO
     {
 	   return (int)selectOne("mypage.basketcount", map);
 	}
+    //결제 정보 가져오기
+    public int tradeInfo(Map<String, Object>map) throws Exception
+    {
+    	return (int)selectOne("mypage.tradeInfo", map);
+    }
     
 }

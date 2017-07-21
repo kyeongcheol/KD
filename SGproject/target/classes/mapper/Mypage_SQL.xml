@@ -86,18 +86,19 @@
 		    D.DELI_RECEIVE_NAME, 
 			D.DELI_RECEIVE_PHONE, 
 			D.DELI_ORDER_MEMO, 
-			P.POINT_MONEY 
+			T.TRADE_MONEY,
+			T.TRADE_DATE
             
           FROM SG_ORDER O,
                SG_GOODS G,
 			   SG_DELI D,
-			   SG_POINT P
+			   SG_TRADE T
                      
           WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
                 AND O.ORDER_GOODS_NO = G.GOODS_NO
 		       	AND O.ORDER_DELI_NO = D.DELI_NO
-				AND O.ORDER_NO = P.POINT_ORDER_NO
-				AND P.POINT_CONTENT='포인트 사용'
+				AND ORDER_DELI_NO = T.TRADE_DELI_NO
+                AND O.ORDER_DELI_NO = #{DELI_NO}
           
           ORDER BY O.ORDER_DATE DESC            
                      
@@ -333,4 +334,17 @@ FROM
 WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
 ]]>
 </select>  
+
+<!-- 결제 번호 받아오기 --> 
+<select id="tradeInfo" parameterType="hashmap" resultType="int">
+  <![CDATA[
+		  SELECT TRADE_NO
+		  FROM SG_TRADE T, SG_DELI D
+		  WHERE T.TRADE_DELI_NO = D.DELI_NO
+		  AND T.TRADE_MEMBER_ID = #{MEMBER_ID}
+		  AND D.DELI_NO = #{DELI_NO}  
+		    
+		  ]]>		     
+		  
+</select>
 </mapper>

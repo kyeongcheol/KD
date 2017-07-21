@@ -63,5 +63,9 @@ public interface MemberService
      
      //나의 장바구니 카운트
      int basketcount(Map<String, Object>map) throws Exception;
+    
+     //결제번호 받아오기
+     int tradeInfo(Map<String, Object>map) throws Exception;
+     
 
 }

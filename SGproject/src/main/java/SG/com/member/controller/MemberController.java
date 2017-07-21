@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import SG.com.common.CommandMap;
 import SG.com.common.Paging;
@@ -240,38 +241,61 @@ public class MemberController
 	        return "Member/myOrder";
 	   }
 	   
-	   //나의 주문 상세보기
+	   //나의 배송 정보내역
 	   @RequestMapping(value="/orderInfoView")
-	   public String orderInfoView(Model model)
+	   public String orderInfoView(HttpSession session, Model model, CommandMap commandMap, HttpServletRequest request) throws Exception
 	   {
-	      return "orderInfoView";
+		      System.out.println("진입");
+		      System.out.println("나의 배송정보 내역");
+		      String mem_no = session.getAttribute("MEMBER_NO").toString();
+		      
+		      commandMap.getMap().put("MEMBER_NO", mem_no); //회원 번호 commandMap에 넣기
+	   
+	      return "Member/orderInfoView";
 	   }
+	   
+	 		      
+	 	
 	   
 	   //주문상품 취소
 	   @RequestMapping(value="/orderInfo/order_del")
-	    public String orderDel(Model model, CommandMap commandMap, HttpSession session, 
-	          @RequestParam(value="DELI_NO", required=true) List<Integer> deli_no) throws Exception
+	    public String orderDel(Model model, CommandMap commandMap, HttpSession session) throws Exception
 	   {
 	       System.out.println("주문내역 삭제");
+	       String mem_id = session.getAttribute("MEMBER_ID").toString();
+	       String deli_no = (String) commandMap.getMap().get("DELI_NO"); 
+	       int order_state = Integer.parseInt(commandMap.getMap().get("ORDER_STATE").toString()); 
+	       String order_no =(String)commandMap.getMap().get("ORDER_NO"); 
 	       
-	    
-	       
-	       for(int i=0; i<deli_no.size(); i++)
-	       {
-	          System.out.println(deli_no.get(i));
-	       }
-	       System.out.println(commandMap.getMap());
-	       
+	       commandMap.getMap().put("MEMBER_ID", mem_id);
+	       commandMap.getMap().put("DELI_NO", deli_no);
+		   commandMap.getMap().put("ORDER_STATE", order_state);
+		   commandMap.getMap().put("ORDER_NO", order_no);
+		  
+		   System.out.println(commandMap.getMap());
+		   /*if(commandMap.get("ORDER_STATE").toString().equals(0))*/
+		   if(order_state == 0)
+		   {
+			   
+			   System.out.println("결제 전 주문 취소함");
+			   memberService.orderDelete(commandMap.getMap());
+			   memberService.deliDelete(commandMap.getMap());
+			   System.out.println(commandMap.getMap());
+		    }
+		   else 
+		   {
+			   System.out.println("배송준비중일때 취소진행  환불 요망");
+			   
+			   memberService.orderDelete(commandMap.getMap());
+			   memberService.deliDelete(commandMap.getMap());
+			   System.out.println(commandMap.getMap());
+		   }
+		   List<Map<String, Object>> myOrderList = memberService.myOrderList(commandMap.getMap());
+		   model.addAttribute("myOrderList", myOrderList);
 	       return "Member/myOrder";
 	   }
 	
-	//주문상품 취소 처리
-	@RequestMapping(value="/ordercancel")
-	public String orderCancel(Model model)
-	{
-		return "redirect:/orderInfo";
-	}
-	
+	    
 	//나의 위시리스트
 	@RequestMapping(value = "/wishList")
 	public String wishList(Model model, CommandMap commandMap, HttpSession session, HttpServletRequest request) 

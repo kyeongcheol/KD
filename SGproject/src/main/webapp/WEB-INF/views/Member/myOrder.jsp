@@ -7,7 +7,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="resources/file/js/jquery-2.0.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
 <style type="text/css">
 @import url('//cdn.rawgit.com/young-ha/webfont-archive/master/css/PureunJeonnam.css');
 #wish_wrap 
@@ -97,22 +96,29 @@
  
  function myOrderDel()
  {
-	 
-	  var deli_no = $("#DELI_NO").val();
-	  
+
+      var deli_no=$("#DELI_NO").val(); 
+      var order_state=$("#ORDER_STATE").val(); 
+      var order_no=$("#ORDER_NO").val();
+      
 	  if(!confirm("삭제하시겠습니까?"))
 	   {
-	   return;
+		  
+	      return;
 	   }
   
-      else{
+      else
+      {
+      var total =  ({"DELI_NO":deli_no, "ORDER_STATE":order_state, "ORDER_NO":order_no});
 	 $.ajax
 	 ({
 		 type : "post",
 		 url : "/SG/orderInfo/order_del",
-		 data : ({"DELI_NO":deli_no}),
+		 data : total,
+		 
 		 success : function(data)
 		 {
+			
 			 alert("삭제되었습니다.");
 			 $("#wish_wrap").html(data);
 		 },
@@ -122,113 +128,62 @@
 	     }
 		 
 	 });
- } 
-/* 	  $( document ).ready(function() {
-			$('#tb01').rowspan(2);
-			$('#tb01').rowspan(3);
-			$('#tb01').rowspan(4);
-			$('#tb01').rowspan(5);
-			$('#tb01').rowspan(6);
-			$('#tb01').rowspan(7);
-			$('#tb01').rowspan(8);
-		});
-		$.fn.rowspan = function(colIdx, isStats) {       
-			return this.each(function(){      
-				var that;     
-				$('tr', this).each(function(row) {      
-					$('td:eq('+colIdx+')', this).filter(':visible').each(function(col) {
-						
-						if ($(this).html() == $(that).html()
-							&& (!isStats 
-									|| isStats && $(this).prev().html() == $(that).prev().html()
-									)
-							) {            
-							rowspan = $(that).attr("rowspan") || 1;
-							rowspan = Number(rowspan)+1;
-
-							$(that).attr("rowspan",rowspan);
-							
-							// do your action for the colspan cell here            
-							$(this).hide();
-							
-							//$(this).remove(); 
-							// do your action for the old cell here
-							
-						} else {            
-							that = this;         
-						}          
-						
-						// set the that if not already set
-						that = (that == null) ? this : that;      
-					});     
-				});    
-			});  
-		};  */
-
-		
-		/* $(document).ready(function () {
-			
-		    alert("나와라 얍")
-	          $(".DELI_NO").each(function () {
-	              var rows = $(".DELI_NO:contains('" + $(this).value() + "')");
-	              if (rows.length > 1) {
-	                  rows.eq(0).attr("rowspan", rows.length);
-	                  rows.not(":eq(0)").remove(); 
-	              } 
-	          });
+   } 
+ }
+	 
+ $( document ).ready(function() 
+	     {
+	         $('#tb01').rowspan(9);
+	        
 	      });
- */
-	
-			$.fn.rowspan = function(colIdx, DELI_NO) {       
-				return this.each(function(){      
-					var that;     
-					$('tr', this).each(function(row) {      
-						$('td:eq('+colIdx+')', this).filter(':visible').each(function(col) {
-							
-							if ($(this).html() == $(that).html()
-								&& (!DELI_NO 
-										|| DELI_NO && $(this).prev().html() == $(that).prev().html()
-										)
-								) {            
-								rowspan = $(that).attr("rowspan") || 1;
-								rowspan = Number(rowspan)+1;
+	      $.fn.rowspan = function(colIdx, isStats) 
+	      {       
+	         return this.each(function()
+	          {      
+	            var that;     
+	            $('tr', this).each(function(row) 
+	            {      
+	               $('td:eq('+colIdx+')', this).filter(':visible').each(function(col) 
+	               {
+	                  
+	                  if ($(this).html() == $(that).html()
+	                     && (!isStats 
+	                           || isStats && $(this).prev().html() == $(that).prev().html()
+	                           )
+	                     ) {            
+	                     rowspan = $(that).attr("rowspan") || 1;
+	                     rowspan = Number(rowspan)+1;
 
-								$(that).attr("rowspan",rowspan);
-								
-								// do your action for the colspan cell here            
-								$(this).hide();
-								
-								//$(this).remove(); 
-								// do your action for the old cell here
-								
-							} else {            
-								that = this;         
-							}          
-							
-							// set the that if not already set
-							that = (that == null) ? this : that;      
-						});     
-					});    
-				});  
-			}; 
-			$("#order").rowspan(0);
-		/* 	$(window).load(function () {
-		          $(".gubun").each(function () {
-		              var rows = $(".gubun:contains('" + $(this).text() + "')");
-		              if (rows.length > 1) {
-		                  rows.eq(0).attr("rowspan", rows.length);
-		                  rows.not(":eq(0)").remove(); 
-		              } 
-		          });
-		      });
-
-
- */
+	                     $(that).attr("rowspan",rowspan);
+	                     
+	                     // do your action for the colspan cell here            
+	                     $(this).hide();
+	                     
+	                     //$(this).remove(); 
+	                     // do your action for the old cell here
+	                     
+	                  } else {            
+	                     that = this;         
+	                  }          
+	                  
+	                  // set the that if not already set
+	                  that = (that == null) ? this : that;      
+	               });     
+	            });    
+	         });  
+	      };  
+	     
+	      
+	      function deli_list()
+	      {
+	      	//나의 배송정보 리스트 팝업 창
+	      	window.open('/SG/orderInfoView','','toolbar=no,menubar=no,location=no,height=950,width=1000'); 
+	      }
 </script>
-
 </head>
 
 <body>
+<form name="frm">
 <div id="wish_wrap">
 <div class="wish_title">
 <div class="wish_title_font">
@@ -237,22 +192,24 @@
 </div>
 
 
-<table id="order" class="wish_table" width="100%" >
+<table id="tb01" class="wish_table" width="100%" >
 <colgroup>
-	<col width="10%" />
-	<col width="10%" />
-	<col width="10%" />
-	<col width="15%" />
-	<col width="10%" />
-	<col width="10%" />
-	<col width="10%" />
-	<col width="10%" />
-	<col width="15%" />
-	</colgroup>
+   <col width="10%" />
+   <col width="10%" />
+   <col width="10%" />
+   <col width="10%" />
+   <col width="15%" />
+   <col width="10%" />
+   <col width="10%" />
+   <col width="10%" />
+   <col width="10%" />
+   <col width="15%" />
+   </colgroup>
 
 <tr>
-	<th>날짜</th>
-	<th>주문번호</th>
+    <th>NO</th>
+    <th>날짜</th>
+    <th>주문번호</th>
     <th>상품이름</th>
     <th>상품이미지</th>
     <th>DIY상품</th>
@@ -265,16 +222,20 @@
 
           <c:choose>
               <c:when test="${fn:length(myOrderList) le 0}">
- 					<tr><td colspan="9" style="text-align:center;">주문 내역이 없습니다.</td></tr>
+                <tr><td colspan="10" style="text-align:center;">주문 내역이 없습니다.</td></tr>
                  </c:when>
                  <c:otherwise>
 
-   				 <c:forEach var="list" items="${myOrderList}" varStatus="stat">
-                 	<tr> 
-                     	<td>${list.ORDER_DATE}</td>
-                     	<td>${list.ORDER_NO}</td>
-                     	<td><a href="goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}">
-                     	${list.GOODS_NAME}</a></td>
+                <c:forEach var="list" items="${myOrderList}" varStatus="stat">
+                    <input type="hidden" id="DELI_NO" name="DELI_NO" value="${list.DELI_NO}">  
+                    <input type="hidden" id="ORDER_STATE" name="ORDER_STATE" value="${list.ORDER_STATE}" >
+                    <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${list.ORDER_NO}" >
+                    <tr>
+                        <td>${stat.count}</td>
+                        <td>${list.ORDER_DATE}</td>
+                        <td>${list.ORDER_NO}</td>
+                        <td><a href="goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}">
+                        ${list.GOODS_NAME}</a></td>
                         <td>
                         <img src="resources/file/img/${list.GOODS_THUMBNAIL}" width="120" height="90"
                         onclick="javascript:location.href=
@@ -283,22 +244,41 @@
                         <td>${list.ORDER_TOPPING_NAME}</td>
                         <td>${list.ORDER_MONEY}</td>
                         
-                        <td>${list.ORDER_TRADE_TYPE}</td>
+               
+<c:choose>
+        
+<c:when test="${list.ORDER_STATE== 0}">
+<td>입금 대기</td>
+<td><div class="board_search_table"><input type="button" value="삭제하기" onclick="myOrderDel()"></div></td>
+</c:when>
+
+<c:when test="${list.ORDER_STATE== 1}">
+<td>배송준비중</td>
+<td><div class="board_search_table"><input type="button" value="삭제하기" onclick="myOrderDel()"></div></td>
+</c:when>
+
+<c:when test="${list.ORDER_STATE== 2}">
+<td>배송중</td>
+<td>&nbsp<td>
+</c:when>
+
+<c:when test="${list.ORDER_STATE== 3}">
+<td>배송완료</td>
+<td>&nbsp<td>
+</c:when>
+
+<c:otherwise>
+없음
+</c:otherwise>
+</c:choose>
                        
-                       
-                          <td><div class="board_search_table">
-                   
-                        <input type="button" id="myOrderDel" value="삭제하기">
-                        
-                        </div>
-                        <%-- <input type="hidden" id="DELI_NO" value="${list.DELI_NO}"/>  --%>
-                        </td>
-                        
-                        <c:if test="${(list.DELI_NO)==(list.DELI_NO)}">
-                        <td class="gubun">
+                        <td>
+                        <a href="#mydeli" onclick="javascript:deli_list();">
                         ${list.DELI_NO}</td>
-                        </c:if>
-                     
+                        
+                        
+            
+            
                       
                     </tr>
                  </c:forEach> 
@@ -308,38 +288,8 @@
                 
            
 </table>
-<%-- <form action="/SG/wishList" method="post">
-<table class="board_search_table" width="94%" style="padding-top: 20px;">
-               <colgroup>
-                  <col width="20%" />
-                    <col width="30%" />
-                    <col width="50%" />
-               </colgroup>
-               <thead>
-                  <tr class="wish_table">
-                     <th>SEARCH</th>
-                     <th><select id="select" name="searchNum" >
-                         <option value="0">상품이름</option>
-                        </select>
-                     </th>
-                        
-                        <th><input type="text" name="isSearch" id="search_text" placeholder="검색할 키워드를 입력해주세요">
-                        <input type="submit" value="검색"></th>
-                  </tr>
-               </thead>
-            </table>
-            </form>
-<div class="paging" style="text-align:center;">
-${pagingHtml}
-</div> --%>
-<!-- <input type="button" value="전체선택" onclick="checkboxSelectQue(1,'chk[]')" />
-<input type="button" value="전체해제" onclick="checkboxSelectQue(2,'chk[]')" />
-<input type="button" id="submitFrm" value="삭제하기"> 
-<div class="wish_bottom">
-<div class="wish_bottom_font">
-<font color="green">장바구니 내역에 있는 상품 정보를 보고 싶으시면 상품이름이나 이미지를 눌러주세요</font></div>
-</div>
-</div> -->
+
+</form>
 
 </body>
 </html>

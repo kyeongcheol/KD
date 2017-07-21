@@ -143,6 +143,12 @@ public class MemberServiceImpl implements MemberService
 		return memberDao.basketcount(map);
 	}
 	
+	@Override
+	public int tradeInfo(Map<String, Object>map) throws Exception
+    {
+    	return memberDao.tradeInfo(map);
+    }
+    
 	
 
 }
