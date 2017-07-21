@@ -46,6 +46,13 @@ public class MemberServiceImpl implements MemberService
 	   return (int)memberDao.mysumTradeMoney(map);
 	}
 	
+	//배송번호 별 주문내역 건수 조회
+	@Override
+	public int orderdelicnt(Map<String, Object> map) throws Exception 
+	{
+		return (int)memberDao.orderdelicnt(map);
+	}
+    
 	//나의 주문내역 리스트
 	@Override
 	public List<Map<String, Object>> myOrderList(Map<String, Object> map) throws Exception 
@@ -75,6 +82,13 @@ public class MemberServiceImpl implements MemberService
 		memberDao.myDeliUpdate(map);
 	}
     
+	//결제번호 받아오기
+	@Override
+	public int tradeInfo(Map<String, Object>map) throws Exception
+	{
+	   return memberDao.tradeInfo(map);
+	}
+	
 	//주문삭제 (입금전일때)
 	@Override
 	public void orderDelete(Map<String, Object> map) throws Exception 
@@ -98,9 +112,16 @@ public class MemberServiceImpl implements MemberService
 
 	//나의 장바구니 내역보기
 	@Override
-	public List<Map<String, Object>> myBasketList(Map<String, Object> map) throws Exception 
+	public List<Map<String, Object>> pagingbasket(Map<String, Object> map) throws Exception 
 	{
-		return memberDao.myBasketList(map);
+		return memberDao.pagingbasket(map);
+	}
+	
+    //장바구니 내역 건수
+	@Override
+	public int basketcount(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.basketcount(map);
 	}
 
 	//나의 장바구니 내역 삭제
@@ -123,26 +144,5 @@ public class MemberServiceImpl implements MemberService
 	{
 		memberDao.deleteMyWish(map);
 	}
-
-	//상품 이름으로 검색
-	@Override
-	public List<Map<String, Object>> searchWish0(Map<String, Object> map) throws Exception 
-	{
-		return memberDao.searchWish0(map);
-	}
-
-	@Override
-	public List<Map<String, Object>> pagingbasket(Map<String, Object> map) throws Exception 
-	{
-		return memberDao.pagingbasket(map);
-	}
-
-	@Override
-	public int basketcount(Map<String, Object> map) throws Exception 
-	{
-		return memberDao.basketcount(map);
-	}
-	
-	
 
 }

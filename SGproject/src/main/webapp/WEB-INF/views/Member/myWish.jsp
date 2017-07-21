@@ -11,9 +11,9 @@
 
 <script type="text/javascript">
  
- function wish_del()
+ function wish_del(wish_no)
  {
-	 var wish_no = $("#WISH_NO").val();
+	 
 	 
 	 $.ajax
 	 ({
@@ -75,7 +75,6 @@
                  <c:otherwise>
 
    				 <c:forEach var="list"  items="${wishlist}" varStatus="stat">
-   				 <input type="hidden" id="WISH_NO" name="WISH_NO" value="${list.WISH_NO}">
    				 <input type="hidden" id="WISH_MEMBER_NO" name="WISH_MEMBER_NO" value="${list.WISH_MEMBER_NO}">
                   <c:url var="viewURL" value="view" >
                      <c:param name="no" value="${list.WISH_GOODS_NO}" />
@@ -93,7 +92,11 @@
                         'goodsDetail?goodsNo=${list.WISH_GOODS_NO}&currentPage=${gcurrentPage}'"/>
                         </td>
                         <td>${list.GOODS_PRICE}</td>
-                        <td><a onclick="wish_del()">삭제</a></td> 
+                        <td class="wish_del">
+                        <div class="board_search_table">
+                        <input type="button" value="삭제하기"></div>
+                        <input type="hidden" id="WISH_NO" name="WISH_NO" value="${list.WISH_NO}">  
+                        </td>
                         
                     </tr>
                  </c:forEach> 
@@ -109,4 +112,13 @@
 </div>
 
 </body>
+<script>
+$(".wish_del").on("click", function(e) //수정
+{ 
+   e.preventDefault(); 	 		
+   var wish_no =$(this).parent().find("#WISH_NO").val();
+  
+   wish_del(wish_no);
+});
+</script>
 </html>

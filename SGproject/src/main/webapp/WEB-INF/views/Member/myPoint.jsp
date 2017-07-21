@@ -156,7 +156,7 @@
 
    				 <c:forEach var="pointList"  items="${pointList}" varStatus="stat">
                  	<tr> 
-                     	<td>${stat.count}</td>
+                     	<td>${pointList.RNUM}</td>
                      	<td>${pointList.POINT_DATE}</td> 
                      	<td>${pointList.POINT_MONEY}</td>
                      	<td>${pointList.POINT_CONTENT}</td>
