@@ -54,6 +54,7 @@
 <select id="myOrderList" parameterType="hashmap" resultType="hashmap">
       <![CDATA[
            SELECT 
+            ROW_NUMBER() OVER(ORDER BY O.ORDER_NO) AS RNUM,
             O.ORDER_NO,
             O.ORDER_MONEY,
             O.ORDER_DATE,
@@ -69,10 +70,12 @@
             WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
                AND O.ORDER_GOODS_NO = G.GOODS_NO
 		       AND O.ORDER_DELI_NO = D.DELI_NO    
-            ORDER BY O.ORDER_DATE DESC            
+        
                       
       ]]>
   </select>
+  
+
   
 <!-- 주문 내역 상세 보기 -->
  <select id="myOrderDetail" parameterType="hashmap" resultType="hashmap">
@@ -96,7 +99,6 @@
 			
             
           FROM SG_ORDER O,
-               SG_GOODS G,
 			   SG_DELI D
                      
           WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
@@ -279,6 +281,7 @@ WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
   ]]>
 </select>
 
+  
 <!-- 위시 리스트 내역 삭제 -->	
 <delete id="deleteMyWish" parameterType="hashmap">
   <![CDATA[

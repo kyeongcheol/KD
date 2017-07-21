@@ -226,6 +226,7 @@ public class MemberController
            System.out.println("진입");
            String mem_id = session.getAttribute("MEMBER_ID").toString();
            
+           
             commandMap.getMap().put("MEMBER_ID", mem_id); //회원 번호 commandMap에 넣기
             
             List<Map<String, Object>> myOrderList = memberService.myOrderList(commandMap.getMap());
@@ -243,8 +244,14 @@ public class MemberController
       
       //나의 주문 상세보기
       @RequestMapping(value="/orderInfoView")
-      public String orderInfoView(Model model)
+      public String orderInfoView(Model model, CommandMap commandMap, HttpServletRequest request, HttpSession session)
+      throws Exception
       {
+        commandMap.getMap().put("ORDER_DELI_NO", commandMap.getMap().get("DELI_NO")); 
+        commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
+        System.out.println(commandMap.getMap());
+        List<Map<String, Object>> myOrderDetail = memberService.myOrderDetail(commandMap.getMap());
+        model.addAttribute("myOrderDetail", myOrderDetail);
          return "Member/myOrder_View";
       }
       
@@ -256,7 +263,7 @@ public class MemberController
           String mem_id = session.getAttribute("MEMBER_ID").toString(); //세션에서 ID값 받아오기
           
           //ajax json data : 배송번호, 주문 상태, 주문번호
-          String deli_no = (String) commandMap.getMap().get("DELI_NO"); 
+          String deli_no = (String) commandMap.getMap().get("DELI_NO");
           int order_state = Integer.parseInt(commandMap.getMap().get("ORDER_STATE").toString()); 
           String order_no =(String)commandMap.getMap().get("ORDER_NO"); 
           
@@ -267,6 +274,8 @@ public class MemberController
           
           commandMap.getMap().put("ORDER_STATE", order_state);
           commandMap.getMap().put("ORDER_NO", order_no);
+          
+         
         
          System.out.println(commandMap.getMap());
          /*if(commandMap.get("ORDER_STATE").toString().equals(0))*/
@@ -278,32 +287,31 @@ public class MemberController
          {
             if(cnt > 1) //배송번호가 하나 이상일 경우
             {
-            	System.out.println("입금 전 부분 취소함 : 배송번호 1개 이상일 경우");
-            	System.out.println(commandMap.getMap());
-            	memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
+               System.out.println("입금 전 부분 취소함 : 배송번호 1개 이상일 경우");
+               System.out.println(commandMap.getMap());
+               memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
             }
             else //배송번호가 하나일 경우
             {
-            	System.out.println("입금 전 부분 취소함 : 배송번호 1개 일경우");
-            	System.out.println(commandMap.getMap());
-            	memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
-            	memberService.deliDelete(commandMap.getMap()); //배송 테이블 삭제
-            	
+               System.out.println("입금 전 부분 취소함 : 배송번호 1개 일경우");
+               System.out.println(commandMap.getMap());
+               memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
+               memberService.deliDelete(commandMap.getMap()); //배송 테이블 삭제
+               
             }
          }  
          
          else if(order_state == 1) //배송준비중
          {
-        	  System.out.println("배송준비중 주문 취소함 ");
-        	  
-        	  int trade_no = memberService.tradeInfo(commandMap.getMap()); //결제 번호 받아오기
-              commandMap.getMap().put("TRADE_NO", trade_no);
+             System.out.println("배송준비중 주문 취소함 ");
+             
+             int trade_no = memberService.tradeInfo(commandMap.getMap()); //결제 번호 받아오기
+             commandMap.getMap().put("TRADE_NO", trade_no);
               
-          	  System.out.println(commandMap.getMap());
-          	  memberService.orderDelete(commandMap.getMap()); //주문 테이블 삭제
-          	  memberService.tradeDelete(commandMap.getMap()); //결제 테이블 삭제
-          	  memberService.deliDelete(commandMap.getMap()); //배송 테이블 삭제
-          	  
+             System.out.println(commandMap.getMap());
+             memberService.delinodel(commandMap.getMap()); //주문 테이블 삭제
+             memberService.tradeDelete(commandMap.getMap()); //결제 테이블 삭제
+             memberService.deliDelete(commandMap.getMap()); //배송 테이블 삭제
          }
   
          List<Map<String, Object>> myOrderList = memberService.myOrderList(commandMap.getMap());
@@ -359,6 +367,7 @@ public class MemberController
        
        System.out.println("나의 장바구니 내역");
        String member_id = session.getAttribute("MEMBER_ID").toString(); //세션에서 MEMBER_ID 가져와 String 변수로 받음
+       session.setAttribute("totalcount", 1);
        System.out.println(member_id);
        commandMap.getMap().put("MEMBER_ID", member_id); //세션 MEMBER_ID를 commandMap에 넣음
       
@@ -433,6 +442,7 @@ public class MemberController
       int blockCount = 5;
       
       commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
+      /*if(session.getAttribute("totalcount") == 1)*/
       int totalCount =  memberService.basketcount(commandMap.getMap());   
       System.out.println(totalCount);
       

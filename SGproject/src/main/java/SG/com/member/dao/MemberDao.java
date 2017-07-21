@@ -57,6 +57,7 @@ public class MemberDao extends AbstractDAO
 	{
 		return (List<Map<String, Object>>)selectList("mypage.myOrderList", map);
 	}
+	
 
 	//나의 주문내역 상세보기
 	@SuppressWarnings("unchecked")
@@ -136,5 +137,6 @@ public class MemberDao extends AbstractDAO
     {
 	    sqlSession.delete("mypage.deleteMyWish", map);
     }
+
        
 }

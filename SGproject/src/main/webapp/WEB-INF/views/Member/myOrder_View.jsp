@@ -238,7 +238,7 @@ function zipfinds()
 
 .faq_line {margin: 0 50px 0 50px;}
 
-
+.black {margin: 0 50px  50px;}
 </style>
 </head>
 <body>
@@ -255,15 +255,15 @@ function zipfinds()
   <div id="ordert_wrap">
 
   <c:choose>
-    <c:when test="${fn:length(orderGoods) > 0}">   
+    <c:when test="${fn:length(myOrderDetail) > 0}">   
        <table class="ordert_table" width="100%">
           <thead> 
           <colgroup>
-          <col width="30%px" />
-          <col width="20%px"/>
-	      <col width="20%px" />
-		  <col width="10%px" />
-		  <col width="10%px" />
+          <col width="30%" />
+          <col width="20%"/>
+         <col width="20%" />
+        <col width="10%" />
+        <col width="10%" />
           </colgroup>
           
            <tr>
@@ -275,14 +275,14 @@ function zipfinds()
            </tr>
           </thead>
          
-   <c:forEach var="orderGoods" items="${orderGoods}" varStatus="stat">
+   <c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">
    
    <tr> 
-      <td><img src="resources/file/goodsFile/${orderGoods.GOODS_THUMBNAIL}" style="width:148px; height:148px" /></td>
-      <td>${orderGoods.GOODS_NAME}</td>
-      <td>${orderGoods.TOPPING_NAME}
-      <td>${orderGoods.GOODS_PRICE}</td>
-      <td>${orderGoods.GOODS_AMOUNT}</td>
+      <td><img src="resources/file/goodsFile/${orderinfo.GOODS_THUMBNAIL}" style="width:148px; height:148px" /></td>
+      <td>${orderinfo.GOODS_NAME}</td>
+      <td>${orderinfo.ORDER_TOPPING_NAME}
+      <td>${orderinfo.ORDER_MONEY}</td>
+      <td>${orderinfo.ORDER_GOODS_AMOUNT}</td>
    </tr>
 
    </c:forEach>
@@ -326,8 +326,9 @@ function zipfinds()
 </tr>
 
 <tr> 
-   <td height="50px"><p id="totalMoney">${totalMoney}</p></td>
-   <td><p id="dcMoney">${totalMoney}</p></td>
+   <td height="50px"><p id="totalMoney">${invoice}</p></td>
+   <td><p id="dcMoney">${point}</p></td>
+   <td><p id="dcMoney">${totalTradeMoney}</p></td>
 </tr>
   
 </table>
@@ -338,14 +339,14 @@ function zipfinds()
 </div>
 
 
-<div class="seller_info" style="height:20px;">
+<div class="seller_info">
 <section class="input-horizontal list-horizontal section box-shadow">
-            <div class="main_subject">
+            <div class="main_subject" style="margin-left:15px;margin-top:30px;">
                <h2>주문자 정보</h2>
             </div>
             
             
-<div style="margin-top:20px;">
+<div style="margin-top:20px;margin-left:110px;">
 <ul class="section-body">
      <li class="id">
       <div class="item-label col-lg-3 col-md-4" style="width:630px;height:23px; font-size:12px;">
@@ -356,11 +357,10 @@ function zipfinds()
       <div class="col-lg-21 col-md-20" style="width:630px;">
          <input type="text" name="MEMBER_ID" id="" value="${sessionScope.MEMBER_ID}" maxlength="20" class="xx-control" label="" required="required">
       </div>
-      <div style="height:5px;"></div>
     </li>
     
    <li class="name">
-      <div class="item-label col-lg-3 col-md-4" style=" width:630px;height:23px; font-size:12px; vertical-align:middle;">
+      <div class="item-label col-lg-3 col-md-4" style=" width:630px;height:23px; font-size:12px; vertical-align:middle;margin-top:10px;">
          <label for="input-name">
             <strong>* 수령자 이름</strong>
          </label>
@@ -368,24 +368,25 @@ function zipfinds()
       <div class="col-lg-21 col-md-20" style="width:630px;">
          <input type="text" id="MEMBER_NAME" class="xx-control" name="DELI_ORDER_NAME" value="${sessionScope.MEMBER_NAME}" required="required" label="이름">
       </div>
-      <div style="height:5px;"></div>
    </li>
+
    <li class="address">
-      <div class="item-label col-lg-3 col-md-4" style=" width:630px;height:30px; font-size:12px; vertical-align:middle;">
+      <div class="item-label col-lg-3 col-md-4" style=" width:630px; font-size:12px; vertical-align:middle;margin-top:10px;">
          <strong>* 수령자 주소</strong>
       </div>
-      <div class="col-lg-21 col-md-20" style="width:630px;">
-         <div class="input-box" >
+      <div class="col-lg-21 col-md-20" style="width:630px;margin-top:5px;">
+         <div class="input-box" style="margin-bottom:10px;" >
          <input type="text" id="MEMBER_ZIP"  name="DELI_ORDER_ZIP"  label="우편번호" value="${orderDeli.MEMBER_ZIP}" maxlength="6" required="">
             <span class="button button-dimmed" onclick="zipfinds()">주소 찾기</span>
          </div>
          <input type="text" id="MEMBER_ADDR1" class="xx-control" name="DELI_ORDER_ADDR1" label="주소" value="${orderDeli.MEMBER_ADDR1}" size="48" readonly="" required="">
+         <div style="height:10px;width:500px;"></div>
          <input type="text" id="MEMBER_ADDR2" class="xx-control" name="DELI_ORDER_ADDR2" value="${orderDeli.MEMBER_ADDR2}" label="주소" required="">
       </div>
-      <div style="height:30px;"></div>
+      
    </li>
    <li class="cell-phone">
-      <div class="item-label col-lg-3 col-md-4" style=" width:630px;height:30px; font-size:12px; vertical-align:middle;">
+      <div class="item-label col-lg-3 col-md-4" style=" width:630px;height:30px; font-size:12px; vertical-align:middle;margin-top:10px;">
          <label for="input-cell-phone01">
             <strong>* 수령자 연락처</strong>
          </label>
@@ -393,33 +394,31 @@ function zipfinds()
       <div class="col-lg-21 col-md-20" style="width:630px;">
          <div class="input-box">
             <input type="text" name="DELI_ORDER_PHONE" id="MEMBER_PHONE" label="휴대폰" value="${orderDeli.MEMBER_PHONE}"  maxlength="11" class="xx-control" required="required">
-         </div>  
-         <div style="height:50px;"></div>       
+         </div>   
       </div>
    </li>
    
    <li class="memo">
-      <div class="item-label col-lg-3 col-md-4" style=" width:630px; height:30px; font-size:12px; vertical-align:middle;">
+      <div class="item-label col-lg-3 col-md-4" style=" width:630px; height:30px; font-size:12px; vertical-align:middle;margin-top:10px;">
          <label for="input-cell-phone01">
             <strong>* 기타사항</strong>
          </label>
       </div>
-      <div class="col-lg-21 col-md-20" style="width:630px;">
+      <div class="col-lg-21 col-md-20" style="width:630px;margin-bottom:40px;">
          <div class="input-box">
             <input type="text" name="DELI_ORDER_PHONE" id="MEMBER_PHONE" label="휴대폰" value="${orderDeli.MEMBER_PHONE}"  maxlength="11" class="xx-control" required="required">
          </div>  
-         <div style="height:10px;"></div>       
       </div>
    </li>
 </ul>
 </div>
 </section>
- 
+
   <div class="btnArea">
 
    <input class="effect effect-5" type="submit" onclick="" value="주문내역수정"/> </div>
 
-</div>
+</div> 
 </form>
 </div>
 
