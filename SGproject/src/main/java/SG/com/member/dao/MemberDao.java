@@ -45,6 +45,12 @@ public class MemberDao extends AbstractDAO
 	
 	//-------------------주문내역---------------------------
 	
+	//배송번호 별 주문내역 건수 조회
+	public int orderdelicnt(Map<String, Object>map) throws Exception 
+	{
+	   return (int)selectOne("mypage.orderdelicnt", map);
+    }
+	
 	//나의 주문내역 리스트 보기
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> myOrderList(Map<String, Object>map) throws Exception 
@@ -79,6 +85,12 @@ public class MemberDao extends AbstractDAO
 	
 	//-------------------주문취소(배송준비 중일 때)---------------------------
 	
+	//결제 정보 가져오기
+    public int tradeInfo(Map<String, Object>map) throws Exception
+    {
+       return (int)selectOne("mypage.tradeInfo", map);
+    }
+    
 	//결제삭제(배송준비중일때)
 	public void tradeDelete(Map<String, Object>map) throws Exception  
 	{
@@ -93,10 +105,16 @@ public class MemberDao extends AbstractDAO
 	
 	//-------------------장바구니---------------------------
 	
-	//나의 장바구니 내역보기
-    public List<Map<String, Object>> myBasketList(Map<String, Object>map) throws Exception 
+	//나의 장바구니 내역보기(페이징)
+    public List<Map<String, Object>> pagingbasket(Map<String, Object>map) throws Exception 
     {
-	   return sqlSession.selectList("mypage.myBasketList", map);
+	   return sqlSession.selectList("mypage.pagingbasket", map);
+	}
+    
+    //나의 장바구니 총 개수
+    public int basketcount(Map<String, Object>map) throws Exception 
+    {
+	   return (int)selectOne("mypage.basketcount", map);
 	}
 	
     //장바구니 내역 삭제
@@ -118,28 +136,5 @@ public class MemberDao extends AbstractDAO
     {
 	    sqlSession.delete("mypage.deleteMyWish", map);
     }
-    
-    //상품 이름으로 검색된 위시리스트 내역보기
-    public List<Map<String, Object>> searchWish0(Map<String, Object>map) throws Exception 
-    {
-	   return sqlSession.selectList("mypage.searchWish0", map);
-	}
-    
-    //나의 장바구니 내역보기(페이징)
-    public List<Map<String, Object>> pagingbasket(Map<String, Object>map) throws Exception 
-    {
-	   return sqlSession.selectList("mypage.pagingbasket", map);
-	}
-    
-    //나의 장바구니 총 개수
-    public int basketcount(Map<String, Object>map) throws Exception 
-    {
-	   return (int)selectOne("mypage.basketcount", map);
-	}
-    //결제 정보 가져오기
-    public int tradeInfo(Map<String, Object>map) throws Exception
-    {
-    	return (int)selectOne("mypage.tradeInfo", map);
-    }
-    
+       
 }

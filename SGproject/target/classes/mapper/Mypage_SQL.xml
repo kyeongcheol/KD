@@ -41,6 +41,15 @@
    ]]>
 </update>
 
+<!-- 배송번호 별 주문 건수 조회 -->
+<select id="orderdelicnt" parameterType="hashmap" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) AS ORDER_COUNT
+		FROM SG_ORDER
+		WHERE ORDER_DELI_NO = #{ORDER_DELI_NO}
+	]]>
+</select>
+
 <!-- 주문내역 조회 -->
 <select id="myOrderList" parameterType="hashmap" resultType="hashmap">
       <![CDATA[
@@ -57,12 +66,10 @@
 			D.DELI_INVOICE_NO,
 			D.DELI_NO
             FROM SG_ORDER O, SG_GOODS G, SG_DELI D
-           WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
+            WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
                AND O.ORDER_GOODS_NO = G.GOODS_NO
-		       AND O.ORDER_DELI_NO = D.DELI_NO
-		  GROUP BY O.ORDER_NO, O.ORDER_MONEY,O.ORDER_DATE, O.ORDER_TRADE_TYPE, 
-		        O.ORDER_TOPPING_NAME,O.ORDER_GOODS_NO, O.ORDER_STATE, G.GOODS_NAME, G.GOODS_THUMBNAIL, D.DELI_INVOICE_NO, DELI_NO     
-          ORDER BY O.ORDER_DATE DESC            
+		       AND O.ORDER_DELI_NO = D.DELI_NO    
+            ORDER BY O.ORDER_DATE DESC            
                       
       ]]>
   </select>
@@ -85,21 +92,17 @@
 			D.DELI_RECEIVE_ADDR2, 
 		    D.DELI_RECEIVE_NAME, 
 			D.DELI_RECEIVE_PHONE, 
-			D.DELI_ORDER_MEMO, 
-			T.TRADE_MONEY,
-			T.TRADE_DATE
+			D.DELI_ORDER_MEMO
+			
             
           FROM SG_ORDER O,
                SG_GOODS G,
-			   SG_DELI D,
-			   SG_TRADE T
+			   SG_DELI D
                      
           WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
                 AND O.ORDER_GOODS_NO = G.GOODS_NO
 		       	AND O.ORDER_DELI_NO = D.DELI_NO
-				AND ORDER_DELI_NO = T.TRADE_DELI_NO
-                AND O.ORDER_DELI_NO = #{DELI_NO}
-          
+			    
           ORDER BY O.ORDER_DATE DESC            
                      
    ]]>
@@ -143,15 +146,28 @@
 
 
 <!-- 취소/환불 -->
-<!-- 1) 입금 전일 때 : 주문 테이블 삭제 -->
-<!-- 2) 배송준비중일 때: 주문 - 결제 - 배송 -->
+<!-- 1) 입금 전일 때 (부분취소) : (배송번호가 2개 이상일때) 주문 테이블 삭제 -->
+<!-- 2) 입금 전일 때 (부분취소) : (배송번호가 1개 일 때) 주문 + 배송 테이블 삭제 --> 
+<!-- 3) 배송 준비 중일 때: 주문 - 결제 - 배송 -->
+
+<!-- 결제 번호 받아오기 --> 
+<select id="tradeInfo" parameterType="hashmap" resultType="int">
+  <![CDATA[
+        SELECT TRADE_NO
+        FROM SG_TRADE T, SG_DELI D
+        WHERE T.TRADE_DELI_NO = D.DELI_NO
+        AND T.TRADE_MEMBER_ID = #{MEMBER_ID}
+        AND D.DELI_NO = #{DELI_NO}  
+          
+   ]]>                
+</select>
 
 <!-- 주문 삭제 -->
 <delete id="orderDelete" parameterType="hashmap">
  <![CDATA[
      DELETE FROM SG_ORDER
      WHERE ORDER_NO = #{ORDER_NO} 
-       AND ORDER_STATE = 0 
+      AND ORDER_STATE = #{ORDER_STATE} 
  ]]>	  
 </delete>
 
@@ -174,32 +190,58 @@
  ]]>
 </delete>
 
-
-<!-- 장바구니 내역 조회 --> 
-<select id="myBasketList" parameterType="hashmap" resultType="hashmap">
-  <![CDATA[
-		  SELECT DISTINCT
-		   B.BASKET_NO,
+<!-- 장바구니 건수 조회 -->
+<select id="basketcount" parameterType="hashmap" resultType="int">
+<![CDATA[
+SELECT COUNT(A.RNUM) AS BASKET_COUNT
+FROM
+(
+  SELECT   
+           ROW_NUMBER() OVER(ORDER BY B.BASKET_NO DESC) AS RNUM,
+           B.BASKET_NO,
 		   B.BASKET_GOODS_NO, 
 		   B.BASKET_GOODS_NAME, 
 		   B.BASKET_REG_DATE, 
 		   B.BASKET_GOODS_AMOUNT, 
-		   B.BASKET_TOPPING_NAME, 
-		   G.GOODS_PRICE,
-		   G.GOODS_THUMBNAIL 
-       
-		  FROM SG_BASKET B, 
-		  SG_GOODS G, 
-		  SG_MEMBER M 
-		  
-		  WHERE M.MEMBER_ID = #{MEMBER_ID} 
-		  AND B.BASKET_GOODS_NAME = G.GOODS_NAME 
-		  AND B.BASKET_MEMBER_NO = M.MEMBER_NO 
-		  AND G.GOODS_ONOFF = 0 
-		  ORDER BY B.BASKET_REG_DATE DESC, 
-		           B.BASKET_GOODS_NO ASC
-   ]]>		           
+		   B.BASKET_TOPPING_NAME,
+           G.GOODS_PRICE,
+		   G.GOODS_THUMBNAIL  
+    
+  FROM SG_BASKET B, SG_GOODS G, SG_MEMBER M  
+  WHERE B.BASKET_GOODS_NAME = G.GOODS_NAME
+  AND B.BASKET_MEMBER_NO = M.MEMBER_NO
+  AND G.GOODS_ONOFF = 0
+  AND M.MEMBER_ID=#{MEMBER_ID} 
+) A
+]]>
 </select>
+
+<!-- 페이징 된 장바구니 내역 -->
+<select id="pagingbasket" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+SELECT A.*
+FROM
+(
+  SELECT 
+           ROW_NUMBER() OVER(ORDER BY B.BASKET_NO) AS RNUM,
+           B.BASKET_NO,
+		   B.BASKET_GOODS_NO, 
+		   B.BASKET_GOODS_NAME, 
+		   B.BASKET_REG_DATE, 
+		   B.BASKET_GOODS_AMOUNT, 
+		   B.BASKET_TOPPING_NAME,
+           G.GOODS_PRICE,
+		   G.GOODS_THUMBNAIL  
+    
+  FROM SG_BASKET B, SG_GOODS G, SG_MEMBER M  
+  WHERE B.BASKET_GOODS_NAME = G.GOODS_NAME
+  AND B.BASKET_MEMBER_NO = M.MEMBER_NO
+  AND G.GOODS_ONOFF = 0
+  AND M.MEMBER_ID=#{MEMBER_ID}  
+) A      
+WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
+]]>
+</select>  
 
 <!-- 장바구니 내역 삭제 -->
 <delete id="deleteMyBasket" parameterType="hashmap">
@@ -237,32 +279,6 @@
   ]]>
 </select>
 
-<!-- 상품 이름으로 검색 -->
-<select id="searchWish0" parameterType="hashmap" resultType="hashmap">
-  <![CDATA[
-		   SELECT DISTINCT  
-			W.WISH_NO,
-			W.WISH_GOODS_NO,
-			W.WISH_REG_DATE, 
-		    G.GOODS_NAME,
-			G.GOODS_THUMBNAIL,
-			G.GOODS_PRICE,
-			M.MEMBER_ID
-			
-			FROM SG_WISH W,
-			     SG_GOODS G,
-				 SG_MEMBER M
-			
-			WHERE W.WISH_GOODS_NO = G.GOODS_NO
-			AND W.WISH_MEMBER_NO = M.MEMBER_NO			 
-			AND G.GOODS_ONOFF = 0
-			AND M.MEMBER_ID = #{MEMBER_ID}
-			AND G.GOODS_NAME LIKE '%' || #{isSearch} || '%'
-			ORDER BY W.WISH_REG_DATE DESC, 
-			         W.WISH_NO ASC
-  ]]>
-</select>
-
 <!-- 위시 리스트 내역 삭제 -->	
 <delete id="deleteMyWish" parameterType="hashmap">
   <![CDATA[
@@ -284,67 +300,7 @@
 	]]>
 </select>
 
-<select id="basketcount" parameterType="hashmap" resultType="int">
-<![CDATA[
-SELECT COUNT(A.RNUM) AS BASKET_COUNT
-FROM
-(
-  SELECT   
-           ROW_NUMBER() OVER(ORDER BY B.BASKET_NO) AS RNUM,
-           B.BASKET_NO,
-		   B.BASKET_GOODS_NO, 
-		   B.BASKET_GOODS_NAME, 
-		   B.BASKET_REG_DATE, 
-		   B.BASKET_GOODS_AMOUNT, 
-		   B.BASKET_TOPPING_NAME,
-           G.GOODS_PRICE,
-		   G.GOODS_THUMBNAIL  
-    
-  FROM SG_BASKET B, SG_GOODS G, SG_MEMBER M  
-  WHERE B.BASKET_GOODS_NAME = G.GOODS_NAME
-  AND B.BASKET_MEMBER_NO = M.MEMBER_NO
-  AND G.GOODS_ONOFF = 0
-  AND M.MEMBER_ID=#{MEMBER_ID} 
-) A
-]]>
-</select>
 
-<select id="pagingbasket" parameterType="hashmap" resultType="hashmap">
-<![CDATA[
-SELECT A.*
-FROM
-(
-  SELECT 
-           ROW_NUMBER() OVER(ORDER BY B.BASKET_NO) AS RNUM,
-           B.BASKET_NO,
-		   B.BASKET_GOODS_NO, 
-		   B.BASKET_GOODS_NAME, 
-		   B.BASKET_REG_DATE, 
-		   B.BASKET_GOODS_AMOUNT, 
-		   B.BASKET_TOPPING_NAME,
-           G.GOODS_PRICE,
-		   G.GOODS_THUMBNAIL  
-    
-  FROM SG_BASKET B, SG_GOODS G, SG_MEMBER M  
-  WHERE B.BASKET_GOODS_NAME = G.GOODS_NAME
-  AND B.BASKET_MEMBER_NO = M.MEMBER_NO
-  AND G.GOODS_ONOFF = 0
-  AND M.MEMBER_ID=#{MEMBER_ID}  
-) A      
-WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
-]]>
-</select>  
 
-<!-- 결제 번호 받아오기 --> 
-<select id="tradeInfo" parameterType="hashmap" resultType="int">
-  <![CDATA[
-		  SELECT TRADE_NO
-		  FROM SG_TRADE T, SG_DELI D
-		  WHERE T.TRADE_DELI_NO = D.DELI_NO
-		  AND T.TRADE_MEMBER_ID = #{MEMBER_ID}
-		  AND D.DELI_NO = #{DELI_NO}  
-		    
-		  ]]>		     
-		  
-</select>
+
 </mapper>

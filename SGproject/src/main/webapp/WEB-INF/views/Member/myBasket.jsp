@@ -12,70 +12,71 @@
 
 <script type="text/javascript">
  
+function basket_order()
+{
+   
+   var f =  document.getElementById('frm');
 
- $(document).ready(function() 
- {
-	  $("#orderFrm").on("click", function()
-	  {
-		 if ( $(".chkclass :checked").size() < 1 ) 
-		 {
-		      alert("주문할 상품을 선택해주세요!!");
-		      return;
-		 }
-	  });
-	  
-	  $("#delFrm").on("click", function() 
-	  {
-	         
-	    if ( $(".chkclass :checked").size() < 1 ) 
-	    {
-	      alert("삭제할 상품을 선택해주세요!!");
-	      return;
-	    }
-	    
-	    else 
-	    {
-	      var param = "";
-	      $(".chkclass :checked").each(function() 
-	      {
-	        if( param == "" )
-	        {
-	          param = "BASKET_NO="+$(this).parent().children("#BASKET_NO").val();
-	          alert(param);
-	        }
-	        else 
-	        {	param = param + "&BASKET_NO="+$(this).parent().children("#BASKET_NO").val(); alert(param); }
-	 
-	      });
-	           
-	      $.ajax
-	      ({
-	        url : '/SG/myBasketList/Delete',
-	        type : 'post',
-	        data : param,
-	        success : function(data) 
-	        {
-	           alert("삭제되었습니다.");
-	           $("#wish_wrap").html(data);
-	        },
-	        error : function() { console.log('error');}
-	      });
-	    }
-	  });
-	});
+   
+   if($("input:checkbox[name='BASKET_NO']").is(":checked") == false) 
+   {
+      alert("상품을 선택해 주세요");
+      return false;
+   }
+   
+   else
+   {
+      f.submit();
+  
+   }
+   
+}
+
+function basket_del()
+{
+	
+	if($("input:checkbox[name='BASKET_NO']").is(":checked") == false) 
+	{
+	      alert("상품을 선택해 주세요");
+	      return false;
+	}
+	
+	else
+	{
+     var param = "";
+     $(".chkclass :checked").each(function() 
+     {
+       if( param == "" )
+       {
+         param = "BASKET_NO="+$(this).parent().children("#BASKET_NO").val();
+         alert(param);
+       } //if
+       else 
+       {	
+         param = param + "&BASKET_NO="+$(this).parent().children("#BASKET_NO").val(); 
+         alert(param); 
+       
+       } //else
+
+      }); //선택자(checked)
+	
+     $.ajax
+     ({
+       url : '/SG/myBasketList/Delete',
+       type : 'post',
+       data : param,
+       success : function(data) 
+       {
+          alert("삭제되었습니다.");
+          $("#wish_wrap").html(data);
+       },
+       error : function() { console.log('error');}
+     }); //ajax
+     
+   } //else
+   	
+}
  
- function checkboxSelectQue(n,obj) 
- {
-	    var i;
-	    var chk = document.getElementsByName(obj);
-	    var tot = chk.length;
-	    for (i = 0; i < tot; i++) 
-	    {
-	        if (n == 1) chk[i].checked = true;
-	        if (n == 2) chk[i].checked = false;
-	    }
- }
-
  function ajaxPageView(page)
  {	
 		
@@ -117,13 +118,14 @@
 장바구니
 </div>
 </div>
-<div style="float:left; margin-left:863px; margin-top:30px;">
-<input class="button_all" type="button" value="전체선택" onclick="checkboxSelectQue(1,'chk[]')" />	
-<input class="button_all" type="button" value="전체해제" onclick="checkboxSelectQue(2,'chk[]')" />
+
+<div class="board_search_table" style="float:left; margin-left:880px; margin-top:30px;">
+<input class="button_all" type="button" value="전체선택"/>	
+<input class="button_unall" type="button" value="전체해제"/>
 </div>
 
 
-<form action="" method="post">
+<form id="frm" action="basketOrder" method="post">
 <table class="wish_table" width="94%">
 <colgroup>
 	<col width="5%" />
@@ -156,7 +158,7 @@
 
    				 <c:forEach var="list" items="${basketlist}" varStatus="stat">
                  	<tr> 
-                     	<td>${list.}</td>
+                     	<td>${list.RNUM}</td>
                      	<td>${list.BASKET_REG_DATE}</td>
                      	<td><a href="goodsDetail?goodsNo=${list.BASKET_GOODS_NO}&currentPage=${gcurrentPage}">
                      	${list.BASKET_GOODS_NAME}</a></td>
@@ -169,8 +171,8 @@
                         <td>${list.BASKET_GOODS_AMOUNT}</td>
                         <td>${list.BASKET_TOPPING_NAME}</td>
                         <td class="chkclass">
-                        <input type="checkbox" id="BASKET_NO" name="chk[]" value="${list.BASKET_NO}"></td>
-                        <input type="hidden" id="BASKET_NO" value="${list.BASKET_NO}"> 
+                        <input type="checkbox" id="BASKET_NO" name="BASKET_NO" value="${list.BASKET_NO}"></td>
+                        <%-- <input type="hidden" id="BASKET_NO" name="BASKET_NO" value="${list.BASKET_NO}">  --%>
                     </tr>
                  </c:forEach> 
                  </c:otherwise> 
@@ -179,17 +181,33 @@
            
 </table>
 
-<div style="float:left; margin-left:1250px; margin-top:20px;">
-<input type="submit" id="orderFrm" value="주문하기">
-<input type="button" id="delFrm" value="삭제하기"> 
+<div class="board_search_table" style="float:left; margin-left:1280px; margin-top:20px;">
+<input type="button" id="orderFrm" value="주문하기" onclick="basket_order()">
+<input type="button" id="delFrm" value="삭제하기" onclick="basket_del()"> 
 </div>
 </form>
+
 <div class="wish_bottom">
 <div class="wish_bottom_font">
 <font color="green">장바구니 내역에 있는 상품 정보를 보고 싶으시면 상품이름이나 이미지를 눌러주세요</font></div>
 </div>
+
 <div class="paging">${pagingHtml}</div>
 </div>
 
+
 </body>
+<script>
+$(".button_all").click(function()
+{
+
+	   $("input:checkbox[name='BASKET_NO']").not(":checked").trigger("click");
+});
+
+$(".button_unall").click(function()
+{
+	$("input:checkbox[name='BASKET_NO']:checked").trigger("click");
+});
+
+</script>
 </html>

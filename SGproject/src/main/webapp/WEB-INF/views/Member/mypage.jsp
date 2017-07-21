@@ -11,7 +11,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>     
 <!-- <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script> -->
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
  
 <script type="text/javascript">
 function tab(num)
@@ -67,6 +67,7 @@ function point_list()
 	//나의 포인트 리스트 팝업 창
 	window.open('/SG/myPoint','','toolbar=no,menubar=no,location=no,height=950,width=1000'); 
 }
+
 
 </script>
 <style>

@@ -55,7 +55,7 @@ width:100%;
 
 #topMenu {
             height: 50px;  /* 메인 메뉴의 높이 */
-            width:100%;  /* 메인 메뉴의 넓이 */
+            width:1200px;  /* 메인 메뉴의 넓이 */
    			margin-left:auto;
    			margin-right:auto;
     }
@@ -76,7 +76,7 @@ width:100%;
 .menuLink, .submenuLink {           /* 상위 메뉴와 하위 메뉴의 a 태그에 공통으로 설정할 스타일 */
         text-decoration:none;               /* a 태그의 꾸밈 효과 제거 */
         display: block;                     /* a 태그의 클릭 범위를 넓힘 */
-        width: 159px;                       /* 기본 넓이를 150px로 설정 */
+        width: 160px;                       /* 기본 넓이를 150px로 설정 */
         font-size: 15px;                    /* 폰트 사이즈를 12px로 설정 */
         font-weight: bold;                  /* 폰트를 굵게 설정 */
         font-family: "Nanum Gothic", Dotum; /* 기본 폰트를 영어/한글 순서대로 설정 */
