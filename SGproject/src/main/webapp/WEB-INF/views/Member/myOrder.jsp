@@ -173,13 +173,7 @@
                });    
             });  
          };  
-        
-         
-function order_view()
-{
-    //나의 배송정보 리스트 팝업 창
-    window.open('/SG/orderInfoView','','toolbar=no,menubar=no,location=no,height=950,width=1200'); 
-}
+               
 </script>
 </head>
 
@@ -227,9 +221,12 @@ function order_view()
                  <c:otherwise>
 
                  <c:forEach var="list" items="${myOrderList}" varStatus="stat">
-                    
+                 <c:url var="orderView" value="/orderInfoView">
+                 <c:param name="DELI_NO" value="${list.DELI_NO}"/>
+                 </c:url>   
                     <tr>
-                        <td><a onclick="javascript:order_view();">${list.DELI_NO}</a></td>
+                        <td><a onclick="javascript:window.open('${orderView}','','toolbar=no,menubar=no,location=no,height=950,width=1200');">
+                        ${list.DELI_NO}</a></td>
                         <td>${list.ORDER_NO}</td>
                         <td><a href="goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}">
                         ${list.GOODS_NAME}</a></td>
@@ -256,7 +253,7 @@ function order_view()
 
 <c:when test="${list.ORDER_STATE == 1}">
 <td>배송준비중</td>
-<td class="ready"><div class="board_search_table"><input type="button" value="주문취소" onclick="myOrderDel()"></div>
+<td class="ready"><div class="board_search_table"><input type="button" value="주문취소"></div>
 <input type="hidden" id="DELI_NO" name="DELI_NO" value="${list.DELI_NO}">  
 <input type="hidden" id="ORDER_STATE" name="ORDER_STATE" value="${list.ORDER_STATE}" >
 <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${list.ORDER_NO}">

@@ -78,32 +78,39 @@
  <select id="myOrderDetail" parameterType="hashmap" resultType="hashmap">
    <![CDATA[
            SELECT 
-            O.ORDER_NO, 
+            O.ORDER_NO,
+            O.ORDER_DELI_NO,
             O.ORDER_MONEY, 
             O.ORDER_DATE, 
             O.ORDER_TRADE_TYPE, 
             O.ORDER_TOPPING_NAME, 
             O.ORDER_STATE, 
-			O.ORDER_GOODS_AMOUNT, 
-            G.GOODS_NAME, 
+			O.ORDER_GOODS_AMOUNT,
+            G.GOODS_NAME,
+            G.GOODS_THUMBNAIL, 
 			D.DELI_INVOICE_NO, 
 			D.DELI_RECEIVE_ZIP, 
 			D.DELI_RECEIVE_ADDR1, 
 			D.DELI_RECEIVE_ADDR2, 
 		    D.DELI_RECEIVE_NAME, 
 			D.DELI_RECEIVE_PHONE, 
-			D.DELI_ORDER_MEMO
-			
-            
+			D.DELI_ORDER_MEMO,
+            C.SUM_ORDER_MONEY
+
           FROM SG_ORDER O,
                SG_GOODS G,
-			   SG_DELI D
+			   SG_DELI D,
+			   (SELECT SUM(ORDER_MONEY) AS SUM_ORDER_MONEY 
+                FROM SG_ORDER 
+                WHERE ORDER_DELI_NO=#{ORDER_DELI_NO}) C
                      
           WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
                 AND O.ORDER_GOODS_NO = G.GOODS_NO
 		       	AND O.ORDER_DELI_NO = D.DELI_NO
-			    
-          ORDER BY O.ORDER_DATE DESC            
+			    AND O.ORDER_DELI_NO = #{ORDER_DELI_NO}
+          
+          ORDER BY O.ORDER_DATE DESC   
+        
                      
    ]]>
 </select>
@@ -154,20 +161,28 @@
 <select id="tradeInfo" parameterType="hashmap" resultType="int">
   <![CDATA[
         SELECT TRADE_NO
-        FROM SG_TRADE T, SG_DELI D
-        WHERE T.TRADE_DELI_NO = D.DELI_NO
-        AND T.TRADE_MEMBER_ID = #{MEMBER_ID}
-        AND D.DELI_NO = #{DELI_NO}  
+        FROM SG_TRADE 
+        WHERE TRADE_MEMBER_ID = #{MEMBER_ID}
+        AND TRADE_DELI_NO = #{DELI_NO}  
           
    ]]>                
 </select>
 
-<!-- 주문 삭제 -->
+<!-- 주문 삭제(입금전일 때) -->
 <delete id="orderDelete" parameterType="hashmap">
  <![CDATA[
      DELETE FROM SG_ORDER
      WHERE ORDER_NO = #{ORDER_NO} 
       AND ORDER_STATE = #{ORDER_STATE} 
+ ]]>	  
+</delete>
+
+<!-- 주문 삭제(배송준비 중일 때) -->
+<delete id="delinodel" parameterType="hashmap">
+ <![CDATA[
+     DELETE FROM SG_ORDER
+     WHERE ORDER_DELI_NO = #{ORDER_DELI_NO}
+     AND ORDER_MEMBER_ID = #{MEMBER_ID}
  ]]>	  
 </delete>
 

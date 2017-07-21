@@ -60,9 +60,9 @@ public class MemberDao extends AbstractDAO
 
 	//나의 주문내역 상세보기
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> myOrderDetail(Map<String, Object>map) throws Exception 
+	public List<Map<String, Object>> myOrderDetail(Map<String, Object>map) throws Exception 
 	{
-	    return (Map<String, Object>)selectOne("mypage.myOrderDetail", map);
+	    return (List<Map<String, Object>>)selectList("mypage.myOrderDetail", map);
 	}
 		
     //주문내역 상세보기 수정(주문 개수 수정, 입금전일때)
@@ -85,6 +85,12 @@ public class MemberDao extends AbstractDAO
 	
 	//-------------------주문취소(배송준비 중일 때)---------------------------
 	
+	//주문삭제 (입금전일때)
+	public void delinodel(Map<String, Object>map) throws Exception  
+	{
+	    sqlSession.delete("mypage.delinodel", map);
+	}
+		
 	//결제 정보 가져오기
     public int tradeInfo(Map<String, Object>map) throws Exception
     {
