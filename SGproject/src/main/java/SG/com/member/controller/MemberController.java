@@ -247,12 +247,54 @@ public class MemberController
       public String orderInfoView(Model model, CommandMap commandMap, HttpServletRequest request, HttpSession session)
       throws Exception
       {
+    	  System.out.println("나의주문상세보기진입");
     	 commandMap.getMap().put("ORDER_DELI_NO", commandMap.getMap().get("DELI_NO")); 
     	 commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
     	 System.out.println(commandMap.getMap());
+    	 
+    	 
     	 List<Map<String, Object>> myOrderDetail = memberService.myOrderDetail(commandMap.getMap());
+    	 int orderUsePoint=0;
+         for(int i=0;i<myOrderDetail.size();i++){
+             
+      	   orderUsePoint =+ pointService.orderUsePoint( myOrderDetail.get(i));
+
+            
+
+        }
+    	 
     	 model.addAttribute("myOrderDetail", myOrderDetail);
+    	 System.out.println("orderUsePoint");
+    	 model.addAttribute("orderUsePoint", orderUsePoint);
+    	 System.out.println("주문상세내역진입");
+    	 System.out.println(myOrderDetail);
          return "Member/myOrder_View";
+      }
+      
+      //나의 주문 수정(배송정보)
+      @RequestMapping(value="/orderUpdateAction")
+      public String orderUpdateAction(Model model, CommandMap commandMap, List<Map<String, Object>> myOrderDetail) throws Exception
+      {
+    	System.out.println("배송정보 수정 집입");
+    	
+    	 commandMap.getMap().put("ORDER_DELI_NO", commandMap.getMap().get("DELI_NO")); 
+      	 commandMap.getMap().put("MEMBER_ID", session.getAttribute("MEMBER_ID"));
+      	 System.out.println(commandMap.getMap());
+    	
+    	Map<String, Object> updatedeli = new HashMap<String, Object>();
+        updatedeli = commandMap.getMap(); //update 할 정보들 updatemember에 넣음
+        memberService.myDeliUpdate(updatedeli); //update 쿼리 실행
+        
+        System.out.println(updatedeli);
+        
+        //memberMap map 선언
+
+        
+   	 List<Map<String, Object>> myOrderDetail1 = memberService.myOrderDetail(commandMap.getMap());
+   	 model.addAttribute("myOrderDetail", myOrderDetail1);
+   	 System.out.println("수정 후 주문내역 조회");
+    	return "Member/myOrder_View" ;
+    	  
       }
       
       //주문상품 취소

@@ -103,5 +103,27 @@
 	]]>
 	</select>
 	
+	<!--주문 상세보기 사용한 포인트 내역 조회 -->
+  <select id="orderUsePoint" parameterType="hashmap" resultType="int">
+	<![CDATA[
+	
+	SELECT 
+			POINT_MONEY
+			FROM SG_POINT 
+			WHERE POINT_ORDER_NO = #{ORDER_NO}
+		    AND POINT_CONTENT='포인트 사용'
+	 
+	]]>
+	</select>
+	
+	<!-- 주문 취소시 포인트 삭제(입금전일 때) -->
+<delete id="orderPointDel" parameterType="hashmap">
+ <![CDATA[
+     DELETE FROM SG_POINT
+     WHERE POINT_ORDER_NO = #{ORDER_NO} 
+      AND POINT_CONTENT ='포인트 사용'
+ ]]>	  
+</delete>
+	
 
 </mapper>

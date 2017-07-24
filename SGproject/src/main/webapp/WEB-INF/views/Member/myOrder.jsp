@@ -262,12 +262,12 @@
 
 <c:when test="${list.ORDER_STATE== 2}">
 <td>배송중</td>
-&nbsp;
+<td></td>
 </c:when>
 
 <c:when test="${list.ORDER_STATE== 3}">
 <td>배송완료</td>
-&nbsp;
+<td></td>
 </c:when>
 
 <c:otherwise>

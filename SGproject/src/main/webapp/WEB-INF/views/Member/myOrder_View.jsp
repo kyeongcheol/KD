@@ -68,6 +68,55 @@ function zipfinds()
     }).open();
 }
 
+function deliupdate()
+{
+	var f = document.frm;
+	var deli_name = f.DELI_RECEIVE_NAME.value;
+	var deli_zip = f.DELI_RECEIVE_ZIP.value;
+	var deli_addr1 = f.DELI_RECEIVE_ADDR1.value;
+	var deli_addr2 = f.DELI_RECEIVE_ADDR2.value;
+	var deli_phone = f.DELI_RECEIVE_PHONE.value;
+	var deli_memo = f.DELI_ORDER_MEMO.value;
+	var deli_no = f.DELI_NO.value;
+	
+	var update =
+		({
+			"DELI_RECEIVE_NAME":deli_name,
+			"DELI_RECEIVE_ZIP":deli_zip,
+			"DELI_RECEIVE_ADDR1":deli_addr1,
+			"DELI_RECEIVE_ADDR2":deli_addr2,
+			"DELI_RECEIVE_PHONE":deli_phone,
+			"DELI_ORDER_MEMO":deli_memo,
+			"DELI_NO":deli_no
+		});
+	$.ajax
+	({
+		type : "POST",
+		url : "/SG/orderUpdateAction",
+		data : update,
+		success : function(data)
+		{
+			confirm("회원정보가 수정되었습니다.");
+			self.close();
+		},
+		error : function()
+		{
+			alert("수정이 되지 않았습니다." + e);
+		}
+	});
+
+	return true;
+	}
+	
+$(".ready").on("click", function(e) 
+		{ 
+		   e.preventDefault();           
+		   var deli_no =$(this).parent().find("#DELI_NO").val();
+		   var order_state =$(this).parent().find("#ORDER_STATE").val();
+		   var order_no =$(this).parent().find("#ORDER_NO").val();
+		   myOrderDel(deli_no, order_state, order_no);
+		         
+		});    
 </script>
 
 <style type="text/css">
@@ -179,6 +228,7 @@ function zipfinds()
  margin-top : 30px;
  margin-bottom : 100px; 
  font-family: PureunJeonnam;
+ height:500px;
 
 }
 .main_subject 
@@ -244,7 +294,7 @@ function zipfinds()
 <body>
 
 <div class="order_view_section" style="height:auto;">
-<form name="frm" action="goodsOrderSuccess" method="post" >
+<form name="frm">
  <div class="order_view_section" style="height:auto; padding-top:0px;">         
   <section class="input-horizontal list-horizontal section box-shadow">
    <div class="main_subject">
@@ -280,7 +330,7 @@ function zipfinds()
    <tr> 
       <td><img src="resources/file/goodsFile/${orderinfo.GOODS_THUMBNAIL}" style="width:148px; height:148px" /></td>
       <td>${orderinfo.GOODS_NAME}</td>
-      <td>${orderinfo.ORDER_TOPPING_NAME}
+      <td>${orderinfo.ORDER_TOPPING_NAME}</td>
       <td>${orderinfo.ORDER_MONEY}</td>
       <td>${orderinfo.ORDER_GOODS_AMOUNT}</td>
    </tr>
@@ -310,6 +360,7 @@ function zipfinds()
 <div class="main_subject">
                <h2>결제 정보</h2>
             </div>
+            
 <div id="ordert_wrap">
 <table class="ordert_table" width="50%">
 <colgroup>
@@ -325,12 +376,16 @@ function zipfinds()
   
 </tr>
 
-<tr> 
-   <td height="50px"><p id="totalMoney">${invoice}</p></td>
-   <td><p id="dcMoney">${point}</p></td>
-   <td><p id="dcMoney">${totalTradeMoney}</p></td>
-</tr>
-  
+<c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">
+   
+   <tr> 
+      <td>${orderinfo.DELI_INVOICE_NO}</td>
+      <td>${orderUsePoint}</td>
+      <td>${orderinfo.SUM_ORDER_MONEY}</td>
+   </tr>
+
+
+</c:forEach>
 </table>
 
 <div style="height:10px;"></div>
@@ -345,7 +400,7 @@ function zipfinds()
                <h2>주문자 정보</h2>
             </div>
             
-            
+ <c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">        
 <div style="margin-top:20px;margin-left:110px;">
 <ul class="section-body">
      <li class="id">
@@ -355,7 +410,7 @@ function zipfinds()
          </label>
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;">
-         <input type="text" name="MEMBER_ID" id="" value="${sessionScope.MEMBER_ID}" maxlength="20" class="xx-control" label="" required="required">
+         <input type="text" name="MEMBER_ID" id="" value="${sessionScope.MEMBER_ID}" maxlength="20" class="xx-control" label="" required="required" readonly>
       </div>
     </li>
     
@@ -366,7 +421,7 @@ function zipfinds()
          </label>
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;">
-         <input type="text" id="MEMBER_NAME" class="xx-control" name="DELI_ORDER_NAME" value="${sessionScope.MEMBER_NAME}" required="required" label="이름">
+         <input type="text" id="DELI_RECEIVE_NAME" class="xx-control" name="DELI_RECEIVE_NAME" value="${orderinfo.DELI_RECEIVE_NAME}" required="required" label="이름">
       </div>
    </li>
 
@@ -376,12 +431,12 @@ function zipfinds()
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;margin-top:5px;">
          <div class="input-box" style="margin-bottom:10px;" >
-         <input type="text" id="MEMBER_ZIP"  name="DELI_ORDER_ZIP"  label="우편번호" value="${orderDeli.MEMBER_ZIP}" maxlength="6" required="">
+         <input type="text" id="DELI_RECEIVE_ZIP"  name="DELI_RECEIVE_ZIP"  label="우편번호" value="${orderinfo.DELI_RECEIVE_ZIP}" maxlength="6" required="">
             <span class="button button-dimmed" onclick="zipfinds()">주소 찾기</span>
          </div>
-         <input type="text" id="MEMBER_ADDR1" class="xx-control" name="DELI_ORDER_ADDR1" label="주소" value="${orderDeli.MEMBER_ADDR1}" size="48" readonly="" required="">
+         <input type="text" id="DELI_RECEIVE_ADDR1" class="xx-control" name="DELI_RECEIVE_ADDR1" label="주소" value="${orderinfo.DELI_RECEIVE_ADDR1}" size="48" readonly="" required="">
          <div style="height:10px;width:500px;"></div>
-         <input type="text" id="MEMBER_ADDR2" class="xx-control" name="DELI_ORDER_ADDR2" value="${orderDeli.MEMBER_ADDR2}" label="주소" required="">
+         <input type="text" id="DELI_RECEIVE_ADDR2" class="xx-control" name="DELI_RECEIVE_ADDR2" value="${orderinfo.DELI_RECEIVE_ADDR2}" label="주소" required="">
       </div>
       
    </li>
@@ -393,7 +448,7 @@ function zipfinds()
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;">
          <div class="input-box">
-            <input type="text" name="DELI_ORDER_PHONE" id="MEMBER_PHONE" label="휴대폰" value="${orderDeli.MEMBER_PHONE}"  maxlength="11" class="xx-control" required="required">
+            <input type="text" name="DELI_RECEIVE_PHONE" id="DELI_RECEIVE_PHONE" label="휴대폰" value="${orderinfo.DELI_RECEIVE_PHONE}"  maxlength="11" class="xx-control" required="required">
          </div>   
       </div>
    </li>
@@ -406,19 +461,38 @@ function zipfinds()
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;margin-bottom:40px;">
          <div class="input-box">
-            <input type="text" name="DELI_ORDER_PHONE" id="MEMBER_PHONE" label="휴대폰" value="${orderDeli.MEMBER_PHONE}"  maxlength="11" class="xx-control" required="required">
+            <input type="text" name="DELI_ORDER_MEMO" id="DELI_ORDER_MEMO" label="기타사항" value="${orderinfo.DELI_ORDER_MEMO}"  maxlength="11" class="xx-control" required="required">
          </div>  
       </div>
    </li>
+
 </ul>
+</div>
+ <c:choose>
+<c:when test="${orderinfo.ORDER_STATE == 0}">
+<td class="ready">  <div class="btnArea">
+
+   <input class="effect effect-5" type="submit" onclick="deliupdate();" value="주문내역수정"/> </div>
+  <input type="hidden" id="DELI_NO" name="DELI_NO" value="${orderinfo.DELI_NO}">  
+</td>
+</c:when>
+<c:when test="${orderinfo.ORDER_STATE == 1}">
+ <td class="ready"> <div class="btnArea">
+
+   <input class="effect effect-5" type="submit" onclick="deliupdate();" value="주문내역수정"/> </div>
+   <input type="hidden" id="DELI_NO" name="DELI_NO" value="${orderinfo.DELI_NO}">  
+</td>
+</c:when>
+<c:otherwise>
+<div class="btnArea"></div>
+</c:otherwise>
+</c:choose>
+ </c:forEach>
+
+ 
 </div>
 </section>
 
-  <div class="btnArea">
-
-   <input class="effect effect-5" type="submit" onclick="" value="주문내역수정"/> </div>
-
-</div> 
 </form>
 </div>
 

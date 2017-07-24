@@ -80,6 +80,7 @@ public class MemberServiceImpl implements MemberService
 	public void myDeliUpdate(Map<String, Object> map) throws Exception 
 	{
 		memberDao.myDeliUpdate(map);
+
 	}
     
 	//결제번호 받아오기
