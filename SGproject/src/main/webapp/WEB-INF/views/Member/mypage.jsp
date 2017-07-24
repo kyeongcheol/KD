@@ -20,7 +20,7 @@ function tab(num)
    if(num == 1){var url="/SG/orderInfo"}
    if(num == 2){var url="/SG/wishList"}
    if(num == 3){var url="/SG/mybasket"}
-   if(num == 4){var url="/SG/qna"}
+   if(num == 4){var url="/SG/myQnaList"}
    
          $.ajax
          ({
@@ -187,7 +187,7 @@ function point_list()
             <li><a href="#myorder" onclick="javascript:tab(1)">주문내역</a></li>
             <li><a href="#mywish" onclick="javascript:tab(2)">위시리스트</a></li>
             <li><a href="#mybasket" onclick="javascript:tab(3)">장바구니</a></li>
-            <li><a href="#qna" onclick="javascript:tab(4)">Q&A</a></li>
+            <li><a href="#myqna" onclick="javascript:tab(4)">Q&A</a></li>
          </ul>
       </div>
       

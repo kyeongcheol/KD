@@ -208,6 +208,7 @@ public class JoinController
 	   return "joinForm";
 	}
 	
+	//아이디 중복 체크
 	@RequestMapping(value="/checkId")
 	public @ResponseBody int checkId(HttpServletRequest request, HttpServletResponse response, CommandMap commandMap) throws Exception
 	{

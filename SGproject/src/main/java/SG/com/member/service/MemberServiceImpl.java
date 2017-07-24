@@ -53,6 +53,13 @@ public class MemberServiceImpl implements MemberService
 		return (int)memberDao.orderdelicnt(map);
 	}
     
+	//나의 주문내역 개수 조회
+	@Override
+	public int myOrderCnt(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.myOrderCnt(map);
+	}
+	
 	//나의 주문내역 리스트
 	@Override
 	public List<Map<String, Object>> myOrderList(Map<String, Object> map) throws Exception 
@@ -116,6 +123,13 @@ public class MemberServiceImpl implements MemberService
 	{
 		memberDao.deliDelete(map);	
 	}
+	
+	//재고+1, 판매량-1 
+	@Override
+	public void amountUpdate(Map<String, Object> map) throws Exception 
+	{
+		memberDao.amountUpdate(map);
+	}
 
 	//나의 장바구니 내역보기
 	@Override
@@ -126,9 +140,9 @@ public class MemberServiceImpl implements MemberService
 	
     //장바구니 내역 건수
 	@Override
-	public int basketcount(Map<String, Object> map) throws Exception 
+	public int myBasketCnt(Map<String, Object> map) throws Exception 
 	{
-		return memberDao.basketcount(map);
+		return memberDao.myBasketCnt(map);
 	}
 
 	//나의 장바구니 내역 삭제
@@ -144,6 +158,13 @@ public class MemberServiceImpl implements MemberService
 	{
 	    return memberDao.myWishList(map);
 	}
+	
+	//나의 위시리스트 개수
+	@Override
+	public int myWishCnt(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.myWishCnt(map);
+	}
 
 	//위시리스트 내역 삭제
 	@Override
@@ -152,8 +173,46 @@ public class MemberServiceImpl implements MemberService
 		memberDao.deleteMyWish(map);
 	}
 
+	//나의 QNA 게시판 리스트
+	@Override
+	public List<Map<String, Object>> myQnaList(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.myQnaList(map);
+	}
 
+	//나의 QNA 게시판 개수
+	@Override
+	public int myQnaCnt(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.myQnaCnt(map);
+	}
+
+	//나의 QNA 게시판 글 등록
+	@Override
+	public void myQnaWrite(Map<String, Object> map) throws Exception 
+	{
+		memberDao.myQnaWrite(map);		
+	}
 	
-	
+    //나의 QNA 게시판 상세보기
+	@Override
+	public Map<String, Object> myQnaView(Map<String, Object> map) throws Exception 
+	{
+		return memberDao.myQnaView(map);
+	}
+
+	//나의 QNA 게시판 글 수정
+	@Override
+	public void myQnaUpdate(Map<String, Object> map) throws Exception 
+	{
+		memberDao.myQnaUpdate(map);
+	}
+
+	//나의 QNA 게시판 글 삭제
+	@Override
+	public void myQnaDelete(Map<String, Object> map) throws Exception 
+	{
+	    memberDao.myQnaDelete(map);
+	}
 
 }

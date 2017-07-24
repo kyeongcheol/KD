@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import SG.com.goods.dao.GoodsDao;
-import SG.com.member.dao.JoinDao;
+
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -51,7 +51,7 @@ public class GoodsServiceImpl implements GoodsService {
 		// TODO Auto-generated method stub
 	    goodsDao.basketInsert(map);
 	}
-
+	
 	@Override
 	public List<Map<String, Object>> wishGoodsList(int MEMBER_NO) throws Exception {
 		// TODO Auto-generated method stub
@@ -78,9 +78,9 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public void basketDelete(Map<String, Object> map) throws Exception {
+	public void basketDelete(int BASKET_NO) throws Exception {
 		// TODO Auto-generated method stub
-		goodsDao.basketDelete(map);
+		goodsDao.basketDelete(BASKET_NO);
 	}
 
 	@Override
@@ -89,6 +89,29 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsDao.selectOneGoodsforBasket(num);
 	}
 
+	@Override
+	public List<Map<String, Object>> BascketMemberSelect(int MEMBER_NO) throws Exception {
+		// TODO Auto-generated method stub
+		return goodsDao.BascketMemberSelect(MEMBER_NO);
+	}
 
+	@Override
+	public List<Map<String, Object>> selectOneGoodsList(int num) throws Exception {
+		// TODO Auto-generated method stub
+		return goodsDao.selectOneGoodsList(num);
+	}
+
+	@Override
+	public int basketNo(int MEMBER_NO) throws Exception {
+		// TODO Auto-generated method stub
+		return goodsDao.basketNo(MEMBER_NO);
+	}
+	
+	
+
+	
+	
+	
+	
 
 }

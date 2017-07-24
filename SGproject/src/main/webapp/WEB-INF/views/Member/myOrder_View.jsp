@@ -59,14 +59,57 @@ function zipfinds()
             }
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document.getElementById('RECEIVERZIP').value = data.zonecode; //5자리 새우편번호 사용
-            document.getElementById('RECEIVERADDR1').value = fullAddr;
+            document.getElementById('DELI_RECEIVE_ZIP').value = data.zonecode; //5자리 새우편번호 사용
+            document.getElementById('DELI_RECEIVE_ADDR1').value = fullAddr;
 
             // 커서를 상세주소 필드로 이동한다.
-            document.getElementById('RECEIVERADDR2').focus();
+            document.getElementById('DELI_RECEIVE_ADDR2').focus();
         }
     }).open();
 }
+
+function deliupdate(order_deli_no)
+{
+   var f = document.frm;
+   var deli_name = f.DELI_RECEIVE_NAME.value;
+   var deli_zip = f.DELI_RECEIVE_ZIP.value;
+   var deli_addr1 = f.DELI_RECEIVE_ADDR1.value;
+   var deli_addr2 = f.DELI_RECEIVE_ADDR2.value;
+   var deli_phone = f.DELI_RECEIVE_PHONE.value;
+   var deli_memo = f.DELI_ORDER_MEMO.value;
+   var order_goods_amount = f.ORDER_GOODS_AMOUNT.value;
+   
+   var update =
+      ({
+         "DELI_RECEIVE_NAME":deli_name,
+         "DELI_RECEIVE_ZIP":deli_zip,
+         "DELI_RECEIVE_ADDR1":deli_addr1,
+         "DELI_RECEIVE_ADDR2":deli_addr2,
+         "DELI_RECEIVE_PHONE":deli_phone,
+         "DELI_ORDER_MEMO":deli_memo,
+         "ORDER_DELI_NO":order_deli_no,
+         "ORDER_GOODS_AMOUNT":order_goods_amount
+      });
+   
+   $.ajax
+   ({
+      type : "POST",
+      url : "/SG/orderUpdateAction",
+      data : update,
+      success : function(data)
+      {
+         confirm("회원정보가 수정되었습니다.");
+         self.close();
+      },
+      error : function(e)
+      {
+         alert("수정이 되지 않았습니다." + e);
+      }
+   });
+
+   return true;
+   }
+   
 
 </script>
 
@@ -179,6 +222,7 @@ function zipfinds()
  margin-top : 30px;
  margin-bottom : 100px; 
  font-family: PureunJeonnam;
+ height:500px;
 
 }
 .main_subject 
@@ -244,7 +288,7 @@ function zipfinds()
 <body>
 
 <div class="order_view_section" style="height:auto;">
-<form name="frm" action="goodsOrderSuccess" method="post" >
+<form name="frm">
  <div class="order_view_section" style="height:auto; padding-top:0px;">         
   <section class="input-horizontal list-horizontal section box-shadow">
    <div class="main_subject">
@@ -261,9 +305,9 @@ function zipfinds()
           <colgroup>
           <col width="30%" />
           <col width="20%"/>
-         <col width="20%" />
-        <col width="10%" />
-        <col width="10%" />
+          <col width="20%" />
+          <col width="10%" />
+          <col width="10%" />
           </colgroup>
           
            <tr>
@@ -280,9 +324,19 @@ function zipfinds()
    <tr> 
       <td><img src="resources/file/goodsFile/${orderinfo.GOODS_THUMBNAIL}" style="width:148px; height:148px" /></td>
       <td>${orderinfo.GOODS_NAME}</td>
-      <td>${orderinfo.ORDER_TOPPING_NAME}
+      <td>${orderinfo.ORDER_TOPPING_NAME}</td>
       <td>${orderinfo.ORDER_MONEY}</td>
-      <td>${orderinfo.ORDER_GOODS_AMOUNT}</td>
+	  
+	  <c:choose>
+	  <c:when test="${orderinfo.ORDER_STATE == 0}">
+      <td><input type="text" name="ORDER_GOODS_AMOUNT" value="${orderinfo.ORDER_GOODS_AMOUNT}"></td>
+	  </c:when>
+	  
+	  <c:otherwise>
+	  <td>${orderinfo.ORDER_GOODS_AMOUNT}</td>
+	  </c:otherwise>
+	  
+	  </c:choose>
    </tr>
 
    </c:forEach>
@@ -310,6 +364,7 @@ function zipfinds()
 <div class="main_subject">
                <h2>결제 정보</h2>
             </div>
+            
 <div id="ordert_wrap">
 <table class="ordert_table" width="50%">
 <colgroup>
@@ -325,12 +380,13 @@ function zipfinds()
   
 </tr>
 
-<tr> 
-   <td height="50px"><p id="totalMoney">${invoice}</p></td>
-   <td><p id="dcMoney">${point}</p></td>
-   <td><p id="dcMoney">${totalTradeMoney}</p></td>
-</tr>
-  
+   <tr> 
+      <td>${myOrderDetail[0].DELI_INVOICE_NO}</td>
+      <td>${orderUsePoint}</td>
+      <td>${myOrderDetail[0].SUM_ORDER_MONEY}</td>
+   </tr>
+
+
 </table>
 
 <div style="height:10px;"></div>
@@ -338,14 +394,14 @@ function zipfinds()
 </section>
 </div>
 
-
 <div class="seller_info">
+
 <section class="input-horizontal list-horizontal section box-shadow">
             <div class="main_subject" style="margin-left:15px;margin-top:30px;">
                <h2>주문자 정보</h2>
             </div>
-            
-            
+<table>            
+ 
 <div style="margin-top:20px;margin-left:110px;">
 <ul class="section-body">
      <li class="id">
@@ -355,7 +411,7 @@ function zipfinds()
          </label>
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;">
-         <input type="text" name="MEMBER_ID" id="" value="${sessionScope.MEMBER_ID}" maxlength="20" class="xx-control" label="" required="required">
+         <input type="text" name="MEMBER_ID" id="" value="${sessionScope.MEMBER_ID}" maxlength="20" class="xx-control" label="" required="required" readonly>
       </div>
     </li>
     
@@ -366,7 +422,7 @@ function zipfinds()
          </label>
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;">
-         <input type="text" id="MEMBER_NAME" class="xx-control" name="DELI_ORDER_NAME" value="${sessionScope.MEMBER_NAME}" required="required" label="이름">
+         <input type="text" id="DELI_RECEIVE_NAME" class="xx-control" name="DELI_RECEIVE_NAME" value="${myOrderDetail[0].DELI_RECEIVE_NAME}" required="required" label="이름">
       </div>
    </li>
 
@@ -376,12 +432,12 @@ function zipfinds()
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;margin-top:5px;">
          <div class="input-box" style="margin-bottom:10px;" >
-         <input type="text" id="MEMBER_ZIP"  name="DELI_ORDER_ZIP"  label="우편번호" value="${orderDeli.MEMBER_ZIP}" maxlength="6" required="">
+         <input type="text" id="DELI_RECEIVE_ZIP"  name="DELI_RECEIVE_ZIP"  label="우편번호" value="${myOrderDetail[0].DELI_RECEIVE_ZIP}" maxlength="6" required="">
             <span class="button button-dimmed" onclick="zipfinds()">주소 찾기</span>
          </div>
-         <input type="text" id="MEMBER_ADDR1" class="xx-control" name="DELI_ORDER_ADDR1" label="주소" value="${orderDeli.MEMBER_ADDR1}" size="48" readonly="" required="">
+         <input type="text" id="DELI_RECEIVE_ADDR1" class="xx-control" name="DELI_RECEIVE_ADDR1" label="주소" value="${myOrderDetail[0].DELI_RECEIVE_ADDR1}" size="48" readonly="" required="">
          <div style="height:10px;width:500px;"></div>
-         <input type="text" id="MEMBER_ADDR2" class="xx-control" name="DELI_ORDER_ADDR2" value="${orderDeli.MEMBER_ADDR2}" label="주소" required="">
+         <input type="text" id="DELI_RECEIVE_ADDR2" class="xx-control" name="DELI_RECEIVE_ADDR2" value="${myOrderDetail[0].DELI_RECEIVE_ADDR2}" label="주소" required="">
       </div>
       
    </li>
@@ -393,7 +449,7 @@ function zipfinds()
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;">
          <div class="input-box">
-            <input type="text" name="DELI_ORDER_PHONE" id="MEMBER_PHONE" label="휴대폰" value="${orderDeli.MEMBER_PHONE}"  maxlength="11" class="xx-control" required="required">
+            <input type="text" name="DELI_RECEIVE_PHONE" id="DELI_RECEIVE_PHONE" label="휴대폰" value="${myOrderDetail[0].DELI_RECEIVE_PHONE}"  maxlength="11" class="xx-control" required="required">
          </div>   
       </div>
    </li>
@@ -406,22 +462,69 @@ function zipfinds()
       </div>
       <div class="col-lg-21 col-md-20" style="width:630px;margin-bottom:40px;">
          <div class="input-box">
-            <input type="text" name="DELI_ORDER_PHONE" id="MEMBER_PHONE" label="휴대폰" value="${orderDeli.MEMBER_PHONE}"  maxlength="11" class="xx-control" required="required">
+            <input type="text" name="DELI_ORDER_MEMO" id="DELI_ORDER_MEMO" label="기타사항" value="${myOrderDetail[0].DELI_ORDER_MEMO}"  maxlength="11" class="xx-control" required="required">
          </div>  
       </div>
    </li>
+
 </ul>
+</div>
+
+
+<tr>
+</tr>
+<c:choose>
+<c:when test="${myOrderDetail[0].ORDER_STATE == 0}">
+<td class="update01">  <div class="btnArea">
+
+  <input class="effect effect-5" type="button" value="주문내역수정"/> </div>
+  <input type="hidden" id="ORDER_DELI_NO" name="ORDER_DELI_NO" value="${myOrderDetail[0].ORDER_DELI_NO}">
+  <c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">
+  <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${orderinfo.ORDER_NO}">
+  </c:forEach>
+</td>
+</c:when>
+<c:when test="${myOrderDetail[0].ORDER_STATE == 1}">
+ <td class="update02"> <div class="btnArea">
+
+   <input class="effect effect-5" type="button" value="주문내역수정"/> </div>
+   <input type="hidden" id="ORDER_DELI_NO" name="ORDER_DELI_NO" value="${myOrderDetail[0].ORDER_DELI_NO}">
+   <c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">
+   <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${orderinfo.ORDER_NO}">
+   </c:forEach> 
+</td>
+</c:when>
+<c:otherwise>
+<div class="btnArea"></div>
+</c:otherwise>
+</c:choose>
+
+</table>
+ 
 </div>
 </section>
 
-  <div class="btnArea">
-
-   <input class="effect effect-5" type="submit" onclick="" value="주문내역수정"/> </div>
-
-</div> 
 </form>
 </div>
 
-
 </body>
+<script>
+$(".update01").on("click", function(e) 
+	      { 
+	         e.preventDefault();           
+	         var order_deli_no =$(this).parent().find("#ORDER_DELI_NO").val();
+	         var order_no = $(this).parent().find("#ORDER_NO").val();
+	         deliupdate(order_deli_no);
+	               
+	      });
+
+$(".update02").on("click", function(e) 
+	      { 
+	         e.preventDefault();
+	         var order_deli_no =$(this).parent().find("#ORDER_DELI_NO").val();
+	         var order_no = $(this).parent().find("#ORDER_NO").val();
+	         deliupdate(order_deli_no);
+	               
+	      });   
+</script>
 </html>

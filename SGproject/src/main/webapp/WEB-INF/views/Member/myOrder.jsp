@@ -95,7 +95,7 @@
 <script type="text/javascript">
  
  //주문 삭제 ajax
- function myOrderDel(deli_no, order_state, order_no)
+ function myOrderDel(deli_no, order_state, order_no, order_amount, goods_no)
  {
 
       if(!confirm("삭제하시겠습니까?"))
@@ -106,7 +106,15 @@
   
       else
       {
-        var total =  ({"DELI_NO":deli_no, "ORDER_STATE":order_state, "ORDER_NO":order_no});
+        var total =  
+        ({
+        	
+        	"DELI_NO":deli_no, "ORDER_STATE":order_state, "ORDER_NO":order_no, "ORDER_GOODS_AMOUNT":order_amount,
+        	"GOODS_NO":goods_no
+        	
+        });
+        alert(order_amount);
+        alert(goods_no);
         
     $.ajax
     ({
@@ -133,8 +141,7 @@
  $( document ).ready(function() 
 		 
          {
-            $('#tb01').rowspan(0);
-           
+            $('#tb01').rowspan(0);           
          });
  
          $.fn.rowspan = function(colIdx, isStats) 
@@ -173,7 +180,37 @@
                });    
             });  
          };  
-               
+            
+//order ajax paging
+function ajaxPaging(page)
+{	
+        		
+   var dataList =
+   ({"PAGE" : page});	
+
+   var url1 = "/SG/orderInfo";
+        		
+   $.ajax
+   ({    
+        	     
+     type : "POST",
+     url : url1,
+     data : dataList,
+     dataType : "text",      
+        	        
+     error : function() 
+     {
+        alert('오류임!');     	
+     },
+        	       
+     success : function(data) 
+     {  
+        $("#wish_wrap").html(data);          		
+     }
+        	        
+   });        
+
+}         
 </script>
 </head>
 
@@ -192,7 +229,6 @@
    <col width="10%" />
    <col width="10%" />
    <col width="10%" />
-   <col width="10%" />
    <col width="15%" />
    <col width="10%" />
    <col width="10%" />
@@ -202,9 +238,8 @@
 
 <tr>
     <th>NO</th>
-    <th>주문번호</th>
-    <th>상품이름</th>
     <th>상품이미지</th>
+    <th>상품이름</th>
     <th>DIY상품</th>
     <th>주문금액</th>
     <th>주문상태</th>
@@ -216,7 +251,7 @@
           
           <c:choose>
               <c:when test="${fn:length(myOrderList) le 0}">
-                <tr><td colspan="9" style="text-align:center;">주문 내역이 없습니다.</td></tr>
+                <tr><td colspan="8" style="text-align:center;">주문 내역이 없습니다.</td></tr>
                  </c:when>
                  <c:otherwise>
 
@@ -227,14 +262,13 @@
                     <tr>
                         <td><a onclick="javascript:window.open('${orderView}','','toolbar=no,menubar=no,location=no,height=950,width=1200');">
                         ${list.DELI_NO}</a></td>
-                        <td>${list.ORDER_NO}</td>
-                        <td><a href="goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}">
-                        ${list.GOODS_NAME}</a></td>
                         <td>
                         <img src="resources/file/img/${list.GOODS_THUMBNAIL}" width="120" height="90"
                         onclick="javascript:location.href=
                         'goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}'"/>
                         </td>
+                        <td><a href="goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}">
+                        ${list.GOODS_NAME}</a></td>
                         <td>${list.ORDER_TOPPING_NAME}</td>
                         <td>${list.ORDER_MONEY}</td>
                           
@@ -244,10 +278,13 @@
         
 <c:when test="${list.ORDER_STATE == 0}">
 <td>입금 대기</td>
-<td class="wait"><div class="board_search_table"><input type="button" value="주문취소"></div>
+<td class="wait"><div class="board_search_table">
+<input type="button" value="주문취소"></div>
 <input type="hidden" id="DELI_NO" name="DELI_NO" value="${list.DELI_NO}">  
 <input type="hidden" id="ORDER_STATE" name="ORDER_STATE" value="${list.ORDER_STATE}" >
 <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${list.ORDER_NO}">
+<input type="hidden" id="ORDER_GOODS_AMOUNT" name="ORDER_GOODS_AMOUNT" value="${list.ORDER_GOODS_AMOUNT}">
+<input type="hidden" id="GOODS_NO" name="GOODS_NO" value="${list.GOODS_NO}">
 </td>
 </c:when>
 
@@ -257,16 +294,20 @@
 <input type="hidden" id="DELI_NO" name="DELI_NO" value="${list.DELI_NO}">  
 <input type="hidden" id="ORDER_STATE" name="ORDER_STATE" value="${list.ORDER_STATE}" >
 <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${list.ORDER_NO}">
+<input type="hidden" id="ORDER_GOODS_AMOUNT" name="ORDER_GOODS_AMOUNT" value="${list.ORDER_GOODS_AMOUNT}">
+<input type="hidden" id="GOODS_NO" name="GOODS_NO" value="${list.GOODS_NO}">
 </td>
 </c:when>
 
 <c:when test="${list.ORDER_STATE== 2}">
 <td>배송중</td>
+<td><a href='goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}'>후기작성</a></td>
 &nbsp;
 </c:when>
 
 <c:when test="${list.ORDER_STATE== 3}">
 <td>배송완료</td>
+<td><a href='goodsDetail?goodsNo=${list.ORDER_GOODS_NO}&currentPage=${gcurrentPage}'>후기작성</a></td>
 &nbsp;
 </c:when>
 
@@ -285,7 +326,9 @@
                 
            
 </table>
+<div class="paging">${pagingHtml}</div>
 </div>
+
 </form>
 
 </body>
@@ -297,8 +340,9 @@ $(".wait").on("click", function(e) //주문취소(입금 전)
    var deli_no =$(this).parent().find("#DELI_NO").val();
    var order_state =$(this).parent().find("#ORDER_STATE").val();
    var order_no =$(this).parent().find("#ORDER_NO").val();
-   
-   myOrderDel(deli_no, order_state, order_no);
+   var order_amount = $(this).parent().find("#ORDER_GOODS_AMOUNT").val();
+   var goods_no = $(this).parent().find("#GOODS_NO").val();
+   myOrderDel(deli_no, order_state, order_no, order_amount, goods_no);
    
 });
 
@@ -308,7 +352,9 @@ $(".ready").on("click", function(e) //주문취소(배송준비중)
    var deli_no =$(this).parent().find("#DELI_NO").val();
    var order_state =$(this).parent().find("#ORDER_STATE").val();
    var order_no =$(this).parent().find("#ORDER_NO").val();
-   myOrderDel(deli_no, order_state, order_no);
+   var order_amount = $(this).parent().find("#ORDER_GOODS_AMOUNT").val();
+   var goods_no = $(this).parent().find("#GOODS_NO").val();
+   myOrderDel(deli_no, order_state, order_no, order_amount, goods_no);
 		   
 });	 
 </script>

@@ -10,45 +10,11 @@
 		<put-attribute name="body" value="/WEB-INF/tiles/tile/body.jsp"/>
 		<put-attribute name="footer" value="/WEB-INF/tiles/tile/footer.jsp"/>
 	</definition>
-		
+	
+	<!-- 마이페이지 -->	
     <definition name="mypage" extends="layout">
 		<put-attribute name="body" value="/WEB-INF/views/Member/mypage.jsp"/>
 	</definition>
 
-	<definition name="memberInfo" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/member_Info.jsp"/>
-	</definition>
-	
-	<definition name="memUpdateForm" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/mem_update_Form.jsp"/>
-	</definition>
-	
-	<definition name="memUpdateAction" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/mem_update_Action.jsp"/>
-	</definition>
-	
-	<definition name="memDeleteForm" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/mem_delete_Form.jsp"/>
-	</definition>
-	
-	<definition name="mypoint" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/myPoint.jsp"/>
-	</definition>
-	
-    <definition name="mybasket" extends="layout">
-		<put-attribute name="body" value="/WEB-INF/views/Member/myBasket.jsp"/>
-	</definition>
-	
-    <definition name="mywish" extends="layout">
-	  <put-attribute name="body" value="/WEB-INF/views/Member/myWish.jsp"/>
-    </definition>	
-
-    <definition name="tradeInfo" extends="layout">
-     <put-attribute name="body" value="/WEB-INF/views/Member/myTrade.jsp"/>
-    </definition>
-	
-    <definition name="tradeInfoView" extends="layout">
-	  <put-attribute name="body" value="/WEB-INF/views/Member/myTrade_View.jsp"/>
-    </definition>
 	
 </tiles-definitions>

@@ -59,8 +59,8 @@
 		  '포인트 사용', 
 		   SYSDATE, #{POINT_MEMBER_NO}, #{POINT_ORDER_NO})
 	]]>
-	</insert>
-	
+</insert>
+
 <!-- 수동적립 이벤트 등 -->
 <insert id="savePoint" parameterType="hashmap" >
   <![CDATA[
@@ -93,9 +93,7 @@
 <!-- 회원별 포인트 내역 조회 -->
   <select id="myPointList" parameterType="hashmap" resultType="hashmap">
 	<![CDATA[
-	    SELECT 
-		ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) AS RNUM,  
-		POINT_DATE, POINT_CONTENT, POINT_MONEY,POINT_ORDER_NO
+		SELECT POINT_DATE, POINT_CONTENT, POINT_MONEY,POINT_ORDER_NO
 	    FROM SG_POINT
 		WHERE POINT_MEMBER_NO = ${MEMBER_NO} 
 		ORDER BY POINT_DATE DESC
@@ -103,5 +101,13 @@
 	]]>
 	</select>
 	
+	 <select id="sumPointInt" parameterType="hashmap" resultType="int">
+	<![CDATA[
+		SELECT 
+			NVL(SUM(POINT_MONEY),0) AS SUM
+			FROM SG_POINT 
+			WHERE POINT_MEMBER_NO = ${MEMBER_NO}
+	]]>
+	</select>
 
 </mapper>

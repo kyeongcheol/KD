@@ -61,4 +61,7 @@ public class PointServiceImpl implements PointService
 		   return pointDao.myPointList(map);
 	   }
 
+
+	   
+
 }

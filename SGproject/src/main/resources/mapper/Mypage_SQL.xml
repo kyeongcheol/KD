@@ -50,10 +50,13 @@
 	]]>
 </select>
 
-<!-- 주문내역 조회 -->
-<select id="myOrderList" parameterType="hashmap" resultType="hashmap">
-      <![CDATA[
-           SELECT 
+<!-- 나의 주문내역 개수 조회 -->
+<select id="myOrderCnt" parameterType="hashmap" resultType="int">
+
+ SELECT COUNT(A.RNUM)
+ FROM (
+ SELECT 
+            ROW_NUMBER() OVER(ORDER BY O.ORDER_NO DESC) AS RNUM,
             O.ORDER_NO,
             O.ORDER_MONEY,
             O.ORDER_DATE,
@@ -69,7 +72,37 @@
             WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
                AND O.ORDER_GOODS_NO = G.GOODS_NO
 		       AND O.ORDER_DELI_NO = D.DELI_NO    
-            ORDER BY O.ORDER_DATE DESC            
+            ORDER BY O.ORDER_DATE DESC ) A       
+
+</select>
+
+<!-- 주문내역 조회 -->
+<select id="myOrderList" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+           SELECT A.*
+           FROM (
+           SELECT
+            ROW_NUMBER() OVER(ORDER BY O.ORDER_NO DESC) AS RNUM, 
+            O.ORDER_NO,
+            O.ORDER_MONEY,
+            O.ORDER_DATE,
+            O.ORDER_TRADE_TYPE,
+            O.ORDER_TOPPING_NAME,
+            O.ORDER_STATE,
+            O.ORDER_GOODS_NO,
+            O.ORDER_GOODS_AMOUNT,
+            G.GOODS_NO,
+            G.GOODS_NAME,
+            G.GOODS_THUMBNAIL,
+			D.DELI_INVOICE_NO,
+			D.DELI_NO
+            FROM SG_ORDER O, SG_GOODS G, SG_DELI D
+            WHERE O.ORDER_MEMBER_ID = #{MEMBER_ID}
+               AND O.ORDER_GOODS_NO = G.GOODS_NO
+		       AND O.ORDER_DELI_NO = D.DELI_NO    
+            ORDER BY O.ORDER_DATE DESC
+            ) A
+            WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )             
                       
       ]]>
   </select>
@@ -146,9 +179,10 @@
          DELI_RECEIVE_PHONE=#{DELI_RECEIVE_PHONE},  
          DELI_ORDER_MEMO=#{DELI_ORDER_MEMO}
      
-	 WHERE DELI_NO=#{DELI_NO} 	 
+	 WHERE DELI_NO=#{ORDER_DELI_NO} 	 
      ]]>
 </update>
+
 
 
 
@@ -205,8 +239,22 @@
  ]]>
 </delete>
 
+<!-- 재고/판매량 업데이트 -->
+<update id="amountUpdate" parameterType="hashmap">
+<![CDATA[
+
+  UPDATE SG_GOODS 
+  SET 
+      GOODS_AMOUNT = GOODS_AMOUNT + #{ORDER_GOODS_AMOUNT},
+      GOODS_SELLCOUNT = GOODS_SELLCOUNT - #{ORDER_GOODS_AMOUNT}
+      WHERE GOODS_NO = #{GOODS_NO}
+]]>
+
+</update>
+
+
 <!-- 장바구니 건수 조회 -->
-<select id="basketcount" parameterType="hashmap" resultType="int">
+<select id="MyBasketCnt" parameterType="hashmap" resultType="int">
 <![CDATA[
 SELECT COUNT(A.RNUM) AS BASKET_COUNT
 FROM
@@ -269,10 +317,44 @@ WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
    ]]>
 </delete>
 
+<!-- 위시리스트 조회 건수 -->
+<select id="myWishCnt" parameterType="hashmap" resultType="int">
+
+SELECT COUNT(A.RNUM) AS BASKET_COUNT
+FROM
+(
+  SELECT 
+            ROW_NUMBER() OVER(ORDER BY W.WISH_NO DESC) AS RNUM,  
+			W.WISH_NO,
+			W.WISH_GOODS_NO,
+			W.WISH_REG_DATE, 
+		    G.GOODS_NAME,
+			G.GOODS_THUMBNAIL,
+			G.GOODS_PRICE,
+			M.MEMBER_ID
+			
+			FROM SG_WISH W,
+			     SG_GOODS G,
+				 SG_MEMBER M
+			
+			WHERE W.WISH_GOODS_NO = G.GOODS_NO
+			AND W.WISH_MEMBER_NO = M.MEMBER_NO			 
+			AND G.GOODS_ONOFF = 0
+			AND M.MEMBER_ID = #{MEMBER_ID}
+			ORDER BY W.WISH_REG_DATE DESC 
+			         
+) A
+
+</select>
+
 <!-- 위시 리스트 내역 조회 -->
 <select id="myWishList" parameterType="hashmap" resultType="hashmap">
   <![CDATA[
-		   SELECT DISTINCT  
+  SELECT A.*
+   FROM
+  (
+    SELECT 
+            ROW_NUMBER() OVER(ORDER BY W.WISH_NO DESC) AS RNUM,  
 			W.WISH_NO,
 			W.WISH_GOODS_NO,
 			W.WISH_REG_DATE, 
@@ -291,6 +373,9 @@ WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
 			AND M.MEMBER_ID = #{MEMBER_ID}
 			ORDER BY W.WISH_REG_DATE DESC, 
 			         W.WISH_NO ASC
+    ) A      
+    WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
+		   
   ]]>
 </select>
 
@@ -315,7 +400,126 @@ WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
 	]]>
 </select>
 
+<!-- QNA 게시판 리스트 -->
+<select id="myQnaList" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
 
+ SELECT A.*
+ FROM 
+ (
+  SELECT
+  ROW_NUMBER() OVER(ORDER BY QNA_NO DESC) AS RNUM, 
+  QNA_NO,
+  QNA_CATEGORY,
+  QNA_MEMBER_NO,
+  QNA_TITLE, 
+  QNA_REGDATE, 
+  QNA_REPSTATE,
+  QNA_REPDATE,
+  QNA_HITCOUNT 
+  FROM SG_QNA
+  WHERE QNA_MEMBER_NO=#{MEMBER_NO}
+) A
 
+ WHERE A.RNUM BETWEEN ${PAGING}*( ${PAGINGNO} -1)+1 AND ${PAGING}*( ${PAGINGNO} )
+
+]]>
+</select>
+
+<!-- QNA 게시판 개수 -->
+<select id="myQnaCnt" parameterType="hashmap" resultType="int">
+
+SELECT COUNT(A.RNUM)
+FROM 
+(
+SELECT
+  ROW_NUMBER() OVER(ORDER BY QNA_NO DESC) AS RNUM, 
+  QNA_NO,
+  QNA_CATEGORY,
+  QNA_MEMBER_NO,
+  QNA_TITLE, 
+  QNA_REGDATE, 
+  QNA_REPSTATE,
+  QNA_REPDATE,
+  QNA_HITCOUNT 
+  FROM SG_QNA
+  WHERE QNA_MEMBER_NO=#{MEMBER_NO}
+) A
+
+</select>
+
+<!-- QNA 게시판 등록 --> 
+<insert id="myQnaWrite" parameterType="hashmap">
+
+<![CDATA[
+INSERT INTO SG_QNA
+(
+        QNA_NO,
+        QNA_CATEGORY,
+        QNA_MEMBER_NO,
+        QNA_TITLE,
+        QNA_CONTENT,
+        QNA_HITCOUNT,
+        QNA_REGDATE 
+)
+
+VALUES
+        (SG_QNA_NO_SEQ,
+        #{QNA_CATEGORY},
+        #{QNA_MEMBER_NO},
+        #{QNA_TITLE},
+        DEFAULT,
+        #{QNA_CONTENT},
+        SYSDATE)
+ 
+]]>
+</insert>
+
+<!-- QNA 게시판 상세보기 --> 
+<select id="myQnaView" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+  SELECT 
+  QNA_NO,
+  QNA_CATEGORY,
+  QNA_MEMBER_NO,
+  QNA_CONTENT,
+  QNA_TITLE,
+  QNA_REPCONTENT,
+  QNA_REGDATE, 
+  QNA_REPSTATE,
+  QNA_REPDATE,
+  QNA_HITCOUNT
+  FROM SG_QNA 
+  WHERE QNA_MEMBER_NO = #{MEMBER_NO}
+  AND QNA_NO=#{QNA_NO} 
+]]>
+</select>
+
+<!-- QNA 게시판 글 수정 -->
+<update id="myQnaUpdate" parameterType="hashmap">
+<![CDATA[
+
+  UPDATE SG_QNA
+  SET 
+  QNA_CONTENT=#{QNA_CONTENT},
+  QNA_TITLE=#{QNA_TITLE}
+  
+  WHERE QNA_MEMBER_NO = #{MEMBER_NO}
+  AND QNA_NO = #{QNA_NO}
+
+]]>
+</update>
+
+<!-- QNA 게시판 글 삭제 -->
+<delete id="myQnaDelete" parameterType="hashmap">
+<![CDATA[
+
+  DELETE
+  FROM SG_QNA
+  WHERE QNA_NO = #{QNA_NO} 
+  AND QNA_MEMBER_NO = #{MEMBER_NO}
+  
+]]>
+</delete>
 
 </mapper>

@@ -26,7 +26,7 @@ function find_Pw()
 	window.open('/SG/login/findPwForm','','toolbar=no,menubar=no,location=no,height=650,width=600'); 
 }
 
-//아이디 저장 cookie 시작
+//아이디 저장 cookie 시작 + cookie.js 참고
 //cookie jquery
 $(document).ready(function()
 {

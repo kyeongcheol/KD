@@ -155,8 +155,6 @@ width:100%;
 		    <ul>          		
 		    <li><a class="loginLink" href="logout">로그아웃</a></li>
 		    <li><a class="loginLink" href="mypage">마이페이지</a></li>
-		    <li><a class="loginLink" href="#">장바구니</a></li>
-		    <li><a class="loginLink" href="#">위시리스트</a></li>		    
 		    </ul>
 		    <div class="loginname">${sessionScope.MEMBER_NAME}님 환영합니다!</div>
 		    </c:otherwise>

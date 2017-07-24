@@ -25,7 +25,6 @@ public interface PointService {
 	//회원별 포인트 내역 조회
 	public List<Map<String, Object>> myPointList(Map<String, Object>map) throws Exception ;
 		
-
-		
+ 
 
 }

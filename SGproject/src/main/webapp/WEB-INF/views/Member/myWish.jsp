@@ -33,6 +33,38 @@
 	 });
  }
  
+ //wish ajax Paging
+ function ajaxPaging(page)
+ {	
+		
+		alert(page);
+		
+		var dataList =
+		({"PAGE" : page});	
+
+		var url1 = "/SG/wishList";
+		
+	    $.ajax({    
+	     
+	    	type : "POST",
+	        url : url1,
+	        data : dataList,
+	        dataType : "text",      
+	        
+	        error : function() {
+	      	  
+	      		alert('오류임!');     	
+	        },
+	       
+	        success : function(data) 
+	        {  
+	      		 $("#wish_wrap").html(data);          		
+	        }
+	        
+	      });        
+
+	}
+ 
 </script>
 
 </head>
@@ -81,7 +113,7 @@
                      <c:param name="gcurrentPage" value="${gcurrentPage}" />
                   </c:url>
                  	<tr> 
-                     	<td>${stat.count}</td>
+                     	<td>${list.RNUM}</td>
                      	<td>${list.WISH_REG_DATE}</td>
                      	<td>${list.WISH_GOODS_NO}</td>
                      	<td><a href="goodsDetail?goodsNo=${list.WISH_GOODS_NO}&currentPage=${gcurrentPage}">
@@ -109,6 +141,7 @@
 <div class="wish_bottom_font">
 <font color="green">위시 리스트 내역에 있는 상품 정보를 보고 싶으시면 상품이름이나 이미지를 눌러주세요</font></div>
 </div>
+<div class="paging">${pagingHtml}</div>
 </div>
 
 </body>
