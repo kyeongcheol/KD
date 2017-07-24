@@ -59,8 +59,8 @@
 		  '포인트 사용', 
 		   SYSDATE, #{POINT_MEMBER_NO}, #{POINT_ORDER_NO})
 	]]>
-</insert>
-
+	</insert>
+	
 <!-- 수동적립 이벤트 등 -->
 <insert id="savePoint" parameterType="hashmap" >
   <![CDATA[
@@ -93,7 +93,9 @@
 <!-- 회원별 포인트 내역 조회 -->
   <select id="myPointList" parameterType="hashmap" resultType="hashmap">
 	<![CDATA[
-		SELECT POINT_DATE, POINT_CONTENT, POINT_MONEY,POINT_ORDER_NO
+	    SELECT 
+		ROW_NUMBER() OVER(ORDER BY POINT_NO DESC) AS RNUM,  
+		POINT_DATE, POINT_CONTENT, POINT_MONEY,POINT_ORDER_NO
 	    FROM SG_POINT
 		WHERE POINT_MEMBER_NO = ${MEMBER_NO} 
 		ORDER BY POINT_DATE DESC
@@ -101,13 +103,27 @@
 	]]>
 	</select>
 	
-	 <select id="sumPointInt" parameterType="hashmap" resultType="int">
+	<!--주문 상세보기 사용한 포인트 내역 조회 -->
+  <select id="orderUsePoint" parameterType="hashmap" resultType="int">
 	<![CDATA[
-		SELECT 
-			NVL(SUM(POINT_MONEY),0) AS SUM
+	
+	SELECT 
+			POINT_MONEY
 			FROM SG_POINT 
-			WHERE POINT_MEMBER_NO = ${MEMBER_NO}
+			WHERE POINT_ORDER_NO = #{ORDER_NO}
+		    AND POINT_CONTENT='포인트 사용'
+	 
 	]]>
 	</select>
+	
+	<!-- 주문 취소시 포인트 삭제(입금전일 때) -->
+<delete id="orderPointDel" parameterType="hashmap">
+ <![CDATA[
+     DELETE FROM SG_POINT
+     WHERE POINT_ORDER_NO = #{ORDER_NO} 
+      AND POINT_CONTENT ='포인트 사용'
+ ]]>	  
+</delete>
+	
 
 </mapper>

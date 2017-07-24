@@ -60,6 +60,20 @@ public class PointServiceImpl implements PointService
 	   {
 		   return pointDao.myPointList(map);
 	   }
+	   
+	    //주문 상세보기 내 사용한 포인트 내역 조회
+	   @Override
+	    public int orderUsePoint(Map<String, Object>map) throws Exception
+	   {
+		  return pointDao.orderUsePoint(map);
+	   }
+	    
+	    //주문 취소시 포인트를 삭제
+	   @Override
+	   public void orderPointDel(Map<String, Object>map) throws Exception
+	   {
+		   pointDao.orderPointDel(map);
+	   }
 
 
 	   

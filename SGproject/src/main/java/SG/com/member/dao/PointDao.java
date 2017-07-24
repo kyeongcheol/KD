@@ -41,7 +41,6 @@ public class PointDao extends AbstractDAO
 	}
 	
 	//회원별 포인트 총 합계
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> sumPoint(Map<String, Object> map) throws Exception 
 	{
 		return (Map<String, Object>)selectOne("point.sumPoint", map);
@@ -53,7 +52,17 @@ public class PointDao extends AbstractDAO
 		return sqlSession.selectList("point.myPointList", map);
 	}
 	
-
-
+	//주문 상세보기 내 사용한 포인트 내역 조회
+	public int orderUsePoint(Map<String, Object>map) throws Exception 
+	{
+		return sqlSession.selectOne("point.orderUsePoint",map);
+	}
+	
+	//주문 취소시 포인트를 삭제
+	public void orderPointDel(Map<String, Object>map) throws Exception
+	{
+		sqlSession.delete("point.orderPointDel", map);
+	}
+	
 
 }
