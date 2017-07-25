@@ -297,14 +297,8 @@ public class MemberController
          commandMap.getMap().put("ORDER_DELI_NO", commandMap.getMap().get("ORDER_DELI_NO")); 
          
          System.out.println(commandMap.getMap());
-       
-         //Map<String, Object> updatedeli = new HashMap<String, Object>();
-         //updatedeli = commandMap.getMap(); //update 할 정보들 updatemember에 넣음
+  
          memberService.myDeliUpdate(commandMap.getMap()); //update 쿼리 실행
-         
-        
-         System.out.println(commandMap.getMap());
-        
          //memberMap map 선언
          
          return "Member/myOrder_View" ;
@@ -536,8 +530,29 @@ public class MemberController
     
    //QNA 게시판 리스트
    @RequestMapping(value ="/myQnaList") 
-   public String myQnaList(Model model, CommandMap commandMap)
+   public String myQnaList(Model model, CommandMap commandMap, HttpSession session) throws Exception
    {
+	   System.out.println("===========나의 QNA LIST 컨트롤러 진입===========");
+	   int member_no = Integer.parseInt(session.getAttribute("MEMBER_NO").toString());
+	   commandMap.getMap().put("MEMBER_NO", member_no);
+	   session.setAttribute("totalcount", 4);
+	   String pagingHtml;
+	   System.out.println(commandMap.getMap());
+	   
+	   //QNA LIST 페이징
+       if(commandMap.get("PAGE").toString().equals(""))
+       {
+           pagingHtml = pagingHtml(commandMap, 1, session);
+       }
+       else
+       {
+          int page = Integer.parseInt(commandMap.get("PAGE").toString());
+          pagingHtml = pagingHtml(commandMap, page, session);
+       }
+       
+	   List<Map<String, Object>> qnalist = memberService.myQnaList(commandMap.getMap());
+	   model.addAttribute("qnalist", qnalist);
+	   model.addAttribute("pagingHtml", pagingHtml);
 	   return "Member/myQnaList";
    }
    
@@ -605,6 +620,13 @@ public class MemberController
     	  System.out.println("==========주문내역 세션 번호========== : " + session_no);
     	  totalCount = memberService.myOrderCnt(commandMap.getMap());
     	  System.out.println("==========주문내역 총 게시물 수========== : " + totalCount);
+      }
+      
+      else
+      {
+    	  System.out.println("==========qna 세션 번호========== : " + session_no);
+    	  totalCount = memberService.myQnaCnt(commandMap.getMap());
+    	  System.out.println("==========qna 총 게시물 수========== : " + totalCount);
       }
         
       int totalPage = (int) Math.ceil((double) totalCount / blockCount);      

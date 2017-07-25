@@ -77,7 +77,7 @@ function deliupdate(order_deli_no)
    var deli_addr2 = f.DELI_RECEIVE_ADDR2.value;
    var deli_phone = f.DELI_RECEIVE_PHONE.value;
    var deli_memo = f.DELI_ORDER_MEMO.value;
-   var order_goods_amount = f.ORDER_GOODS_AMOUNT.value;
+   
    
    var update =
       ({
@@ -88,7 +88,8 @@ function deliupdate(order_deli_no)
          "DELI_RECEIVE_PHONE":deli_phone,
          "DELI_ORDER_MEMO":deli_memo,
          "ORDER_DELI_NO":order_deli_no,
-         "ORDER_GOODS_AMOUNT":order_goods_amount
+         "ORDER_GOODS_AMOUNT":order_goods_amount,
+         
       });
    
    $.ajax
@@ -326,17 +327,8 @@ function deliupdate(order_deli_no)
       <td>${orderinfo.GOODS_NAME}</td>
       <td>${orderinfo.ORDER_TOPPING_NAME}</td>
       <td>${orderinfo.ORDER_MONEY}</td>
-	  
-	  <c:choose>
-	  <c:when test="${orderinfo.ORDER_STATE == 0}">
-      <td><input type="text" name="ORDER_GOODS_AMOUNT" value="${orderinfo.ORDER_GOODS_AMOUNT}"></td>
-	  </c:when>
-	  
-	  <c:otherwise>
 	  <td>${orderinfo.ORDER_GOODS_AMOUNT}</td>
-	  </c:otherwise>
 	  
-	  </c:choose>
    </tr>
 
    </c:forEach>
@@ -479,19 +471,13 @@ function deliupdate(order_deli_no)
 
   <input class="effect effect-5" type="button" value="주문내역수정"/> </div>
   <input type="hidden" id="ORDER_DELI_NO" name="ORDER_DELI_NO" value="${myOrderDetail[0].ORDER_DELI_NO}">
-  <c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">
-  <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${orderinfo.ORDER_NO}">
-  </c:forEach>
 </td>
 </c:when>
 <c:when test="${myOrderDetail[0].ORDER_STATE == 1}">
  <td class="update02"> <div class="btnArea">
 
    <input class="effect effect-5" type="button" value="주문내역수정"/> </div>
-   <input type="hidden" id="ORDER_DELI_NO" name="ORDER_DELI_NO" value="${myOrderDetail[0].ORDER_DELI_NO}">
-   <c:forEach var="orderinfo" items="${myOrderDetail}" varStatus="stat">
-   <input type="hidden" id="ORDER_NO" name="ORDER_NO" value="${orderinfo.ORDER_NO}">
-   </c:forEach> 
+   <input type="hidden" id="ORDER_DELI_NO" name="ORDER_DELI_NO" value="${myOrderDetail[0].ORDER_DELI_NO}">  
 </td>
 </c:when>
 <c:otherwise>
@@ -513,8 +499,7 @@ $(".update01").on("click", function(e)
 	      { 
 	         e.preventDefault();           
 	         var order_deli_no =$(this).parent().find("#ORDER_DELI_NO").val();
-	         var order_no = $(this).parent().find("#ORDER_NO").val();
-	         deliupdate(order_deli_no);
+	         deliupdate(order_deli_no, order_no);
 	               
 	      });
 
@@ -522,8 +507,7 @@ $(".update02").on("click", function(e)
 	      { 
 	         e.preventDefault();
 	         var order_deli_no =$(this).parent().find("#ORDER_DELI_NO").val();
-	         var order_no = $(this).parent().find("#ORDER_NO").val();
-	         deliupdate(order_deli_no);
+	         deliupdate(order_deli_no, order_no);
 	               
 	      });   
 </script>

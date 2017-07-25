@@ -9,9 +9,9 @@
 <script type="text/javascript" src="resources/file/js/jquery-2.0.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <link rel="stylesheet" href="/SG/resources/file/css/myBasket.css">
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
-</script>
+</script> -->
 
 </head>
 
@@ -28,49 +28,41 @@
 <colgroup>
 	<col width="5%" />
 	<col width="10%"/>
+	<col width="30%" />
 	<col width="10%" />
 	<col width="20%" />
-	<col width="10%" />
-	<col width="10%" />
-	<col width="25%" />
-	<col width="10%" />
+	<col width="20%" />
 </colgroup>
 <tr>
-	<th>NO</th>
-	<th>날짜</th>
-    <th>상품이름</th>
-    <th>상품이미지</th>
-    <th>상품가격</th>
-    <th>상품수량</th>
-    <th>재료이름</th>
-    <th>선택</th>
+	<th>글 번호</th>
+	<th>카테고리</th>
+	<th>글 제목</th>
+    <th>조회수</th>
+    <th>등록날짜</th>
+    <th></th>
 </tr>
 
           <c:choose>
-               <c:when test="${fn:length(basketlist) le 0}">
+               <c:when test="${fn:length(qnalist) le 0}">
  					<tr>
-                 		<td colspan="8" style="text-align:center;">담은 장바구니가 없습니다.</td>
+                 		<td colspan="6" style="text-align:center;">등록된 게시글이 존재하지 않습니다.</td>
                  	</tr>
-                 </c:when>
+               </c:when>
                  <c:otherwise>
 
-   				 <c:forEach var="list" items="${basketlist}" varStatus="stat">
+   				 <c:forEach var="qnalist" items="${qnalist}" varStatus="stat">
+   				 <c:url var="qnaview" value="/myQnaView">
+   				  <c:param name="QNA_NO" value="${qnalist.QNA_NO}"/>
+   				 </c:url>
                  	<tr> 
-                     	<td>${list.RNUM}</td>
-                     	<td>${list.BASKET_REG_DATE}</td>
-                     	<td><a href="goodsDetail?goodsNo=${list.BASKET_GOODS_NO}&currentPage=${gcurrentPage}">
-                     	${list.BASKET_GOODS_NAME}</a></td>
-                        <td>
-                        <img src="resources/file/img/${list.GOODS_THUMBNAIL}" width="120" height="90"
-                        onclick="javascript:location.href=
-                        'goodsDetail?goodsNo=${list.BASKET_GOODS_NO}&currentPage=${gcurrentPage}'"/>
-                        </td>
-                        <td>${list.GOODS_PRICE}</td>
-                        <td>${list.BASKET_GOODS_AMOUNT}</td>
-                        <td>${list.BASKET_TOPPING_NAME}</td>
-                        <td class="chkclass">
-                        <input type="checkbox" id="BASKET_NO" name="BASKET_NO" value="${list.BASKET_NO}"></td>
-                        <%-- <input type="hidden" id="BASKET_NO" name="BASKET_NO" value="${list.BASKET_NO}">  --%>
+                     	<td>${qnalist.RNUM}</td>
+                     	<td>${qnalist.QNA_CATEGORY}</td>
+                     	<td><a onclick="javascript:window.open('${qnaview}','','toolbar=no,menubar=no,location=no,height=950,width=1200');">
+                     	${qnalist.QNA_TITLE}</a>
+                     	</td>
+                     	<td>${qnalist.QNA_HITCOUNT}</td>
+                        <td>${qnalist.QNA_REGDATE}</td>
+                        <td></td>                      
                     </tr>
                  </c:forEach> 
                  </c:otherwise> 
@@ -80,8 +72,7 @@
 </table>
 
 <div class="board_search_table" style="float:left; margin-left:1280px; margin-top:20px;">
-<input type="button" id="orderFrm" value="주문하기" onclick="basket_order()">
-<input type="button" id="delFrm" value="삭제하기" onclick="basket_del()"> 
+<input type="button" id="writeform" name="writeform" value="글 등록">
 </div>
 
 <div class="wish_bottom">
