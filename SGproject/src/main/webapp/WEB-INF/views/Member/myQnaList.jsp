@@ -71,7 +71,7 @@
            
 </table>
 
-<div class="board_search_table" style="float:left; margin-left:1280px; margin-top:20px;">
+<div class="board_search_table" style="float:left; margin-left:1350px; margin-top:20px;">
 <input type="button" id="writeform" name="writeform" value="글 등록">
 </div>
 

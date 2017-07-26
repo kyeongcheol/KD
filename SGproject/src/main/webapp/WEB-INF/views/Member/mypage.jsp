@@ -81,6 +81,7 @@ function point_list()
    
   
 }
+
 </style>
 <title>mypage게시판</title>
 </head>
@@ -195,6 +196,7 @@ function point_list()
       
       </div>
       </div> 
+      </div>
       </div>
       
 </body>

@@ -14,6 +14,7 @@
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script charset="UTF-8" type="text/javascript" src="http://s1.daumcdn.net/svc/attach/U03/cssjs/postcode/1484723365148/170118.js"></script>
 <script type="text/javascript">
+
     function zipfind() 
     {
         new daum.Postcode
@@ -134,7 +135,9 @@ function checkpw()
 </head>
 
 <body>
-<div class="body_center">
+<div class="container">
+<div class="body_center" style="width:1142px; margin-left:100px;">
+
 <form name="frm" action="/SG/joinSuccess" method="post" >
 <section class="input-horizontal list-horizontal section box-shadow">
             <div class="main_subject">
@@ -281,6 +284,7 @@ function checkpw()
  </div>
 </section>
 </form>
+</div>
 </div>
 </body>
 </html>

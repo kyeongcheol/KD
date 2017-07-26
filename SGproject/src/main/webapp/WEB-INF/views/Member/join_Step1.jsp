@@ -18,11 +18,12 @@ function modal_email()
 <div class="title">
 <h2></h2>
 </div>
+<div class="container">
 <div class="contents1">         
          
       <div class="xans-member-joinAgreement">
          
-         <div class="agreeArea">
+         <div class="agreeArea" style="width:1145px;">
             <h3>샐러드 구쁘다 회원가입을 위해 본인인증을 시작합니다.</h3>
             <div class="agree">
             <p>이메일 인증을 통하여 본인인증을 진행할 수 있습니다.<br>
@@ -31,13 +32,15 @@ function modal_email()
 		<br>이메일 인증은 따로 정보를 저장하지 않습니다.<br>해당 이메일로 전송받은 인증 번호를 입력해서 인증을 받는 방법입니다.
 		</div>
 	</div>
-	<div class="btnArea">   
-    <%--<a href="/SG/modal_email" class="effect effect-5" target="modal" data-size="sm" data-label="이메일 인증"> --%>
-    <a href="javascript:modal_email();" class="effect effect-5">	
+	
+</div>
+
+    <a href="javascript:modal_email();" class="effect effect-5" 
+    style="padding: 15px 0px; width:140px; margin-top: 20px; margin-left: 1010px;">	
 	이메일 인증
 	</a>
-	</div>
-</div>		
+
+</div>
 </div>
 </body>
 

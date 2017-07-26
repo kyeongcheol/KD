@@ -19,6 +19,7 @@ body
   width: 150px;
   border-radius: 6px;
   overflow: hidden;
+  position: absolute;
 }
 .effect.effect-5 {
   -webkit-transition: all 0.2s linear 0s;
@@ -112,7 +113,7 @@ body
    font-size: 11px;
    line-height: 160%;
    text-align: left;
-   width:1500px;
+   width:1145px;
 }
 
 .xans-member-joinAgreement .agreeArea .agree {

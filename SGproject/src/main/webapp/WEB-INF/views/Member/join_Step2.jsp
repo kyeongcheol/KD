@@ -50,12 +50,12 @@ function joinCheck()
 
 
 <form name="agreeForm">
-
+   <div class="container">
    <div class="contents1">         
          
       <div class="xans-member-joinAgreement">
       
-         <div class="agreeArea">
+         <div class="agreeArea" style="width:1145px;">
          <h3>이용약관</h3>   
             <div class="agree">
                         
@@ -271,7 +271,7 @@ function joinCheck()
              </div><!-- <div class="agreeArea"> -->
 
               
-               <div class="agreeArea">
+               <div class="agreeArea" style="width:1145px;">
                   <h3>개인정보 수집 및 이용 동의</h3>
                     <div class="agree">
                         
@@ -314,13 +314,16 @@ function joinCheck()
          
          <br/><br/>
          
-         <div class="btnArea">   
-         <a class="effect effect-5" title="다음 단계로 이동" onclick="javascript:joinCheck();">다음 단계로 이동</a>
-         </div>
+         
          
       </div>
+      </div>
    </div>
- 
+   
+   <a class="effect effect-5" title="다음 단계로 이동" onclick="javascript:joinCheck();" style="padding: 15px 0px; width:140px; 
+   margin-left: 1185px;">
+      다음 단계로 이동</a>
+         
 </form>
 </body>
 </html>

@@ -7,18 +7,17 @@ body
 
 /* 이동 버튼 */
 .effect {
-  text-align: center;
-  display: inline-block;
-  position: relative;
-  text-decoration: none;
-  color: #fff;
-  text-transform: capitalize;
-  background-color:#00CCCF;
-  font-size: 18px;
-  padding: 20px 0px;
-  width: 150px;
-  border-radius: 6px;
-  overflow: hidden;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: #fff;
+    text-transform: capitalize;
+    background-color: #00CCCF;
+    font-size: 18px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: absolute;
 }
 .effect.effect-5 {
   -webkit-transition: all 0.2s linear 0s;
@@ -111,7 +110,6 @@ body
    font-size: 20px;
    line-height: 160%;
    text-align: center;
-   width:1500px;
 }
 
 .xans-member-joinAgreement .agreeArea .agree {
