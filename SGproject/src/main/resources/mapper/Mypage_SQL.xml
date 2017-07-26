@@ -460,17 +460,20 @@ INSERT INTO SG_QNA
         QNA_TITLE,
         QNA_CONTENT,
         QNA_HITCOUNT,
-        QNA_REGDATE 
+        QNA_REGDATE,
+        QNA_REPSTATE
+         
 )
 
 VALUES
-        (SG_QNA_NO_SEQ,
+        (SG_QNA_NO_SEQ.NEXTVAL,
         #{QNA_CATEGORY},
-        #{QNA_MEMBER_NO},
+        #{MEMBER_NO},
         #{QNA_TITLE},
-        DEFAULT,
         #{QNA_CONTENT},
-        SYSDATE)
+        DEFAULT,
+        SYSDATE,
+        DEFAULT)
  
 ]]>
 </insert>

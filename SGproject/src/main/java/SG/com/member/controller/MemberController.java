@@ -534,12 +534,33 @@ public class MemberController
    }
    
     
-   //QNA 게시판 리스트
-   @RequestMapping(value ="/myQnaList") 
-   public String myQnaList(Model model, CommandMap commandMap)
-   {
-	   return "Member/myQnaList";
-   }
+  //QNA 게시판 리스트
+    @RequestMapping(value ="/myQnaList") 
+    public String myQnaList(Model model, CommandMap commandMap, HttpSession session) throws Exception
+    {
+       System.out.println("===========나의 QNA LIST 컨트롤러 진입===========");
+       int member_no = Integer.parseInt(session.getAttribute("MEMBER_NO").toString());
+       commandMap.getMap().put("MEMBER_NO", member_no);
+       session.setAttribute("totalcount", 4);
+       String pagingHtml;
+       System.out.println(commandMap.getMap());
+       
+       //QNA LIST 페이징
+        if(commandMap.get("PAGE").toString().equals(""))
+        {
+            pagingHtml = pagingHtml(commandMap, 1, session);
+        }
+        else
+        {
+           int page = Integer.parseInt(commandMap.get("PAGE").toString());
+           pagingHtml = pagingHtml(commandMap, page, session);
+        }
+        
+       List<Map<String, Object>> qnalist = memberService.myQnaList(commandMap.getMap());
+       model.addAttribute("qnalist", qnalist);
+       model.addAttribute("pagingHtml", pagingHtml);
+       return "Member/myQnaList";
+    }
    
    //QNA 게시판 등록 폼
    @RequestMapping(value ="/myQnaWriteForm")
@@ -550,29 +571,64 @@ public class MemberController
    
    //QNA 게시판 등록 처리
    @RequestMapping(value ="/myQnaWrite/writeAction")
-   public String myQnaWriteAction(Model model, CommandMap commandMap)
+   public String myQnaWriteAction(Model model, CommandMap commandMap, HttpSession session) throws Exception
    {
+	   System.out.println("==========QNA 등록 처리 진입==============");
+	   String mem_no = session.getAttribute("MEMBER_NO").toString();
+	      
+	   commandMap.getMap().put("MEMBER_NO", mem_no);
+	   
+	   
+	   System.out.println(commandMap.getMap());
+	   
+	   memberService.myQnaWrite(commandMap.getMap());
+	   
 	   return "Member/myQnaWrite";
    }
    
    //QNA 게시판 상세보기
    @RequestMapping(value ="/myQnaView")
-   public String myQnaView(Model model, CommandMap commandMap)
+   public String myQnaView(Model model, CommandMap commandMap, HttpSession session) throws Exception
    {
+	   System.out.println("==========QNA 상세보기 처리 진입==============");
+	   String mem_no = session.getAttribute("MEMBER_NO").toString();
+	      
+	   commandMap.getMap().put("MEMBER_NO", mem_no);
+	   Map<String, Object> myQnaView = memberService.myQnaView(commandMap.getMap());
+	   
+	   model.addAttribute("myQnaView", myQnaView);
+	   
+	   System.out.println(myQnaView);
+	   
 	   return "Member/myQnaView";
    }
    
    //QNA 게시판 수정 처리
    @RequestMapping(value = "/myQnaView/updateAction")
-   public String myQnaUpdateAction(Model model, CommandMap commandMap)
+   public String myQnaUpdateAction(Model model, CommandMap commandMap, HttpSession session) throws Exception
    {
+	   System.out.println("==========QNA 수정 처리 진입==============");
+	   String mem_no = session.getAttribute("MEMBER_NO").toString();
+	      
+	   commandMap.getMap().put("MEMBER_NO", mem_no);
+       
+	   memberService.myQnaUpdate(commandMap.getMap());
+	   
 	   return "Member/myQnaView";
    }
    
    //QNA 게시판 삭제 처리
    @RequestMapping(value = "/myQnaView/deleteAction")
-   public String myQnaDeleteAction(Model model, CommandMap commandMap)
+   public String myQnaDeleteAction(Model model, CommandMap commandMap, HttpSession session) throws Exception
    {
+	   System.out.println("==========QNA 삭제 처리 진입==============");
+	   String mem_no = session.getAttribute("MEMBER_NO").toString();
+	      
+	   commandMap.getMap().put("MEMBER_NO", mem_no);
+	   
+	   memberService.myQnaDelete(commandMap.getMap());
+	   
+	   
 	   return "Member/myQnaView";
    }
    
